@@ -1,0 +1,471 @@
+$hnb-text-color: #b3000e;
+$hnb-color: #212c4f;
+$table-color: #4e884e;
+$link-color: #1565C0;
+
+:root {
+  /* 中文優先：Noto Sans TC 含良好拉丁字形，可維持整體一致 */
+  --font-cjk:
+    'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', 'Hiragino Sans TC', Arial,
+    sans-serif;
+
+  /* 補充：Emoji */
+  --font-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
+}
+
+/*vuetify media query breakpoints
+  xs: 0
+  sm: 600px
+  md: 960px
+  lg: 1280px
+  xl: 1920px
+  xxl: 2560px
+*/
+$breakpoint-sm: 600px;
+$breakpoint-md: 960px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+$breakpoint-xxl: 2560px;
+
+@mixin breakpoint($breakpoint) {
+  @if $breakpoint ==sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint ==md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint ==lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint ==xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint ==xxl {
+    @media (min-width: $breakpoint-xxl) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint #{$breakpoint} is not recognized.";
+  }
+}
+
+html,
+body,
+#app {
+  font-family: var(--font-cjk), var(--font-emoji);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  font-synthesis: none;
+  background-color: #F5F5F5;
+  /* 避免瀏覽器自行合成粗/斜體 */
+}
+
+#app {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.hnb {
+  
+  &__login {
+    &--wrapper {
+      --ink: #1f1a14;
+      --ink-soft: #3d362c;
+      --paper: #f6f1ea;
+      --sand: #efe6d8;
+      --gold: #c79042;
+      --sage: #50625b;
+      --teal: #2f6b6b;
+      height: 100dvh;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(190, 91, 34, 0.18), transparent 55%),
+        radial-gradient(circle at 10% 80%, rgba(18, 103, 201, 0.22), transparent 45%),
+        linear-gradient(140deg, #fbf7f0 0%, #efe6d8 60%, #e6e0d2 100%);
+      padding: 0;
+    }
+
+    &--panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    &--card {
+      width: 100%;
+      max-width: 420px;
+      padding: 36px 32px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(61, 54, 44, 0.12);
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    &--form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    &--actions {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+    }
+
+    &--button {
+      margin-top: 8px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    &--footer {
+      margin-top: 18px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+    
+    &--link {
+      color: $link-color;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__header {
+    &--kicker {
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      color: var(--sage);
+    }
+
+    &--title {
+      margin: 8px 0 0;
+      font-size: 28px;
+      color: var(--ink);
+    }
+
+    &--note {
+      margin: 8px 0 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+  }
+
+  &__role {
+    &--toggle {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+      background: rgba(80, 98, 91, 0.08);
+      padding: 6px;
+
+      .v-btn {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: none;
+      }
+    }
+  }
+
+  &__captcha {
+    &--row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 160px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    &--box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 10px;
+      background: var(--paper);
+      border: 1px dashed rgba(61, 54, 44, 0.2);
+    }
+
+    &--text {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      color: var(--ink);
+    }
+
+    &--refresh {
+      margin: 0;
+    }
+  }
+
+  &__forgot {
+    &--link {
+      text-transform: none;
+      font-size: 13px;
+      padding: 6px;
+    }
+  }
+
+  &__drawer {
+    width: 275px !important;
+  }
+
+  &__main {
+    padding-left: 275px;
+  }
+
+  // 主選單
+  &__menu {
+    overflow: auto;
+    background-color: #FFFFFF; /* 淺橘色背景 */
+
+    &--open {
+      .hnb__menu--title {
+        color: $hnb-text-color;
+        background-color: #e7f7f8;
+      }
+    }
+  }
+
+  &__singleItem {
+    background-color: #FFFFFF;
+
+    &--open {
+      color: $hnb-text-color;
+      background-color: #e7f7f8 !important;
+    }
+
+    &--sub {
+      background-color: #46c8ce;
+      color: #ffffff;
+    }
+
+  }
+  // 第二層選單
+  &__sec-menu {
+    min-height: 44px !important;
+    overflow: auto;
+
+    &--open {
+      color: $hnb-text-color;
+      background-color: #e7f7f8;
+    }
+
+    &--title {
+      border-top: 1px solid #E0E0E0;      
+    }
+  }
+  // 第三層選單
+  &__third-menu {
+    background-color: #FFFFFF;
+    padding-left: 28px !important; /* 調整第三層選單的縮排 */
+
+    &--sub {
+      background-color: #46c8ce;
+      color: #ffffff;
+    }
+  }
+
+  // 內容區
+  &__title {
+    border-left: 6px solid #FF8F00;
+    color: #FF8F00;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 1rem 0;
+    padding-left: 1rem;
+  }
+
+  // 表格
+  &__table {
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+
+    > .v-data-table-footer {
+      background-color: #FFF8E1;
+      border-top: 2px solid #E0E0E0;
+    }
+    td {
+      padding-top: 3px !important;
+      padding-bottom: 3px !important;
+    }
+  }
+
+  // stamp-card
+  &__stamp-card {
+    border: 2px solid #80CBC4;
+
+    .v-card-text {
+      background-color: #f1fffe;
+      min-height: 220px;
+      height: 100%;
+    }
+  }
+
+  // 視窗
+  &__dialog {
+    &--title {
+      border-left: 6px solid #1565C0;
+      color: #1565C0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding-left: 1rem;
+    }
+  }
+
+  // 必填輸入框
+  &__textField {
+    &--required {
+      input, .v-field {
+        background-color: #E0F2F1;
+      }
+    }
+    &--readonly {
+      input, .v-field {
+        background-color: #ECEFF1;
+      }
+    }
+  }
+
+  // 連結樣式
+  &__text {
+    &--link {
+      border-bottom: 1px solid #1565C0;
+      color: #1565C0;
+      font-size: 0.875rem;
+      text-decoration: none;
+      &:hover {
+        border-bottom: 1px solid transparent ;
+      }
+    }
+  }
+
+  // 按鈕
+  &__btn {
+    &--red {
+      background-color: #b3000e;
+      color: #fff;
+      height: 32px;
+      &:hover {
+        background-color: #df0011;
+      }
+    }
+  }
+
+  // 匯票相關
+  &__draft {
+    &--bgYellow {
+      background-color: #FFECB3;
+    }    
+    &--border-s {
+      border-left: 1px solid #333333;
+    }
+    &--border-s-e {
+      border-left: 1px solid #333333;
+      border-right: 1px solid #333333;
+    }
+    &--back-height {
+      height: 110px;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .hnb__login--card {
+    padding: 28px 24px;
+  }
+
+  .hnb__captcha--row {
+    grid-template-columns: 1fr;
+  }
+
+  .hnb__captcha--box {
+    justify-content: center;
+  }
+}
+
+// ─── HNB16 華南銀行 國內信用狀系統 專用樣式 ────────────────────────────
+
+$hnb16-primary: #1565C0;   // 華南藍
+$hnb16-accent:  #2a91bc;   // 系統藍
+
+.hnb16 {
+  &__logo {
+    color: $hnb16-accent;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  // 頁面標題
+  &__title {
+    // border-left: 6px solid $hnb16-primary;
+    color: $hnb-text-color;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0.75rem 0 1rem;
+    // padding-left: 1rem;
+  }
+
+  // 麵包屑
+  &__breadcrumb {
+    font-size: 1rem;
+
+    .v-breadcrumbs-item--link {
+      color: $hnb-text-color;
+      text-decoration: none;
+      border-bottom: 1px solid $hnb-text-color;
+
+      &:hover {
+        border-bottom: 1px solid transparent;
+      }
+    }
+
+    .v-breadcrumbs-item--disabled {
+      color: $hnb-color;
+      opacity: 0.7;
+    }
+  }
+
+  // 待辦事項列表
+  &__todo {
+    &--item {
+      cursor: pointer;
+      border-bottom: 1px solid #E0E0E0;
+
+      &:hover {
+        background-color: #E3F2FD;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // 查詢條件卡
+  &__search {
+    &--card {
+      border: 1px solid #BBDEFB;
+      border-radius: 8px;
+      background-color: #F8FBFF;
+    }
+  }
+
+  // 必填欄位
+  &__required {
+    input, .v-field {
+      background-color: #E3F2FD !important;
+    }
+  }
+}
