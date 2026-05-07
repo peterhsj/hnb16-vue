@@ -8,15 +8,11 @@
           v-for="item in todoItems"
           :key="item.value"
           class="hnb16__todo--item"
-          :subtitle="item.subtitle"
           @click="handleTodoClick(item)"
         >
-          <template #prepend>
-            <v-icon color="blue-darken-2" icon="mdi-play-circle-outline" />
-          </template>
-
           <template #title>
-            <span class="text-body-1">{{ item.text }}</span>
+            <v-icon class="me-2" color="red-darken-1" icon="mdi-play-circle-outline" size="18" />
+            <span class="text-body-2">{{ item.text }}</span>
 
             <v-chip
               class="ml-2"
