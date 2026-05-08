@@ -289,16 +289,31 @@ body,
 
   // 表格
   &__table {
-    border: 1px solid #E0E0E0;
-    border-radius: 6px;
+    background-color: #FFFFFF;
+    border: 1px solid #a6c2d1;
 
     > .v-data-table-footer {
       background-color: #FFF8E1;
       border-top: 2px solid #E0E0E0;
     }
-    td {
-      padding-top: 3px !important;
-      padding-bottom: 3px !important;
+
+    th {
+      background-color: #13989e;
+      // border: 1px solid #90bcbe;
+      color: #FFFFFF;
+
+      &:hover, &:focus {
+        color: #FFFFFF !important;
+      }
+    }
+
+    th:not(:first-child),
+    td:not(:first-child) {
+      border-left: 1px solid #90bcbe;
+    }
+
+    th, td {
+      padding: 4px 6px !important;
     }
   }
 
@@ -363,6 +378,51 @@ body,
     }
   }
 
+  // tab
+  &__tab {
+    height: 39px;
+
+    button {
+      margin: 0 1px;
+      // font-size: 0.95rem;
+      font-weight: 400;
+      border: 1px solid #cdd0d5;
+      border-top-left-radius: 0.25rem !important;
+      border-top-right-radius: 0.25rem !important;
+      background-color: #f8dadc;
+      color: #666666;
+      height: 39px !important;
+    }
+
+    .active-tab {
+      color: white;
+      background-color: $hnb-text-color;
+
+      .v-tab__slider {
+        opacity: 0; /* 隱藏滑塊 */
+      }
+    }
+
+  }
+
+  // chips
+  &__chip {
+    &--status {
+      background-color: #ffecb3;
+      color: #333333;
+      font-weight: 500;
+    }
+    &--count {
+      background-color: #FFFFFF;
+      color: $hnb-text-color;
+      font-weight: 500;
+
+      .v-chip__underlay {
+        opacity: 0;
+      }
+    }
+  }
+
   // 匯票相關
   &__draft {
     &--bgYellow {
@@ -415,6 +475,16 @@ $hnb16-accent:  #2a91bc;   // 系統藍
     font-weight: 500;
     margin: 0.75rem 0 1rem;
     // padding-left: 1rem;
+  }
+
+  // 項目標題
+  &__subtitle {
+    border-left: 4px solid $hnb-text-color;
+    color: $hnb-text-color;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0.75rem 0 1rem;
+    padding-left: 1rem;
   }
 
   // 麵包屑

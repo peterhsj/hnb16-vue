@@ -2,8 +2,8 @@
   <v-container fluid>
     <h1 class="mx-4 hnb16__title">待辦事項列表</h1>
 
-    <v-card class="mt-4" color="grey-lighten-4" variant="outlined">
-      <v-list>
+    <v-card class="ma-4" color="grey-lighten-1" variant="outlined">
+      <v-list class="py-0">
         <v-list-item
           v-for="item in todoItems"
           :key="item.value"
@@ -15,7 +15,7 @@
             <span class="text-body-2">{{ item.text }}</span>
 
             <v-chip
-              class="ml-2"
+              class="ml-2 py-3 px-4"
               color="orange-accent-4"
               density="compact"
               size="small"
