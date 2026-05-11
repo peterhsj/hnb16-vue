@@ -93,7 +93,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     port: 5173,
     warmup: {
-      clientFiles: ['./src/assets/scss/custom.scss'], // 在服務器啟動時預加載 SCSS，避免首次 404
+      clientFiles: [
+        './src/assets/scss/custom.scss',
+        './src/styles/settings.scss',
+      ], // 在服務器啟動時預加載 SCSS，避免首次 404
     },
   },
 }))
