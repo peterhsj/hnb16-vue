@@ -376,6 +376,40 @@ body,
         background-color: #df0011;
       }
     }
+
+    &--default {
+      background-color: #13989e !important;
+      border: 1px solid #13989e;
+      color: #ffffff !important;
+      font-weight: normal;
+      height: 32px !important;
+       &:hover {
+        background-color: #2fbcc2 !important;
+      }
+    }
+
+    &--select {
+      background-color: #2fbcc2 !important;
+      border: 1px solid #207a7e;
+      color: #ffffff !important;
+      font-weight: normal;
+      height: 32px !important;
+       &:hover {
+        background-color: #16a8ae !important;
+      }
+    }
+
+    &--cancle {
+      background-color: #d3d3d3 !important;
+      border: 1px solid #d3d3d3;
+      color: #555555 !important;
+      font-weight: normal;
+      height: 32px !important;
+       &:hover {
+        background-color: #e5e5e5 !important;
+        color: #333333 !important;
+      }
+    }
   }
 
   // tab

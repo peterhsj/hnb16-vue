@@ -3,6 +3,7 @@ import Mock from 'mockjs'
 
 // 引入各個模組的 mock API
 import './auth' // '登入/登出'
+import './info' // '訊息匣'
 // import './todoList' // '待辦事項統計'
 // import './documentComplete' // '押匯文件齊全'
 // import './notification' // '押匯'
