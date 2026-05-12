@@ -31,21 +31,30 @@
     <span class="mx-2 text-body-2">
       <span class="text-red-darken-3">總筆數：</span>
       {{ totalItems }}
-      <span class="text-red-darken-3">/ 總頁數：</span>
-      {{ totalPages }}
-      <span class="text-red-darken-3">/ 總金額：</span>
-      {{ totalAmount }}
+      <span v-if="isShowTotalPages">
+        <span class="text-red-darken-3">/ 總頁數：</span>
+        {{ totalPages }}
+      </span>
+
+      <span v-if="isShowTotalAmount">
+        <span class="text-red-darken-3">/ 總金額：</span>
+        NT$ {{ thousandsFormatting(totalAmount) }}
+      </span>
     </span>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { thousandsFormatting } from '@/utils/format'
+
   withDefaults(defineProps<{
     page: number
     itemsPerPage: number
     totalPages: number
     totalItems: number
     totalAmount: number
+    isShowTotalPages?: boolean
+    isShowTotalAmount?: boolean
     itemsPerPageOptions?: number[]
   }>(), {
     itemsPerPageOptions: () => [10, 20, 50, 100],

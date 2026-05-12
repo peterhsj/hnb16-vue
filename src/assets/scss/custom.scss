@@ -330,6 +330,9 @@ body,
 
   // 視窗
   &__dialog {
+    border: 7px solid rgba(0, 0, 0, 0.55);
+    border-radius: 1.25rem !important;
+
     &--title {
       border-left: 6px solid #1565C0;
       color: #1565C0;
@@ -399,7 +402,7 @@ body,
       }
     }
 
-    &--cancle {
+    &--cancel {
       background-color: #d3d3d3 !important;
       border: 1px solid #d3d3d3;
       color: #555555 !important;
@@ -410,6 +413,12 @@ body,
         color: #333333 !important;
       }
     }
+  }
+
+  // Form 相關
+  &__form-label {
+    min-width: 120px;
+    text-align: right;
   }
 
   // tab

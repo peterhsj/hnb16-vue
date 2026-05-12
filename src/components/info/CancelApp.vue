@@ -97,6 +97,16 @@
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
   </div>
 </template>
 
@@ -105,21 +115,84 @@
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref } from 'vue'
   import { deleteCancelAppItems, getCancelAppList, markCancelAppRead } from '@/api/info'
+  import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
 
+  const { handleApiError } = useApiErrorHandler()
   const cancelAppSelected = ref<string[]>([])
   const cancelAppItems = ref<CancelItem[]>([])
   const isLoading = ref(false)
 
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<{ action: string, status: number }>({
+    action: '',
+    status: 0,
+  })
+
+  const cancelAppHeaders: DataTableHeader[] = [
+    { title: '主旨', key: 'title', align: 'start', sortable: false },
+    { title: '訊息內容', key: 'content', align: 'start', sortable: false },
+    { title: '訊息日期', key: 'date', align: 'center', sortable: false },
+    { title: '已讀', key: 'status', align: 'center', sortable: false, width: 150 },
+  ]
+
+  interface PageOptions {
+    page: number
+    itemsPerPage: number
+    sortBy: {
+      key: string
+      order?: 'asc' | 'desc'
+    }[]
+  }
+  const pageOptionsInit = ref<PageOptions>({
+    page: 1,
+    itemsPerPage: 10,
+    sortBy: [{ key: 'companyId', order: 'asc' }],
+  })
+  const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
+  const totalCount = ref<number>(0) // 總筆數
+  const totalAmount = ref<number>(0) // 總金額
+
+  const totalPages = computed(() =>
+    Math.ceil(cancelAppItems.value.length / pageOptions.value.itemsPerPage),
+  )
+
+  watch(
+    () => pageOptions.value,
+    newVal => {
+      console.log('Page options changed:', newVal)
+      fetchCancelAppList()
+    },
+    { deep: true },
+  )
+
+  // 取得列表資料
   async function fetchCancelAppList () {
+    const { page, itemsPerPage } = pageOptions.value
+    const payload = {
+      page,
+      itemsPerPage,
+    }
     isLoading.value = true
     try {
-      const res = await getCancelAppList()
-      const { status, data: { data: sourceData } } = res
+      const res = await getCancelAppList(payload)
+      const { status, data: { data: sourceData, total } } = res
       if (status === 200) {
         cancelAppItems.value = sourceData || []
+        totalCount.value = total || 0
       }
-    } catch (error) {
-      console.error('Error fetching Cancel App list:', error)
+    } catch (error: any) {
+      await handleApiError(error, fetchCancelAppList, {
+        messageTitle,
+        message,
+        messageStatus,
+        isConfirmBtn,
+        messageDialog,
+      })
     } finally {
       isLoading.value = false
     }
@@ -127,7 +200,17 @@
 
   onMounted(fetchCancelAppList)
 
-  async function deleteCancelAppSelected () {
+  // 刪除選取的項目
+  function deleteCancelAppSelected () {
+    messageTitle.value = '作業訊息'
+    message.value = '確認刪除選取的訊息嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    messageDialog.value = true
+    processStatus.value.action = 'delete'
+  }
+
+  async function deleteConfirm () {
     await deleteCancelAppItems(cancelAppSelected.value)
     await fetchCancelAppList()
     cancelAppSelected.value = []
@@ -147,18 +230,16 @@
     }
   }
 
-  const cancelAppHeaders: DataTableHeader[] = [
-    { title: '主旨', key: 'title', align: 'start', sortable: false },
-    { title: '訊息內容', key: 'content', align: 'start', sortable: false },
-    { title: '訊息日期', key: 'date', align: 'center', sortable: false },
-    { title: '已讀', key: 'status', align: 'center', sortable: false, width: 150 },
-  ]
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
 
-  const pageOptions = ref({ page: 1, itemsPerPage: 10 })
-
-  const totalPages = computed(() =>
-    Math.ceil(cancelAppItems.value.length / pageOptions.value.itemsPerPage),
-  )
-
-  const totalAmount = ref<number>(0)
+  // 確認 message
+  function messageConfirm (): void {
+    messageDialog.value = false
+    if (processStatus.value.action === 'delete') {
+      deleteConfirm()
+    }
+  }
 </script>

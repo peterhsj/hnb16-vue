@@ -97,6 +97,16 @@
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
   </div>
 </template>
 
@@ -105,21 +115,84 @@
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref } from 'vue'
   import { deleteLcAppItems, getLcAppList, markLcAppRead } from '@/api/info'
+  import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
 
+  const { handleApiError } = useApiErrorHandler()
   const lcAppSelected = ref<string[]>([])
   const lcAppItems = ref<InfoItem[]>([])
   const isLoading = ref(false)
 
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<{ action: string, status: number }>({
+    action: '',
+    status: 0,
+  })
+
+  const lcAppHeaders: DataTableHeader[] = [
+    { title: '主旨', key: 'title', align: 'start', sortable: false },
+    { title: '訊息內容', key: 'content', align: 'start', sortable: false },
+    { title: '訊息日期', key: 'date', align: 'center', sortable: false },
+    { title: '已讀', key: 'status', align: 'center', sortable: false, width: 150 },
+  ]
+
+  interface PageOptions {
+    page: number
+    itemsPerPage: number
+    sortBy: {
+      key: string
+      order?: 'asc' | 'desc'
+    }[]
+  }
+  const pageOptionsInit = ref<PageOptions>({
+    page: 1,
+    itemsPerPage: 10,
+    sortBy: [{ key: 'companyId', order: 'asc' }],
+  })
+  const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
+  const totalCount = ref<number>(0) // 總筆數
+  const totalAmount = ref<number>(0) // 總金額
+
+  const totalPages = computed(() =>
+    Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
+  )
+
+  watch(
+    () => pageOptions.value,
+    newVal => {
+      console.log('Page options changed:', newVal)
+      fetchLcAppList()
+    },
+    { deep: true },
+  )
+
+  // 取得列表資料
   async function fetchLcAppList () {
+    const { page, itemsPerPage } = pageOptions.value
+    const payload = {
+      page,
+      itemsPerPage,
+    }
     isLoading.value = true
     try {
-      const res = await getLcAppList()
-      const { status, data: { data: sorceData } } = res
+      const res = await getLcAppList(payload)
+      const { status, data: { data: sorceData, total } } = res
       if (status === 200) {
         lcAppItems.value = sorceData || []
+        totalCount.value = total || 0
       }
-    } catch (error) {
-      console.error('Error fetching LC App list:', error)
+    } catch (error: any) {
+      await handleApiError(error, fetchLcAppList, {
+        messageTitle,
+        message,
+        messageStatus,
+        isConfirmBtn,
+        messageDialog,
+      })
     } finally {
       isLoading.value = false
     }
@@ -127,7 +200,17 @@
 
   onMounted(fetchLcAppList)
 
-  async function deleteLcAppSelected () {
+  // 刪除選取的項目
+  function deleteLcAppSelected () {
+    messageTitle.value = '作業訊息'
+    message.value = '確認刪除選取的訊息嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    messageDialog.value = true
+    processStatus.value.action = 'delete'
+  }
+
+  async function deleteConfirm () {
     await deleteLcAppItems(lcAppSelected.value)
     await fetchLcAppList()
     lcAppSelected.value = []
@@ -147,18 +230,16 @@
     }
   }
 
-  const lcAppHeaders: DataTableHeader[] = [
-    { title: '主旨', key: 'title', align: 'start', sortable: false },
-    { title: '訊息內容', key: 'content', align: 'start', sortable: false },
-    { title: '訊息日期', key: 'date', align: 'center', sortable: false },
-    { title: '已讀', key: 'status', align: 'center', sortable: false, width: 150 },
-  ]
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
 
-  const pageOptions = ref({ page: 1, itemsPerPage: 10 })
-
-  const totalPages = computed(() =>
-    Math.ceil(lcAppItems.value.length / pageOptions.value.itemsPerPage),
-  )
-
-  const totalAmount = ref<number>(0)
+  // 確認 message
+  function messageConfirm (): void {
+    messageDialog.value = false
+    if (processStatus.value.action === 'delete') {
+      deleteConfirm()
+    }
+  }
 </script>

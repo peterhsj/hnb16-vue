@@ -4,6 +4,7 @@ export interface ApiResponse<T = any> {
   code: number
   message?: string
   data?: T
+  total?: number
 }
 
 export interface InfoItem {
@@ -17,8 +18,8 @@ export interface InfoItem {
 /**
  * 查詢開狀訊息列表
  */
-export function getLcAppList () {
-  return api.get<ApiResponse<InfoItem[]>>('/api/info/lcApp')
+export function getLcAppList (payload: any) {
+  return api.post<ApiResponse<InfoItem[]>>('/api/info/lcApp', payload)
 }
 
 /**
@@ -45,8 +46,8 @@ export interface AmendItem {
   status: boolean
 }
 
-export function getAmendAppList () {
-  return api.get<ApiResponse<AmendItem[]>>('/api/info/amendApp')
+export function getAmendAppList (payload: any) {
+  return api.post<ApiResponse<AmendItem[]>>('/api/info/amendApp', payload)
 }
 
 export function markAmendAppRead (amendNos: string[]) {
@@ -65,8 +66,8 @@ export interface CancelItem {
   status: boolean
 }
 
-export function getCancelAppList () {
-  return api.get<ApiResponse<CancelItem[]>>('/api/info/cancelApp')
+export function getCancelAppList (payload: any) {
+  return api.post<ApiResponse<CancelItem[]>>('/api/info/cancelApp', payload)
 }
 
 export function markCancelAppRead (cancelNos: string[]) {
@@ -85,8 +86,8 @@ export interface DraftItem {
   status: boolean
 }
 
-export function getDraftAppList () {
-  return api.get<ApiResponse<DraftItem[]>>('/api/info/draftApp')
+export function getDraftAppList (payload: any) {
+  return api.post<ApiResponse<DraftItem[]>>('/api/info/draftApp', payload)
 }
 
 export function markDraftAppRead (draftNos: string[]) {

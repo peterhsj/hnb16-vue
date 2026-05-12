@@ -10,17 +10,15 @@
         </v-breadcrumbs>
       </div>
 
-      <div>
+      <div v-if="currentView === 'selectType'">
         <h2 class="mx-4 hnb16__title">選擇開狀申請書填寫方式</h2>
 
         <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
-          <v-form ref="formRef" @submit.prevent="sendForm">
+          <v-form ref="formRef" @submit.prevent="sendTypeForm">
             <v-row align="center">
-              <v-col cols="auto">
-                <div class="text-body-2 font-weight-medium">受益人類別</div>
-              </v-col>
+              <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人類別</div>
 
-              <v-col cols="12" md="3" sm="5">
                 <v-select
                   v-model="form.beneficiaryType"
                   bg-color="white"
@@ -36,11 +34,9 @@
               </v-col>
 
               <template v-if="form.beneficiaryType === '1'">
-                <v-col cols="auto">
-                  <div class="text-body-2 font-weight-medium">受益人</div>
-                </v-col>
+                <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人</div>
 
-                <v-col cols="12" md="3" sm="5">
                   <v-select
                     v-model="form.beneficiary"
                     bg-color="white"
@@ -57,11 +53,9 @@
               </template>
 
               <template v-if="form.beneficiaryType === '2'">
-                <v-col cols="auto">
-                  <div class="text-body-2 font-weight-medium">集團受益人</div>
-                </v-col>
+                <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">集團受益人</div>
 
-                <v-col cols="12" md="3" sm="5">
                   <v-select
                     v-model="form.beneficiary"
                     bg-color="white"
@@ -78,11 +72,9 @@
               </template>
 
               <template v-if="form.beneficiaryType !== null">
-                <v-col cols="auto">
-                  <div class="text-body-2 font-weight-medium">填寫方式</div>
-                </v-col>
+                <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">填寫方式</div>
 
-                <v-col cols="12" md="3" sm="5">
                   <v-select
                     v-model="form.inputType"
                     bg-color="white"
@@ -107,7 +99,7 @@
                   :disabled="form.inputType === null"
                   type="submit"
                 >
-                  確認
+                  確定
                 </v-btn>
               </v-col>
             </v-row>
@@ -115,14 +107,14 @@
         </v-card>
       </div>
 
-      <div v-if="form.inputType === 'edit'" class="mt-4">
+      <div v-if="currentView === 'search'">
         <h2 class="mx-4 hnb16__title">查詢舊有開狀申請書</h2>
 
         <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
-          <v-form ref="searchFormRef" @submit.prevent="sendForm">
+          <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
             <v-radio-group v-model="searchForm.searchType">
-              <v-row class="ma-0" no-gutters>
-                <v-col class="px-0 py-1 d-flex align-center" cols="auto">
+              <v-row class="ma-0">
+                <v-col class="px-0 d-flex align-center" cols="auto">
                   <v-radio
                     color="teal-darken-2"
                     density="compact"
@@ -131,31 +123,25 @@
                   />
                 </v-col>
 
-                <v-col>
-                  <v-row align="center" class="flex-grow-1 ma-0">
-                    <v-col cols="auto">
-                      <div class="text-body-2 font-weight-medium">信用狀號碼</div>
-                    </v-col>
+                <v-col class="d-flex align-center ga-4">
+                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">信用狀號碼</div>
 
-                    <v-col cols="12" lg="3" md="6">
-                      <v-text-field
-                        v-model="searchForm.lcNo"
-                        bg-color="white"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="searchForm.searchType !== 'lcNo'"
-                        hide-details
-                        variant="outlined"
-                      />
-                    </v-col>
-                  </v-row>
+                  <v-text-field
+                    v-model="searchForm.lcNo"
+                    bg-color="white"
+                    color="teal-darken-2"
+                    density="compact"
+                    :disabled="searchForm.searchType !== 'lcNo'"
+                    hide-details
+                    variant="outlined"
+                  />
                 </v-col>
               </v-row>
 
               <v-divider class="my-1" />
 
-              <v-row class="ma-0" no-gutters>
-                <v-col class="px-0 py-1 d-flex align-center" cols="auto">
+              <v-row class="ma-0">
+                <v-col class="px-0 d-flex align-center" cols="auto">
                   <v-radio
                     color="teal-darken-2"
                     density="compact"
@@ -164,32 +150,27 @@
                   />
                 </v-col>
 
-                <v-col>
-                  <v-row align="center" class="flex-grow-1 ma-0">
-                    <v-col cols="auto">
-                      <div class="text-body-2 font-weight-medium">開狀申請書號碼</div>
-                    </v-col>
+                <v-col class="d-flex align-center ga-4">
+                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">開狀申請書號碼</div>
 
-                    <v-col cols="12" lg="3" md="6">
-                      <v-text-field
-                        v-model="searchForm.appNo"
-                        bg-color="white"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="searchForm.searchType !== 'appNo'"
-                        hide-details
-                        variant="outlined"
-                      />
-                    </v-col>
-                  </v-row>
+                  <v-text-field
+                    v-model="searchForm.appNo"
+                    bg-color="white"
+                    color="teal-darken-2"
+                    density="compact"
+                    :disabled="searchForm.searchType !== 'appNo'"
+                    hide-details
+                    variant="outlined"
+                  />
                 </v-col>
               </v-row>
 
               <v-divider class="my-1" />
 
-              <v-row class="ma-0" no-gutters>
-                <v-col class="px-0 py-1 d-flex align-start" cols="auto">
+              <v-row class="ma-0">
+                <v-col class="px-0 pt-3 d-flex align-start" cols="auto">
                   <v-radio
+                    class="mt-1"
                     color="teal-darken-2"
                     density="compact"
                     hide-details
@@ -197,13 +178,11 @@
                   />
                 </v-col>
 
-                <v-col>
+                <v-col class="pa-0">
                   <v-row align="center" class="flex-grow-1 ma-0">
-                    <v-col cols="auto">
-                      <div class="text-body-2 font-weight-medium">申請人放款戶號</div>
-                    </v-col>
+                    <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                      <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">申請人放款戶號</div>
 
-                    <v-col cols="12" lg="3" md="6">
                       <v-text-field
                         v-model="searchForm.beneNo"
                         bg-color="white"
@@ -215,11 +194,9 @@
                       />
                     </v-col>
 
-                    <v-col cols="auto">
-                      <div class="text-body-2 font-weight-medium">受益人統編</div>
-                    </v-col>
+                    <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                      <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人統編</div>
 
-                    <v-col cols="12" lg="3" md="6">
                       <v-text-field
                         v-model="searchForm.beneInNo"
                         bg-color="white"
@@ -231,11 +208,9 @@
                       />
                     </v-col>
 
-                    <v-col cols="auto">
-                      <div class="text-body-2 font-weight-medium">狀態</div>
-                    </v-col>
+                    <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                      <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">狀態</div>
 
-                    <v-col cols="12" lg="3" md="6">
                       <v-select
                         v-model="searchForm.status"
                         bg-color="white"
@@ -248,68 +223,86 @@
                       />
                     </v-col>
 
-                    <v-col class="pa-0" cols="12">
-                      <v-row align="start" class="ma-0">
-                        <v-col cols="auto">
-                          <div class="text-body-2 font-weight-medium">開狀日期</div>
-                        </v-col>
+                    <v-col class="d-flex align-start ga-4" cols="12" lg="5" md="6">
+                      <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label pt-2">開狀日期</div>
 
-                        <v-col class="px-0 px-md-2 py-1" cols="12" lg="3" md="4">
-                          <v-date-input
-                            v-model="searchForm.startDate"
-                            append-inner-icon="mdi-calendar"
-                            bg-color="white"
-                            color="teal-darken-2"
-                            density="compact"
-                            :disabled="searchForm.searchType !== 'advanced'"
-                            placeholder="起日：2026/01/01"
-                            prepend-icon=""
-                            required
-                            variant="outlined"
-                          />
-                        </v-col>
-
-                        <v-col cols="auto">
-                          <div class="text-body-2 font-weight-medium">~</div>
-                        </v-col>
-
-                        <v-col class="px-0 px-md-2 py-1" cols="12" lg="3" md="4">
-                          <v-date-input
-                            v-model="searchForm.endDate"
-                            append-inner-icon="mdi-calendar"
-                            bg-color="white"
-                            color="teal-darken-2"
-                            density="compact"
-                            :disabled="searchForm.searchType !== 'advanced'"
-                            placeholder="訖日：2026/01/01"
-                            prepend-icon=""
-                            required
-                            variant="outlined"
-                          />
-                        </v-col>
-                      </v-row>
-
-                      <v-alert
-                        v-if="isDateRangeInvalid"
-                        class="mt-1"
+                      <v-date-input
+                        v-model="searchForm.startDate"
+                        append-inner-icon="mdi-calendar"
+                        bg-color="white"
+                        color="teal-darken-2"
                         density="compact"
-                        type="error"
-                        variant="tonal"
-                      >
-                        結束日期須晚於開始日期
-                      </v-alert>
+                        :disabled="searchForm.searchType !== 'advanced'"
+                        placeholder="起日"
+                        prepend-icon=""
+                        :rules="rules.startDateRule"
+                        variant="outlined"
+                      />
+
+                      <div class="text-body-1 font-weight-medium pt-2">~</div>
+
+                      <v-date-input
+                        v-model="searchForm.endDate"
+                        append-inner-icon="mdi-calendar"
+                        bg-color="white"
+                        color="teal-darken-2"
+                        density="compact"
+                        :disabled="searchForm.searchType !== 'advanced'"
+                        placeholder="訖日"
+                        prepend-icon=""
+                        :rules="rules.endDateRule"
+                        variant="outlined"
+                      />
                     </v-col>
                   </v-row>
                 </v-col>
               </v-row>
             </v-radio-group>
+
+            <v-row>
+              <v-col cols="6">
+                <v-btn
+                  class="hnb__btn--default"
+                  variant="flat"
+                  @click="changeType"
+                >
+                  選擇填寫方式
+                </v-btn>
+              </v-col>
+
+              <v-col class="d-flex justify-end" cols="6">
+                <v-btn
+                  class="hnb__btn--cancel mx-1"
+                  variant="flat"
+                  @click="reset"
+                >
+                  重設
+                </v-btn>
+
+                <v-btn
+                  class="hnb__btn--default mx-1"
+                  type="submit"
+                  variant="flat"
+                >
+                  確定
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-form>
         </v-card>
+      </div>
+
+      <!-- 開狀申請書清冊 -->
+      <div v-if="isShowList" class="mt-4 mx-4">
+        <h2 class="hnb16__title">開狀申請書清冊</h2>
+        <LcAppList :form-data="searchForm" />
 
       </div>
 
+      <!-- 填寫開狀申請書 -->
       <div>
         <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2>
+        {{searchForm}}
         <!-- 填寫開狀申請書-CDS -->
         <!-- <LcForCDS v-if="form.inputType === 'new' && form.beneficiaryType === '1'" /> -->
 
@@ -319,25 +312,14 @@
 </template>
 
 <script setup lang="ts">
+  import { isAfter, isBefore } from 'date-fns'
+  import { reactive, ref, watch } from 'vue'
+
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '申請作業' },
     { title: '開狀申請書', disabled: true },
   ]
-
-  const formRef = ref()
-  const searchFormRef = ref()
-
-  interface Form {
-    beneficiaryType: string | null
-    beneficiary: string | null
-    inputType: string | null
-  }
-  const form = reactive<Form>({
-    beneficiaryType: null,
-    beneficiary: null,
-    inputType: null,
-  })
 
   const beneficiaryTypeOptions = [
     { title: 'CDS 客戶 (中鋼、中鴻、中鋁、華新麗華、東和鋼鐵)', value: '1' },
@@ -362,6 +344,17 @@
     { title: '舊有申請資料修改', value: 'edit' },
   ]
 
+  const searchStatusOptions = [
+    { title: '待銀行審核', value: 'pending' },
+    { title: '已核准', value: 'approved' },
+    { title: '已拒絕', value: 'rejected' },
+  ]
+
+  const currentView = ref('selectType')
+  const isShowList = ref(false)
+  const formRef = ref()
+  const searchFormRef = ref()
+
   interface SearchForm {
     searchType: 'lcNo' | 'appNo' | 'advanced'
     lcNo: string
@@ -372,6 +365,18 @@
     startDate: string | null
     endDate: string | null
   }
+
+  interface Form {
+    beneficiaryType: string | null
+    beneficiary: string | null
+    inputType: string | null
+  }
+
+  const form = reactive<Form>({
+    beneficiaryType: null,
+    beneficiary: null,
+    inputType: null,
+  })
 
   const searchForm = reactive<SearchForm>({
     searchType: 'lcNo',
@@ -384,18 +389,28 @@
     endDate: null,
   })
 
-  const searchStatusOptions = [
-    { title: '待銀行審核', value: 'pending' },
-    { title: '已核准', value: 'approved' },
-    { title: '已拒絕', value: 'rejected' },
-  ]
+  interface Rules {
+    startDateRule: ((v: string) => boolean | string)[]
+    endDateRule: ((v: string) => boolean | string)[]
+  }
+  const rules: Rules = {
+    startDateRule: [v => {
+      if (!v || !searchForm.endDate) return true
 
-  const isDateRangeInvalid = computed(() => {
-    if (!searchForm.startDate || !searchForm.endDate) {
-      return false
-    }
-    return new Date(searchForm.endDate).getTime() <= new Date(searchForm.startDate).getTime()
-  })
+      const start = new Date(v)
+      const end = new Date(searchForm.endDate)
+      if (!start || !end) return true
+      return !isAfter(start, end) || '起始日期不能晚於結束日期'
+    }],
+    endDateRule: [v => {
+      if (!v || !searchForm.startDate) return true
+
+      const end = new Date(v)
+      const start = new Date(searchForm.startDate)
+      if (!start || !end) return true
+      return !isBefore(end, start) || '結束日期不能早於起始日期'
+    }],
+  }
 
   watch(() => form.beneficiaryType, () => {
     form.beneficiary = null
@@ -406,8 +421,34 @@
     form.inputType = null
   })
 
-  function sendForm() {
+  watch(() => searchForm.searchType, newType => {
+    searchFormRef.value.reset()
+    searchForm.searchType = newType
+  })
+
+  function changeType (): void {
+    currentView.value = 'selectType'
+    isShowList.value = false
+    nextTick(() => {
+      formRef.value.reset()
+    })
+  }
+
+  function sendTypeForm (): void {
     console.log('送出表單', form)
-    // 在這裡可以進行表單驗證或發送 API 請求
+    const { beneficiaryType, beneficiary, inputType } = form
+    if (inputType === 'edit') {
+      currentView.value = 'search'
+    }
+  }
+
+  function sendSearchForm (): void {
+    console.log('送出表單', searchForm)
+    isShowList.value = true
+  }
+
+  function reset (): void {
+    searchFormRef.value.reset()
+    searchForm.searchType = 'lcNo'
   }
 </script>

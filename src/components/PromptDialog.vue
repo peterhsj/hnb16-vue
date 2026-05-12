@@ -5,13 +5,23 @@
     width="auto"
   >
     <v-card
+      class="hnb__dialog"
       max-width="400"
       min-width="300"
     >
-      <v-card-title class="px-6 text-subtitle-1 bg-blue-darken-2">
-        {{ props.messageTitle }}
+      <v-card-title class="d-flex px-4 font-weight-bold text-red-darken-3">
+        <span>{{ props.messageTitle }}</span>
+        <v-spacer />
+
+        <v-btn
+          density="comfortable"
+          icon="mdi-close"
+          variant="flat"
+          @click="onClose"
+        />
       </v-card-title>
-      <v-card-text class="d-flex align-center">
+
+      <v-card-text class="d-flex align-center bg-grey-lighten-4">
         <span class="mr-4">
           <v-icon
             v-if="props.messageStatus === 'alert'"
@@ -20,6 +30,7 @@
             icon="mdi-alert-circle-outline"
             size="60"
           />
+
           <v-icon
             v-else-if="props.messageStatus === 'success'"
             class="my-4"
@@ -28,14 +39,15 @@
             size="60"
           />
         </span>
+
         <div v-html="props.message" />
       </v-card-text>
+
       <v-card-actions>
         <v-spacer />
 
         <v-btn
-          class="text-white"
-          color="blue-grey-lighten-3"
+          class="hnb__btn--cancel"
           variant="flat"
           @click="onClose"
         >
@@ -44,12 +56,14 @@
 
         <v-btn
           v-if="props.isConfirmBtn"
-          color="light-blue-darken-2"
+          class="hnb__btn--default"
           variant="flat"
           @click="promptConfirm"
         >
           確認
         </v-btn>
+
+        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-dialog>

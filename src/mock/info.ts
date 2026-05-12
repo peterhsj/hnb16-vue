@@ -32,11 +32,16 @@ const lcAppItems: InfoItem[] = [
 ]
 
 // 查詢開狀訊息列表
-Mock.mock('/api/info/lcApp', 'get', () => {
+Mock.mock('/api/info/lcApp', 'post', (options: any) => {
+  const body = options.body ? JSON.parse(options.body) : {}
+  const { page, itemsPerPage } = body as { page: number, itemsPerPage: number }
+
+  console.log('Received payload for /api/info/lcApp:', { page, itemsPerPage })
   return {
     code: 200,
     message: 'success',
     data: lcAppItems,
+    total: lcAppItems.length,
   }
 })
 
@@ -105,11 +110,16 @@ const amendAppItems: AmendItem[] = [
 ]
 
 // 查詢修狀訊息列表
-Mock.mock('/api/info/amendApp', 'get', () => {
+Mock.mock('/api/info/amendApp', 'post', (options: any) => {
+  const body = options.body ? JSON.parse(options.body) : {}
+  const { page, itemsPerPage } = body as { page: number, itemsPerPage: number }
+
+  console.log('Received payload for /api/info/amendApp:', { page, itemsPerPage })
   return {
     code: 200,
     message: 'success',
     data: amendAppItems,
+    total: amendAppItems.length,
   }
 })
 
@@ -176,11 +186,16 @@ const cancelAppItems: CancelItem[] = [
 ]
 
 // 查詢註銷訊息列表
-Mock.mock('/api/info/cancelApp', 'get', () => {
+Mock.mock('/api/info/cancelApp', 'post', (options: any) => {
+  const body = options.body ? JSON.parse(options.body) : {}
+  const { page, itemsPerPage } = body as { page: number, itemsPerPage: number }
+
+  console.log('Received payload for /api/info/cancelApp:', { page, itemsPerPage })
   return {
     code: 200,
     message: 'success',
     data: cancelAppItems,
+    total: cancelAppItems.length,
   }
 })
 
@@ -247,11 +262,16 @@ const draftAppItems: DraftItem[] = [
 ]
 
 // 查詢押匯訊息列表
-Mock.mock('/api/info/draftApp', 'get', () => {
+Mock.mock('/api/info/draftApp', 'post', (options: any) => {
+  const body = options.body ? JSON.parse(options.body) : {}
+  const { page, itemsPerPage } = body as { page: number, itemsPerPage: number }
+
+  console.log('Received payload for /api/info/draftApp:', { page, itemsPerPage })
   return {
     code: 200,
     message: 'success',
     data: draftAppItems,
+    total: draftAppItems.length,
   }
 })
 
