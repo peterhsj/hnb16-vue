@@ -68,6 +68,12 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
+    <!-- App Dialog -->
+    <AppDialog
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      @on-close="appDialogClose"
+    />
   </div>
 </template>
 
@@ -83,6 +89,9 @@
 
   const tableItems = ref<LcAppItem[]>([])
   const isLoading = ref(false)
+  // App Dialog
+  const appDialog = ref(false)
+  const appNo = ref<string>('')
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -213,12 +222,14 @@
   }
 
   // 查看開狀申請書
-  function handleAppView (appNo: string): void {
-    messageTitle.value = '查看開狀申請書'
-    message.value = `您選擇了查看開狀申請書，申請書號碼為 ${appNo}。`
-    messageStatus.value = 'info'
-    isConfirmBtn.value = false
-    messageDialog.value = true
+  function handleAppView (value: string): void {
+    // messageTitle.value = '查看開狀申請書'
+    // message.value = `您選擇了查看開狀申請書，申請書號碼為 ${appNo}。`
+    // messageStatus.value = 'info'
+    // isConfirmBtn.value = false
+    // messageDialog.value = true
+    appNo.value = value
+    appDialog.value = true
   }
 
   // 查看信用狀
@@ -240,5 +251,11 @@
   // 確認 message
   function messageConfirm (): void {
     messageDialog.value = false
+  }
+
+  // 離開 App Dialog
+  function appDialogClose (): void {
+    appDialog.value = false
+    appNo.value = ''
   }
 </script>

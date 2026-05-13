@@ -308,12 +308,14 @@ body,
     }
 
     th:not(:first-child),
-    td:not(:first-child) {
+    td:not(:first-child),
+    &--left-border {
       border-left: 1px solid #90bcbe;
+      // border-bottom: 1px solid #90bcbe !important;
     }
 
     th, td {
-      padding: 4px 6px !important;
+      padding: 8px 12px !important;
     }
   }
 
@@ -368,6 +370,16 @@ body,
       }
     }
   }
+
+  // 列表
+  &__list {
+    &--ol {
+      list-style-type: none;
+      text-indent: -1.4rem;
+      margin-left: 2.25rem;
+    }
+  }
+
 
   // 按鈕
   &__btn {
