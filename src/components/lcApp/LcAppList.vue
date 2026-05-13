@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { LcAppItem } from '@/api/lcApp'
+  import type { LcAppItem, SearchForm } from '@/api/lcApp'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getLcAppList } from '@/api/lcApp'
@@ -111,10 +111,18 @@
   ]
 
   interface Props {
-    formData?: LcAppItem
+    formData?: SearchForm | {}
   }
-  const props = withDefaults(defineProps<Props>(), {
-    formData: {} as LcAppItem,
+  const props = defineProps<Props>()
+  const searchForm = ref<SearchForm | {}>(props.formData || {
+    searchType: 'lcNo',
+    lcNo: null,
+    appNo: null,
+    beneNo: null,
+    beneInNo: null,
+    status: null,
+    startDate: null,
+    endDate: null,
   })
 
   interface PageOptions {
@@ -139,6 +147,16 @@
   )
 
   watch(
+    () => props.formData,
+    newVal => {
+      searchForm.value = newVal || {}
+      pageOptions.value.page = 1
+      fetchLcAppList()
+    },
+    { deep: true },
+  )
+
+  watch(
     () => pageOptions.value,
     newVal => {
       console.log('Page options changed:', newVal)
@@ -149,11 +167,20 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
+    const { lcNo, appNo, beneNo, beneInNo, status, startDate, endDate } = searchForm.value as SearchForm
     const { page, itemsPerPage } = pageOptions.value
     const payload = {
+      lcNo,
+      appNo,
+      beneNo,
+      beneInNo,
+      status,
+      startDate,
+      endDate,
       page,
       itemsPerPage,
     }
+    console.log('Fetching list with payload:', payload, 'Page:', page, 'Items per page:', itemsPerPage)
     isLoading.value = true
     try {
       const res = await getLcAppList(payload)

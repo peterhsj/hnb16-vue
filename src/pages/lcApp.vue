@@ -14,13 +14,13 @@
         <h2 class="mx-4 hnb16__title">選擇開狀申請書填寫方式</h2>
 
         <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
-          <v-form ref="formRef" @submit.prevent="sendTypeForm">
+          <v-form ref="typeFormRef" @submit.prevent="sendTypeForm">
             <v-row align="center">
               <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                 <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人類別</div>
 
                 <v-select
-                  v-model="form.beneficiaryType"
+                  v-model="typeForm.beneficiaryType"
                   bg-color="white"
                   color="teal-darken-2"
                   density="compact"
@@ -33,12 +33,12 @@
                 />
               </v-col>
 
-              <template v-if="form.beneficiaryType === '1'">
+              <template v-if="typeForm.beneficiaryType === '1'">
                 <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                   <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人</div>
 
                   <v-select
-                    v-model="form.beneficiary"
+                    v-model="typeForm.beneficiary"
                     bg-color="white"
                     color="teal-darken-2"
                     density="compact"
@@ -52,12 +52,12 @@
                 </v-col>
               </template>
 
-              <template v-if="form.beneficiaryType === '2'">
+              <template v-if="typeForm.beneficiaryType === '2'">
                 <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                   <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">集團受益人</div>
 
                   <v-select
-                    v-model="form.beneficiary"
+                    v-model="typeForm.beneficiary"
                     bg-color="white"
                     color="teal-darken-2"
                     density="compact"
@@ -71,12 +71,12 @@
                 </v-col>
               </template>
 
-              <template v-if="form.beneficiaryType !== null">
+              <template v-if="typeForm.beneficiaryType !== null">
                 <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                   <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">填寫方式</div>
 
                   <v-select
-                    v-model="form.inputType"
+                    v-model="typeForm.inputType"
                     bg-color="white"
                     color="teal-darken-2"
                     density="compact"
@@ -96,7 +96,7 @@
                 <v-btn
                   class="hnb__btn--default"
                   density="compact"
-                  :disabled="form.inputType === null"
+                  :disabled="typeForm.inputType === null"
                   type="submit"
                 >
                   確定
@@ -295,7 +295,7 @@
       <!-- 開狀申請書清冊 -->
       <div v-if="isShowList" class="mt-4 mx-4">
         <h2 class="hnb16__title">開狀申請書清冊</h2>
-        <LcAppList :form-data="searchForm" />
+        <LcAppList :form-data="propsFormData" />
 
       </div>
 
@@ -304,7 +304,7 @@
         <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2>
         {{searchForm}}
         <!-- 填寫開狀申請書-CDS -->
-        <!-- <LcForCDS v-if="form.inputType === 'new' && form.beneficiaryType === '1'" /> -->
+        <!-- <LcForCDS v-if="typeForm.inputType === 'new' && typeForm.beneficiaryType === '1'" /> -->
 
       </div>
     </v-container>
@@ -312,6 +312,7 @@
 </template>
 
 <script setup lang="ts">
+  import type { SearchForm, TypeForm } from '@/api/lcApp'
   import { isAfter, isBefore } from 'date-fns'
   import { reactive, ref, watch } from 'vue'
 
@@ -352,27 +353,10 @@
 
   const currentView = ref('selectType')
   const isShowList = ref(false)
-  const formRef = ref()
+  const typeFormRef = ref()
   const searchFormRef = ref()
 
-  interface SearchForm {
-    searchType: 'lcNo' | 'appNo' | 'advanced'
-    lcNo: string
-    appNo: string
-    beneNo: string
-    beneInNo: string
-    status: string | null
-    startDate: string | null
-    endDate: string | null
-  }
-
-  interface Form {
-    beneficiaryType: string | null
-    beneficiary: string | null
-    inputType: string | null
-  }
-
-  const form = reactive<Form>({
+  const typeForm = reactive<TypeForm>({
     beneficiaryType: null,
     beneficiary: null,
     inputType: null,
@@ -388,6 +372,7 @@
     startDate: null,
     endDate: null,
   })
+  const propsFormData = ref<SearchForm | {}>({})
 
   interface Rules {
     startDateRule: ((v: string) => boolean | string)[]
@@ -412,13 +397,13 @@
     }],
   }
 
-  watch(() => form.beneficiaryType, () => {
-    form.beneficiary = null
-    form.inputType = null
+  watch(() => typeForm.beneficiaryType, () => {
+    typeForm.beneficiary = null
+    typeForm.inputType = null
   })
 
-  watch(() => form.beneficiary, () => {
-    form.inputType = null
+  watch(() => typeForm.beneficiary, () => {
+    typeForm.inputType = null
   })
 
   watch(() => searchForm.searchType, newType => {
@@ -430,13 +415,13 @@
     currentView.value = 'selectType'
     isShowList.value = false
     nextTick(() => {
-      formRef.value.reset()
+      typeFormRef.value.reset()
     })
   }
 
   function sendTypeForm (): void {
-    console.log('送出表單', form)
-    const { beneficiaryType, beneficiary, inputType } = form
+    console.log('送出表單', typeForm)
+    const { beneficiaryType, beneficiary, inputType } = typeForm
     if (inputType === 'edit') {
       currentView.value = 'search'
     }
@@ -445,6 +430,7 @@
   function sendSearchForm (): void {
     console.log('送出表單', searchForm)
     isShowList.value = true
+    propsFormData.value = { ...searchForm }
   }
 
   function reset (): void {
