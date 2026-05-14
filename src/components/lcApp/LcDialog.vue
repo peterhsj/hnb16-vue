@@ -51,7 +51,7 @@
             <!-- 第 1 列：敬啟者 / 信用狀號碼 / 通知銀行編號 -->
             <tr>
               <td class="w-50" rowspan="2">
-                <p class="font-weight-bold mb-1">敬啟者：</p>
+                <p class="font-weight-bold my-1">敬啟者：</p>
 
                 <p>
                   本行茲循右列申請人之請求開發本信用狀，本信用狀規定如有未盡事宜適用國際商會所訂現行「信用狀統一慣例與實務」之規定。
@@ -115,11 +115,11 @@
             <!-- 第 5 列：匯票條件 / 應檢附單據 -->
             <tr>
               <td colspan="3">
-                <p class="font-weight-bold mb-1">
+                <p class="font-weight-bold my-1">
                   本信用狀可由上開受益人在不超過上開金額範圍內，依本狀規定條件簽發匯票承兌/付款：
                 </p>
 
-                <p class="font-weight-bold mb-1">一、匯票之條件：</p>
+                <p class="font-weight-bold my-1">一、匯票之條件：</p>
 
                 <ol class="hnb__list--ol ms-10">
                   <li>甲、付款人：華南商業銀行 建成分行</li>
@@ -127,12 +127,12 @@
                   <li>丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 
-                <p class="font-weight-bold mb-1">二、應檢附之單據如下：</p>
+                <p class="font-weight-bold my-1">二、應檢附之單據如下：</p>
 
                 <ol class="hnb__list--ol ms-10">
-                  <li><v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
-                  <li><v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
-                  <li><v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li>1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
+                  <li>2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
+                  <li>3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
                 </ol>
 
                 <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
@@ -143,7 +143,7 @@
             <!-- 第 6 列：特別指示 -->
             <tr>
               <td colspan="3">
-                <p class="font-weight-bold mb-1">三、特別指示：</p>
+                <p class="font-weight-bold my-1">三、特別指示：</p>
                 <p>1.電子押匯特別指示條款</p>
 
                 <ol class="hnb__list--ol">
@@ -154,14 +154,14 @@
                   <li>(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
                   <li>(6) 本信用狀適用eUCP2.0版。</li>
                   <li>(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
-                  <li>(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSL/提示</li>
+                  <li>(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
                 </ol>
 
-                <p class="mb-1">
+                <p class="my-1">
                   2.最後交貨日期：民國  年  月  日。（未填者自開狀日起三個月視為最後交貨日）
                 </p>
 
-                <p class="mb-1">
+                <p class="my-1">
                   3.遠期信用狀利息：
                   <v-icon icon="mdi mdi-square" size="small" /> 買方負擔
                   <v-icon icon="mdi mdi-square-outline" size="small" /> 賣方負擔
@@ -204,7 +204,6 @@
               <v-btn
                 class="ma-1 hnb__btn--default"
                 prepend-icon="mdi-cloud-download"
-                size="small"
                 @click="downloadFile"
               >
                 下載電子檔
@@ -213,17 +212,16 @@
               <v-btn
                 class="ma-1 hnb__btn--orange"
                 prepend-icon="mdi-printer"
-                size="small"
                 @click="printDoc"
               >
                 列印
               </v-btn>
             </v-col>
 
-            <v-col class="text-center my-2" cols="12">
+            <v-col v-if="props.isShowVersion" class="text-center my-2" cols="12">
               <span
                 class="mx-3 text-decoration-underline text-primary cursor-pointer"
-                @click="selectedVersion = 0"
+                @click.prevent="handleLcView('1')"
               >
                 版本 0
               </span>
@@ -234,7 +232,7 @@
           </v-row>
 
           <!-- 修改通知書號碼卡片 -->
-          <v-row justify="center">
+          <v-row v-if="props.isShowNotice" justify="center">
             <v-col cols="12" md="4" sm="6">
               <v-card class="mx-auto border-sm bg-white" variant="outlined">
                 <v-card-title class="text-center text-red-darken-3 text-subtitle-1 font-weight-bold py-2">
@@ -252,6 +250,7 @@
                     link
                     :title="item"
                     :value="item"
+                    @click.prevent="handleNoticeView(item)"
                   />
                 </v-list>
               </v-card>
@@ -281,10 +280,14 @@
   interface Props {
     lcDialog?: boolean
     lcNo?: string
+    isShowVersion?: boolean
+    isShowNotice?: boolean
   }
   const props = withDefaults(defineProps<Props>(), {
     lcDialog: false,
     lcNo: '',
+    isShowNotice: false,
+    isShowVersion: false,
   })
 
   const show = ref<boolean>(props.lcDialog)
@@ -304,14 +307,14 @@
   const emit = defineEmits<{
     'update:lcDialog': [boolean]
     'on-close': []
+    'open-lc-detail': [lcNo: string]
+    'open-notice-detail': [noticeNo: string]
   }>()
 
   const amendmentNos = ref([
     'LC123400215_V01',
     'LC123400215_V02',
   ])
-
-  const selectedVersion = ref(1)
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -325,5 +328,15 @@
   function onClose (): void {
     show.value = false
     emit('on-close')
+  }
+
+  // 查看信用狀
+  function handleLcView (value: string): void {
+    emit('open-lc-detail', value)
+  }
+
+  // 查看修改通知書
+  function handleNoticeView (value: string): void {
+    emit('open-notice-detail', value)
   }
 </script>
