@@ -95,7 +95,6 @@
               <v-col class="d-flex justify-end" cols="12">
                 <v-btn
                   class="hnb__btn--default"
-                  density="compact"
                   :disabled="typeForm.inputType === null"
                   type="submit"
                 >
@@ -112,7 +111,7 @@
 
         <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
           <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
-            <v-radio-group v-model="searchForm.searchType">
+            <v-radio-group v-model="searchForm.searchType" hide-details="auto">
               <v-row class="ma-0">
                 <v-col class="px-0 d-flex align-center" cols="auto">
                   <v-radio
@@ -263,7 +262,6 @@
               <v-col cols="6">
                 <v-btn
                   class="hnb__btn--default"
-                  variant="flat"
                   @click="changeType"
                 >
                   選擇填寫方式
@@ -273,7 +271,6 @@
               <v-col class="d-flex justify-end" cols="6">
                 <v-btn
                   class="hnb__btn--cancel mx-1"
-                  variant="flat"
                   @click="reset"
                 >
                   重設
@@ -282,7 +279,6 @@
                 <v-btn
                   class="hnb__btn--default mx-1"
                   type="submit"
-                  variant="flat"
                 >
                   確定
                 </v-btn>

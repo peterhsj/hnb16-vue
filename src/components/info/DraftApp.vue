@@ -23,10 +23,8 @@
         <div class="d-flex flex-column align-center" style="width: 80px;">
           <v-btn
             class="hnb__btn--select mt-2"
-            density="compact"
             :disabled="draftAppSelected.length === 0"
-            elevation="2"
-            variant="elevated"
+            size="small"
             @click="deleteDraftAppSelected"
           >
             刪除
@@ -56,9 +54,7 @@
 
           <v-btn
             class="hnb__btn--select mt-2"
-            density="compact"
-            elevation="2"
-            variant="elevated"
+            size="small"
             @click="readAll"
           >
             全部已讀
@@ -71,8 +67,8 @@
           v-if="item.status"
           class="py-1 px-4"
           color="orange-darken-1"
-          density="comfortable"
           label
+          size="small"
         >
           已讀
         </v-chip>
@@ -80,8 +76,7 @@
         <v-btn
           v-else
           class="hnb__btn--default"
-          density="compact"
-          variant="elevated"
+          size="small"
           @click="readItem(item)"
         >
           標為已讀

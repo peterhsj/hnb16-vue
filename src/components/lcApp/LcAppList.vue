@@ -40,6 +40,7 @@
       <template #item.action="{ item }">
         <v-btn
           class="hnb__btn--default mx-1 my-1"
+          size="small"
           variant="flat"
           @click="editItem(item)"
         >
@@ -74,6 +75,12 @@
       :app-no="appNo"
       @on-close="appDialogClose"
     />
+    <!-- Lc Dialog -->
+    <LcDialog
+      v-model:lc-dialog="lcDialog"
+      :lc-no="lcNo"
+      @on-close="lcDialogClose"
+    />
   </div>
 </template>
 
@@ -92,6 +99,9 @@
   // App Dialog
   const appDialog = ref(false)
   const appNo = ref<string>('')
+  // Lc Dialog
+  const lcDialog = ref(false)
+  const lcNo = ref<string>('')
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -107,16 +117,16 @@
   })
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false },
-    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false },
-    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false },
-    { title: '申請人', key: 'applicant', align: 'start', sortable: false },
-    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false },
-    { title: '申請日期', key: 'applyDate', align: 'center', sortable: false },
-    { title: '金額', key: 'amount', align: 'end', sortable: false },
-    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false },
-    { title: '狀態', key: 'status', align: 'center', sortable: false },
-    { title: '操作', key: 'action', align: 'center', sortable: false, width: 200 },
+    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
+    { title: '申請人', key: 'applicant', sortable: false, nowrap: true },
+    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
+    { title: '申請日期', key: 'applyDate', align: 'center', sortable: false, nowrap: true },
+    { title: '金額', key: 'amount', align: 'end', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiary', sortable: false, nowrap: true },
+    { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
+    { title: '操作', key: 'action', align: 'center', sortable: false, width: 200, nowrap: true },
   ]
 
   interface Props {
@@ -233,12 +243,14 @@
   }
 
   // 查看信用狀
-  function handleLcView (lcNo: string): void {
-    messageTitle.value = '查看信用狀'
-    message.value = `您選擇了查看信用狀，信用狀號碼為 ${lcNo}。`
-    messageStatus.value = 'info'
-    isConfirmBtn.value = false
-    messageDialog.value = true
+  function handleLcView (value: string): void {
+    // messageTitle.value = '查看信用狀'
+    // message.value = `您選擇了查看信用狀，信用狀號碼為 ${lcNo}。`
+    // messageStatus.value = 'info'
+    // isConfirmBtn.value = false
+    // messageDialog.value = true
+    lcNo.value = value
+    lcDialog.value = true
   }
 
   onMounted(fetchLcAppList)
@@ -255,6 +267,12 @@
 
   // 離開 App Dialog
   function appDialogClose (): void {
+    appDialog.value = false
+    appNo.value = ''
+  }
+
+  // 離開 Lc Dialog
+  function lcDialogClose (): void {
     appDialog.value = false
     appNo.value = ''
   }
