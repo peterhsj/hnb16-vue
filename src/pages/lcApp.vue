@@ -271,7 +271,7 @@
               <v-col class="d-flex justify-end" cols="6">
                 <v-btn
                   class="hnb__btn--cancel mx-1"
-                  @click="reset"
+                  @click="resetSearchForm"
                 >
                   重設
                 </v-btn>
@@ -291,17 +291,32 @@
       <!-- 開狀申請書清冊 -->
       <div v-if="isShowList" class="mt-4 mx-4">
         <h2 class="hnb16__title">開狀申請書清冊</h2>
-        <LcAppList :form-data="propsFormData" />
+        <LcAppList :form-data="propsFormData" @on-edit="handleEdit" />
 
       </div>
 
       <!-- 填寫開狀申請書 -->
-      <div>
-        <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2>
-        {{searchForm}}
+      <div v-if="isEdit">
+        <!-- <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2> -->
         <!-- 填寫開狀申請書-CDS -->
-        <!-- <LcForCDS v-if="typeForm.inputType === 'new' && typeForm.beneficiaryType === '1'" /> -->
-
+        <LcAppEditFormCds
+          v-if="typeForm.beneficiaryType === '1'"
+          :form-data="lcAppData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
+        />
+        <!-- 填寫開狀申請書-FPC -->
+        <!--
+        <LcAppEditFormFPC
+          v-if="typeForm.beneficiaryType === '2'"
+        />
+        -->
+        <!-- 填寫開狀申請書-other -->
+        <!--
+        <LcAppEditFormOther
+          v-if="typeForm.beneficiaryType === '3'"
+        />
+        -->
       </div>
     </v-container>
   </div>
@@ -309,6 +324,7 @@
 
 <script setup lang="ts">
   import type { SearchForm, TypeForm } from '@/api/lcApp'
+  import type { LcAppData } from '@/types/lcCdsApplication'
   import { isAfter, isBefore } from 'date-fns'
   import { reactive, ref, watch } from 'vue'
 
@@ -348,9 +364,11 @@
   ]
 
   const currentView = ref('selectType')
+  const isEdit = ref(false)
   const isShowList = ref(false)
   const typeFormRef = ref()
   const searchFormRef = ref()
+  const lcAppData = ref<LcAppData>({ type: '', appNo: '' })
 
   const typeForm = reactive<TypeForm>({
     beneficiaryType: null,
@@ -403,15 +421,16 @@
   })
 
   watch(() => searchForm.searchType, newType => {
-    searchFormRef.value.reset()
+    searchFormRef.value.SearchForm()
     searchForm.searchType = newType
   })
 
+  // 選擇開狀申請書填寫方式
   function changeType (): void {
     currentView.value = 'selectType'
     isShowList.value = false
     nextTick(() => {
-      typeFormRef.value.reset()
+      typeFormRef.value.SearchForm()
     })
   }
 
@@ -420,17 +439,47 @@
     const { beneficiaryType, beneficiary, inputType } = typeForm
     if (inputType === 'edit') {
       currentView.value = 'search'
+    } else {
+      handleEdit({ type: 'new', appNo: '' })
+      currentView.value = ''
+      isEdit.value = true
     }
   }
 
+  // 查詢舊有開狀申請書
   function sendSearchForm (): void {
     console.log('送出表單', searchForm)
     isShowList.value = true
     propsFormData.value = { ...searchForm }
   }
 
-  function reset (): void {
+  function resetSearchForm (): void {
     searchFormRef.value.reset()
     searchForm.searchType = 'lcNo'
+  }
+
+  // 編輯開狀申請書
+  function handleEdit (payload: { type: string, appNo: string }): void {
+    console.log('編輯事件觸發，接收到 payload:', payload)
+    // 取得 appId
+    lcAppData.value = { type: payload.type, appNo: payload.appNo }
+    currentView.value = ''
+    isShowList.value = false
+    isEdit.value = true
+  }
+
+  function closeEditForm (): void {
+    isEdit.value = false
+    currentView.value = 'selectType'
+    typeForm.beneficiaryType = null
+    typeForm.beneficiary = null
+    typeForm.inputType = null
+  }
+
+  function submitEditForm (): void {
+    // 送出編輯表單後的處理邏輯（例如刷新列表、顯示成功訊息等）
+    console.log('編輯表單已送出，執行相關處理')
+    // 這裡可以根據實際需求來決定是否要關閉編輯表單或是刷新列表等
+    closeEditForm()
   }
 </script>

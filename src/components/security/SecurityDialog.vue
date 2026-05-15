@@ -12,26 +12,35 @@
         <v-card-title class="px-6 py-3 bg-blue-darken-1">
           資訊安全政策宣告
         </v-card-title>
+
         <v-divider />
+
         <v-card-text class="overflow-y-auto" height="600">
           <p class="py-2 text-blue-grey-darken-2">
             感謝您蒞臨
             <span class="text-subtitle-1 text-brown-darken-1">網際優勢</span>
             ( 以下簡稱本公司 )！
           </p>
+
           <h3 class="text-h6 text-cyan-darken-3">一、目的</h3>
+
           <p class="pl-5 py-2 text-blue-grey-darken-2">
             本公司為確保資訊資料、系統、設備及網路通訊安全，有效降低因人為疏失、蓄意或天然災害等導致之資訊資產遭竊、不當使用、洩漏、竄改或毀損等風險，並建立資訊安全管理系統，特訂定資訊安全政策(以下簡稱本政策)，以確保資訊之機密性、完整性與可用性。
           </p>
+
           <ul class="pl-10 py-2 text-blue-grey-darken-2">
             <li>機密性：確保只有經授權的人才能存取資訊。</li>
             <li>完整性：確保使用之資訊正確無誤、未遭竄改。</li>
             <li>可用性：確保經授權的使用者在需要時可以存取資訊及相關資訊資產。</li>
           </ul>
+
           <h3 class="text-h6 text-cyan-darken-3">二、依據</h3>
+
           <p class="pl-5 py-2 text-blue-grey-darken-2">ISO/IEC 27001:2013 <br>
             (Information technology - Security techniques - Information security management systems - Requirements)。</p>
+
           <h3 class="text-h6 text-cyan-darken-3">三、內容</h3>
+
           <ul class="pl-10 py-2 text-blue-grey-darken-2">
             <li>建立組織資訊安全管理委員會，負責推動資訊安全工作。</li>
             <li>各項資訊安全管理規定必須遵守政府相關法規</li>
@@ -46,15 +55,20 @@
             <li>本公司所有人員負有維持資訊安全之責任，且應遵守相關之資訊安全管理規範。 </li>
             <li>資訊安全管理系統文件應有明確之管理規範。</li>
           </ul>
+
           <h3 class="text-h6 text-cyan-darken-3">四、修訂與公告</h3>
+
           <ul class="pl-10 py-2 text-blue-grey-darken-2">
             <li>本政策每年應至少評估一次，以反映政府、客戶、供應商等內外部議題及本公司業務之最新狀況，確保安全實務作業之可用性及有效性。</li>
             <li>本政策由「資訊安全管理委員會」審查後頒布實施，修正時亦同。</li>
           </ul>
         </v-card-text>
+
         <v-divider />
+
         <v-card-actions class="py-4 px-6">
           <v-spacer />
+
           <v-btn
             class="text-white"
             color="blue-grey-lighten-3"

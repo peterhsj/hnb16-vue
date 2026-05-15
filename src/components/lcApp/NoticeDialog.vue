@@ -36,7 +36,7 @@
                     <!-- 銀行名稱 -->
                     <v-col class="text-center my-2" cols="12">
                       <span class="hnb__bankName">國內信用狀修改通知書</span>
-                      <br />
+                      <br>
                       <span class="text-h6">網際商業銀行 南門分行</span>
                     </v-col>
                     <!-- 基本欄位 (兩欄排列) -->

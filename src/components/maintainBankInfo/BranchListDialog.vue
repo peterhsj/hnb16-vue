@@ -13,14 +13,19 @@
           <v-card-title class="px-6 py-3 bg-blue-darken-1">
             {{ props.data.bankName }} 分行資料
           </v-card-title>
+
           <v-divider />
+
           <v-card-text class="overflow-y-auto" height="600">
             <!-- 分行列表顯示 -->
             <BranchList v-if="props.data" :form-data="props.data" title="分行資料列表" />
           </v-card-text>
+
           <v-divider />
+
           <v-card-actions class="py-4 px-6">
             <v-spacer />
+
             <v-btn
               class="text-white"
               color="blue-grey-lighten-3"

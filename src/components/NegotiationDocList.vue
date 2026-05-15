@@ -3,11 +3,13 @@
     <!-- 押匯單據查詢列表 -->
     <div class="d-flex justify-space-between align-center">
       <h1 class="hnb__title">{{ props.title }}</h1>
+
       <div v-if="totalAmount > 0">
         <span class="me-5">
           <span class="text-teal-darken-2">發票張數總計：</span>
           {{ thousandsFormatting(totalAmount) }} 張
         </span>
+
         <v-btn
           class="me-5 ms-4"
           color="light-blue-darken-2"
@@ -19,6 +21,7 @@
         </v-btn>
       </div>
     </div>
+
     <v-card class="border-lg pa-4" flat>
       <div v-if="totalAmount > 0" class="mb-4">
         <v-btn
@@ -30,6 +33,7 @@
           <v-icon :icon="'mdi-trash-can-outline'" size="18" />
           刪除
         </v-btn>
+
         <v-btn
           color="success"
           size="small"
@@ -46,6 +50,7 @@
           <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
         </v-card-text>
       </v-card>
+
       <v-data-table-server
         v-else
         v-model="selectedItems"
@@ -68,6 +73,7 @@
         <template #header.invoicesRequired>
           <div class="text-end text-no-wrap">應檢附 / 已檢附<br>發票張數</div>
         </template>
+
         <template #item.invoicesRequired="{ item }">
           {{ item?.invoicesRequired || 0 }} / {{ item?.invoicesAttached || 0 }}
         </template>
@@ -77,6 +83,7 @@
           <a v-if="item.draftNo" class="text-blue-darken-2" href="#" @click.prevent="handleDraftView(item.draftNo)">
             {{ item.draftNo }}
           </a>
+
           <span v-else>-</span>
         </template>
 
@@ -91,6 +98,7 @@
           <a v-if="item.lcNo" class="text-blue-darken-2" href="#" @click.prevent="handleLcView(item.lcNo)">
             {{ item.lcNo }}
           </a>
+
           <span v-else>-</span>
         </template>
 
@@ -98,6 +106,7 @@
         <template #header.issuingDate>
           <div class="text-center text-no-wrap">預約押匯日期<br>押匯日期</div>
         </template>
+
         <template #item.issuingDate="{ item }">
           {{ item.scheduledIssuingDate || '' }}<br>
           {{ item.issuingDate || '-' }}
@@ -107,6 +116,7 @@
         <template #header.draftDate>
           <div class="text-center text-no-wrap">匯票日期<br>匯票到期日</div>
         </template>
+
         <template #item.draftDate="{ item }">
           {{ item.draftDate || '' }}<br>
           {{ item.draftDueDate || '-' }}

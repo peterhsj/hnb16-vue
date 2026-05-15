@@ -3,6 +3,7 @@
     <!-- 分行資料查詢列表 -->
     <div class="d-flex justify-space-between align-center">
       <h1 class="hnb__title">{{ props.title }}</h1>
+
       <div>
         <v-btn
           class="me-5"
@@ -15,6 +16,7 @@
         </v-btn>
       </div>
     </div>
+
     <v-card class="border-lg pa-4" flat>
       <!-- 無資料時顯示 -->
       <v-card v-if="!loading && listItems.length === 0" class="mx-auto my-3" color="grey-lighten-4" flat>
@@ -23,6 +25,7 @@
           <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
         </v-card-text>
       </v-card>
+
       <v-data-table-server
         v-else
         v-model:items-per-page="pageOptions.itemsPerPage"
@@ -52,6 +55,7 @@
             <v-icon :icon="'mdi-pause'" size="18" />
             停用
           </v-btn>
+
           <v-btn
             v-else
             class="ma-2"
@@ -62,6 +66,7 @@
             <v-icon :icon="'mdi-play'" size="18" />
             啟用
           </v-btn>
+
           <v-btn
             class="ma-2"
             color="light-blue-darken-2"

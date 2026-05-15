@@ -27,21 +27,26 @@
       <template #item.info="{ item }">
         <div class="py-2">
           <p class="mb-3">[ {{ item.id }} ] 下列 押匯重新提示通知，請查核。</p>
+
           <v-container class="mb-1 pa-0" fluid>
             <!-- 標題列 -->
             <v-row class="bg-teal-lighten-3 border-sm" dense>
               <v-col class="pa-2 text-teal-darken-5" cols="3">
                 信用狀號碼
               </v-col>
+
               <v-col class="pa-2 text-teal-darken-5" cols="3">
                 押匯通知行
               </v-col>
+
               <v-col class="pa-2 text-teal-darken-5" cols="2">
                 匯票號碼
               </v-col>
+
               <v-col class="text-right pa-2 text-teal-darken-5" cols="2">
                 金額
               </v-col>
+
               <v-col class="text-center pa-2 text-teal-darken-5" cols="2">
                 押匯日期
               </v-col>
@@ -59,17 +64,21 @@
                   {{ draft.lcNo }}
                 </a>
               </v-col>
+
               <v-col class="pa-2" cols="3">
                 {{ draft.bankName }} {{ draft.branchName }}
               </v-col>
+
               <v-col class="pa-2" cols="2">
                 <a class="text-blue-darken-2" href="#" @click.prevent="handleDraftView(draft.draftNo)">
                   {{ draft.draftNo }}
                 </a>
               </v-col>
+
               <v-col class="text-right pa-2" cols="2">
                 $ {{ thousandsFormatting(draft.amount || 0) }}
               </v-col>
+
               <v-col class="text-center pa-2" cols="2">
                 {{ draft.date }}
               </v-col>
@@ -77,6 +86,7 @@
           </v-container>
         </div>
       </template>
+
       <template #item.actions="{ item }">
         <v-btn
           class="ma-2"
@@ -87,6 +97,7 @@
           <v-icon :icon="'mdi-trash-can-outline'" size="18" />
           刪除
         </v-btn>
+
         <v-btn
           class="ma-2"
           color="success"

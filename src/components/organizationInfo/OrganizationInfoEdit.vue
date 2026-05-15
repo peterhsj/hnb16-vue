@@ -13,9 +13,12 @@
           <v-card-title class="px-6 py-3 bg-blue-darken-1">
             {{ props.editType === 'new' ? '新增' : '編輯' }} 會員-公司資料
           </v-card-title>
+
           <v-divider />
+
           <v-card-text class="overflow-y-auto" height="600">
             <p class="hnb__dialog--title">公司基本資料</p>
+
             <v-container fluid>
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
@@ -31,6 +34,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-select
                     v-model="formData.categoryId"
@@ -49,6 +53,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="6" md="6">
                   <v-text-field
@@ -63,6 +68,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="6" md="6">
                   <v-text-field
                     v-model="formData.companyNameEn"
@@ -72,6 +78,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12">
                   <v-text-field
                     v-model="formData.address"
@@ -84,6 +91,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12">
                   <v-text-field
                     v-model="formData.addressEn"
@@ -93,6 +101,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12">
                   <v-text-field
                     v-model="formData.registeredAddress"
@@ -105,6 +114,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -115,6 +125,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.fax"
@@ -125,6 +136,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -135,6 +147,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.principalPhone"
@@ -146,7 +159,9 @@
                 </v-col>
               </v-row>
             </v-container>
+
             <p class="hnb__dialog--title">公司聯絡人資料</p>
+
             <v-container fluid>
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
@@ -158,6 +173,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.contactPhone"
@@ -167,6 +183,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.contactFax"
@@ -176,6 +193,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="6" md="6">
                   <v-text-field
                     v-model="formData.contactMobile"
@@ -185,6 +203,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="6" md="6">
                   <v-text-field
                     v-model="formData.contactEmail"
@@ -199,7 +218,9 @@
                 </v-col>
               </v-row>
             </v-container>
+
             <p class="hnb__dialog--title">其他資料</p>
+
             <v-container fluid>
               <!-- <v-row>
                 <v-col cols="12">
@@ -237,6 +258,7 @@
                             尚未上傳發票章圖檔
                           </p>
                         </v-col>
+
                         <v-col
                           v-else
                           cols="12"
@@ -251,6 +273,7 @@
                       </v-row>
                     </v-card-text>
                   </v-card>
+
                   <v-row class="align-start">
                     <v-col cols="12" md="9">
                       <v-file-input
@@ -269,6 +292,7 @@
                         variant="outlined"
                       />
                     </v-col>
+
                     <v-col cols="12" md="3">
                       <v-btn
                         block
@@ -282,6 +306,7 @@
                     </v-col>
                   </v-row>
                 </v-col>
+
                 <v-col cols="12" md="6">
                   <v-card
                     class="mx-auto mb-4 hnb__stamp-card"
@@ -305,6 +330,7 @@
                             尚未上傳公司LOGO圖檔
                           </p>
                         </v-col>
+
                         <v-col
                           v-else
                           cols="12"
@@ -319,6 +345,7 @@
                       </v-row>
                     </v-card-text>
                   </v-card>
+
                   <v-row class="align-start">
                     <v-col cols="12" md="9">
                       <v-file-input
@@ -337,6 +364,7 @@
                         variant="outlined"
                       />
                     </v-col>
+
                     <v-col cols="12" md="3">
                       <v-btn
                         block
@@ -353,9 +381,12 @@
               </v-row>
             </v-container>
           </v-card-text>
+
           <v-divider />
+
           <v-card-actions class="py-4 px-6">
             <v-spacer />
+
             <v-btn
               class="text-white"
               color="blue-grey-lighten-3"

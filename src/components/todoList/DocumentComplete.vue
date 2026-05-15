@@ -27,18 +27,22 @@
       <template #item.info="{ item }">
         <div class="py-2">
           <p class="mb-3">[ {{ item.id }} ] 下列押匯單據已齊全，請查核。</p>
+
           <v-container class="mb-1 pa-0" fluid>
             <!-- 標題列 -->
             <v-row class="bg-teal-lighten-3 border-sm" dense>
               <v-col class="text-center pa-2 text-teal-darken-5" cols="3">
                 匯票號碼
               </v-col>
+
               <v-col class="text-right pa-2 text-teal-darken-5" cols="3">
                 金額
               </v-col>
+
               <v-col class="text-center pa-2 text-teal-darken-5" cols="3">
                 匯票號碼
               </v-col>
+
               <v-col class="text-right pa-2 text-teal-darken-5" cols="3">
                 金額
               </v-col>
@@ -58,10 +62,12 @@
                     {{ item.data[(rowIndex - 1) * 2]?.draftNo }}
                   </a>
                 </v-col>
+
                 <v-col class="text-right pa-2" cols="3">
                   $ {{ thousandsFormatting(item.data[(rowIndex - 1) * 2]?.amount || 0) }}
                 </v-col>
               </template>
+
               <template v-else>
                 <v-col class="text-center pa-2" cols="3" />
                 <v-col class="text-right pa-2" cols="3" />
@@ -74,10 +80,12 @@
                     {{ item.data[(rowIndex - 1) * 2 + 1]?.draftNo }}
                   </a>
                 </v-col>
+
                 <v-col class="text-right pa-2" cols="3">
                   $ {{ thousandsFormatting(item.data[(rowIndex - 1) * 2 + 1]?.amount || 0) }}
                 </v-col>
               </template>
+
               <template v-else>
                 <v-col class="text-center pa-2" cols="3" />
                 <v-col class="text-right pa-2" cols="3" />
@@ -86,6 +94,7 @@
           </v-container>
         </div>
       </template>
+
       <template #item.actions="{ item }">
         <v-btn
           class="ma-2"
@@ -96,6 +105,7 @@
           <v-icon :icon="'mdi-trash-can-outline'" size="18" />
           刪除
         </v-btn>
+
         <v-btn
           class="ma-2"
           color="success"

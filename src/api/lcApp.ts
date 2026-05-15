@@ -24,15 +24,15 @@ export interface SearchForm {
 }
 
 export interface LcAppItem {
-  appNo: string       // 開狀申請書號碼
-  lcNo: string        // 信用狀號碼
-  lcType: string      // 信用狀別
-  applicant: string   // 申請人
-  notifyBank: string  // 通知銀行
-  applyDate: string   // 申請日期
-  amount: number      // 金額
+  appNo: string // 開狀申請書號碼
+  lcNo: string // 信用狀號碼
+  lcType: string // 信用狀別
+  applicant: string // 申請人
+  notifyBank: string // 通知銀行
+  applyDate: string // 申請日期
+  amount: number // 金額
   beneficiary: string // 受益人
-  status: string      // 狀態
+  status: string // 狀態
 }
 
 export interface LcAppListPayload {

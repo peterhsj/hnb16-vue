@@ -13,7 +13,9 @@
           <v-card-title class="px-6 py-3 bg-blue-darken-1">
             {{ props.editType === 'new' ? '新增' : '編輯' }} 分行資料
           </v-card-title>
+
           <v-divider />
+
           <v-card-text class="overflow-y-auto" height="600">
             <v-container fluid>
               <v-row>
@@ -30,6 +32,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" md="6">
                   <v-text-field
                     v-model="formData.branchName"
@@ -43,6 +46,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" md="10">
                   <v-text-field
@@ -59,9 +63,12 @@
               </v-row>
             </v-container>
           </v-card-text>
+
           <v-divider />
+
           <v-card-actions class="py-4 px-6">
             <v-spacer />
+
             <v-btn
               class="text-white"
               color="blue-grey-lighten-3"

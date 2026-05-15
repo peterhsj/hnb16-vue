@@ -7,6 +7,7 @@
         <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
       </v-card-text>
     </v-card>
+
     <v-data-table
       v-else
       class="hnb__table"

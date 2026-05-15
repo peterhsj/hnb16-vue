@@ -3,12 +3,14 @@
     <!-- 匯票基本資料查詢列表 -->
     <div class="d-flex justify-space-between align-center">
       <h1 class="hnb__title">{{ props.title }}</h1>
+
       <div>
         <span class="me-5">
           <span>共 {{ thousandsFormatting(totalCount) }} 筆匯票 / </span>
           <span class="text-teal-darken-2">總金額：</span>
           <span>{{ thousandsFormatting(totalAmount) }}</span>
         </span>
+
         <v-btn
           class="me-5 ms-4"
           color="light-blue-darken-2"
@@ -20,6 +22,7 @@
         </v-btn>
       </div>
     </div>
+
     <v-card class="border-lg pa-4" flat>
       <!-- 無資料時顯示 -->
       <v-card v-if="!loading && items.length === 0" class="mx-auto my-3" color="grey-lighten-4" flat>
@@ -56,6 +59,7 @@
           <a v-if="item.draftNo" class="text-blue-darken-2" href="#" @click.prevent="handleDraftView(item.draftNo)">
             {{ item.draftNo }}
           </a>
+
           <span v-else>-</span>
         </template>
 
@@ -64,6 +68,7 @@
           <a v-if="item.lcNo" class="text-blue-darken-2" href="#" @click.prevent="handleLcView(item.lcNo)">
             {{ item.lcNo }}
           </a>
+
           <span v-else>-</span>
         </template>
 
@@ -71,6 +76,7 @@
         <template #item.lcAmount="{ item }">
           $ {{ thousandsFormatting(item?.lcAmount || 0) }}
         </template>
+
         <template #item.availableBalance="{ item }">
           $ {{ thousandsFormatting(item?.availableBalance || 0) }}
         </template>

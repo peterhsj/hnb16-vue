@@ -3,6 +3,7 @@
     <v-card-title class="px-6 text-subtitle-1 bg-blue-darken-2">
       匯票資訊
     </v-card-title>
+
     <v-card-text
       class="d-flex align-start"
       style="max-height: calc(100vh - 97px); overflow-y: auto;"
@@ -14,6 +15,7 @@
           <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
         </v-card-text>
       </v-card>
+
       <v-container v-else class="hnb__print" fluid>
         <v-card class="w-100" flat>
           <v-tabs
@@ -30,6 +32,7 @@
               {{ tab.title }}
             </v-tab>
           </v-tabs>
+
           <v-divider />
 
           <v-tabs-window v-model="currentTab">
@@ -49,10 +52,13 @@
             </v-tabs-window-item>
           </v-tabs-window>
         </v-card>
+
         <invoiceList class="draft-list-print" />
       </v-container>
     </v-card-text>
+
     <v-divider />
+
     <v-card-actions>
       <v-spacer />
 
@@ -64,6 +70,7 @@
       >
         關閉
       </v-btn>
+
       <v-btn
         color="teal-lighten-1"
         prepend-icon="mdi-printer"

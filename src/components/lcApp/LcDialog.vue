@@ -96,13 +96,13 @@
               <td class="align-top">
                 <span class="font-weight-bold">受益人：</span>
                 中鴻鋼鐵股份有限公司
-                <br />
+                <br>
                 <span class="font-weight-bold">受益人負責人：</span>
                 林大華
-                <br />
+                <br>
                 <span class="font-weight-bold">負責人職稱：</span>
                 總經理
-                <br />
+                <br>
                 <span class="font-weight-bold">地址：</span>
                 高雄縣橋頭鄉芋寮村芋寮路317號
               </td>

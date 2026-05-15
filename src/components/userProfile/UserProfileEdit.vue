@@ -13,9 +13,12 @@
           <v-card-title class="px-6 py-3 bg-blue-darken-1">
             {{ props.editType === 'new' ? '新增' : '編輯' }} 人員資料
           </v-card-title>
+
           <v-divider />
+
           <v-card-text class="overflow-y-auto" height="600">
             <p class="hnb__dialog--title">基本設定</p>
+
             <v-container fluid>
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
@@ -33,6 +36,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-select
                     v-model="formData.categoryId"
@@ -48,6 +52,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-select
                     v-model="formData.userRoleId"
@@ -64,6 +69,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12">
                   <v-select
                     v-model="formData.notification"
@@ -82,7 +88,9 @@
                 </v-col>
               </v-row>
             </v-container>
+
             <p class="hnb__dialog--title">個人資料</p>
+
             <v-container fluid>
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
@@ -98,6 +106,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.title"
@@ -108,6 +117,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -123,6 +133,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -142,6 +153,7 @@
                     @focus="$event.target.removeAttribute('readonly')"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="password2"
@@ -161,6 +173,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -171,6 +184,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
                     v-model="formData.fax"
@@ -181,6 +195,7 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0" cols="12" lg="4" md="4">
                   <v-text-field
@@ -194,6 +209,7 @@
                     variant="outlined"
                   />
                 </v-col>
+
                 <v-col class="pb-0" cols="12" lg="6" md="6">
                   <v-text-field
                     v-model="formData.email"
@@ -207,9 +223,11 @@
                   />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col class="pb-0 text-no-wrap" cols="12" lg="4" md="4">
                   <span>設定使用者憑證</span>
+
                   <v-btn
                     class="text-white ms-3"
                     color="light-blue-darken-1"
@@ -222,9 +240,12 @@
               </v-row>
             </v-container>
           </v-card-text>
+
           <v-divider />
+
           <v-card-actions class="py-4 px-6">
             <v-spacer />
+
             <v-btn
               class="text-white"
               color="blue-grey-lighten-3"

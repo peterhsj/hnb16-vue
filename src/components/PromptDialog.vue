@@ -48,19 +48,17 @@
 
         <v-btn
           class="hnb__btn--cancel"
-          variant="flat"
           @click="onClose"
         >
-          離開
+          關閉
         </v-btn>
 
         <v-btn
           v-if="props.isConfirmBtn"
           class="hnb__btn--default"
-          variant="flat"
           @click="promptConfirm"
         >
-          確認
+          確定
         </v-btn>
 
         <v-spacer />

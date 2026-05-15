@@ -3,6 +3,7 @@
     <!-- 會員-公司資料查詢列表 -->
     <div class="d-flex justify-space-between align-center">
       <h1 class="hnb__title">{{ props.title }}</h1>
+
       <div>
         <v-btn
           class="me-5"
@@ -15,6 +16,7 @@
         </v-btn>
       </div>
     </div>
+
     <v-btn @click="toggleAuth">token 測試</v-btn>
 
     <v-card class="border-lg pa-4" flat>
@@ -25,6 +27,7 @@
           <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
         </v-card-text>
       </v-card>
+
       <v-data-table-server
         v-else
         v-model:items-per-page="pageOptions.itemsPerPage"
@@ -79,11 +82,13 @@
               <span v-if="item.contactMobile" class="text-caption text-grey-darken-1">{{ item.contactMobile || '-' }}</span>
               <br>
             </span>
+
             <span v-if="item.contactPhone || item.contactFax">
               <span>電話：{{ item.contactPhone || '-' }}</span>
               <span v-if="item.contactFax"> / <span>傳真：{{ item.contactFax || '-' }}</span></span>
               <br>
             </span>
+
             <span v-if="item.contactEmail">電子信箱：{{ item.contactEmail || '-' }}</span>
           </div>
         </template>

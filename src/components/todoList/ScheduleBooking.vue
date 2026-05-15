@@ -29,6 +29,7 @@
           [ {{ item.id }} ] {{ item.company }}於{{ item.date }} 已送出 {{ item.bankName }}{{ item.branchName }} 預約押匯{{ item.total }} 筆，總金額 {{ thousandsFormatting(item.amount || 0) }}元。
         </div>
       </template>
+
       <template #item.actions="{ item }">
         <v-btn
           class="ma-2"
@@ -39,6 +40,7 @@
           <v-icon :icon="'mdi-trash-can-outline'" size="18" />
           刪除
         </v-btn>
+
         <v-btn
           class="ma-2"
           color="success"

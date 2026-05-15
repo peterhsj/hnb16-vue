@@ -15,7 +15,7 @@ const router = createRouter({
   routes: setupLayouts(routes),
 })
 
-router.beforeEach((to) => {
+router.beforeEach(to => {
   const userStore = useUserStore()
   if (to.path !== '/login' && !userStore.isAuthenticated) {
     return '/login'

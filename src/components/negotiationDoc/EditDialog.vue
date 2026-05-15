@@ -12,6 +12,7 @@
         <v-card-title class="px-6 text-subtitle-1 bg-blue-darken-2">
           編輯匯票資訊
         </v-card-title>
+
         <v-card-text class="d-flex align-center">
           <v-row class="mt-5">
             <v-col
@@ -29,6 +30,7 @@
                 variant="outlined"
               />
             </v-col>
+
             <v-col
               cols="12"
             >
@@ -48,9 +50,12 @@
             </v-col>
           </v-row>
         </v-card-text>
+
         <v-divider />
+
         <v-card-actions class="py-4 px-6">
           <v-spacer />
+
           <v-btn
             class="text-white"
             color="blue-grey-lighten-3"
@@ -59,6 +64,7 @@
           >
             取消
           </v-btn>
+
           <v-btn
             color="light-blue-darken-2"
             type="submit"

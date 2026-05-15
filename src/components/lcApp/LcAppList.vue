@@ -42,7 +42,7 @@
           class="hnb__btn--default mx-1 my-1"
           size="small"
           variant="flat"
-          @click="editItem(item)"
+          @click="editItem('edit', item.appNo)"
         >
           編輯開狀申請書
         </v-btn>
@@ -110,6 +110,8 @@
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
 
+  const emits = defineEmits(['on-edit'])
+
   const { handleApiError } = useApiErrorHandler()
 
   const tableItems = ref<LcAppItem[]>([])
@@ -135,10 +137,10 @@
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const isShowTotalAmount = ref<boolean>(true)
-  const processStatus = ref<{ action: string, status: number }>({
-    action: '',
-    status: 0,
-  })
+  // const processStatus = ref<{ action: string, status: number }>({
+  //   action: '',
+  //   status: 0,
+  // })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
@@ -247,12 +249,8 @@
   }
 
   // 編輯項目
-  function editItem (item: LcAppItem): void {
-    messageTitle.value = '編輯開狀申請書'
-    message.value = `您選擇了編輯開狀申請書，申請書號碼為 ${item.appNo}。`
-    messageStatus.value = 'info'
-    isConfirmBtn.value = false
-    messageDialog.value = true
+  function editItem (type: string, appNo: string): void {
+    emits('on-edit', { type, appNo })
   }
 
   // 查看開狀申請書 App Dialog

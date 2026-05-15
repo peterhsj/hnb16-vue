@@ -101,13 +101,13 @@
 
             <tr>
               <td class="w-50">
-                <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司<br />
-                <span class="font-weight-bold">統一編號：</span>75708007<br />
-                <span class="font-weight-bold">負責人：</span><span class="pe-5">李志村</span> ( 職稱 ) 總經理<br />
-                <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號<br />
-                <span class="font-weight-bold">電話：</span>07-611-7171<br />
-                <span class="font-weight-bold">受益人事業部：</span>1 塑膠部<br />
-                <span class="font-weight-bold">客戶編號：</span>HSTKS<br />
+                <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司<br>
+                <span class="font-weight-bold">統一編號：</span>75708007<br>
+                <span class="font-weight-bold">負責人：</span><span class="pe-5">李志村</span> ( 職稱 ) 總經理<br>
+                <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號<br>
+                <span class="font-weight-bold">電話：</span>07-611-7171<br>
+                <span class="font-weight-bold">受益人事業部：</span>1 塑膠部<br>
+                <span class="font-weight-bold">客戶編號：</span>HSTKS<br>
                 <span class="font-weight-bold">Email：</span>a1b2c3d4e5@example.com
               </td>
 
@@ -204,10 +204,10 @@
           </tbody>
         </v-table>
 
-        <v-table class="hnb__table mt-4" density="compact">
+        <v-table class="hnb__table-v mt-4" density="compact">
           <tbody>
             <tr>
-              <th class="hnb__tbhd2 w-25">
+              <th class="hnb__tbhd2 w-25 text-end">
                 國內信用狀額(限)度
               </th>
 
@@ -215,7 +215,7 @@
                 36,000,000
               </td>
 
-              <th class="hnb__tbhd2 w-25">
+              <th class="hnb__tbhd2 w-25 text-end">
                 國內信用狀餘額(含本件)
               </th>
 
@@ -225,21 +225,21 @@
             </tr>
 
             <tr>
-              <th class="hnb__tbhd">
+              <th class="hnb__tbhd text-end">
                 國內交易外幣信用狀額(限)度
               </th>
 
-              <td></td>
+              <td />
 
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 國內交易外幣信用狀餘額(含本件)
               </th>
 
-              <td></td>
+              <td />
             </tr>
 
             <tr>
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 擔保條件
               </th>
 
@@ -247,7 +247,7 @@
                 信保10%
               </td>
 
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 額(限)度到期日
               </th>
 
@@ -257,7 +257,7 @@
             </tr>
 
             <tr>
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 存入保證金比率(%)
               </th>
 
@@ -265,15 +265,15 @@
                 10.00
               </td>
 
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 承兌手續費
               </th>
 
-              <td></td>
+              <td />
             </tr>
 
             <tr>
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 開狀手續費
               </th>
 
@@ -281,11 +281,11 @@
                 500
               </td>
 
-              <th class="hnb__tbhd2">
+              <th class="hnb__tbhd2 text-end">
                 放款帳號
               </th>
 
-              <td></td>
+              <td />
             </tr>
           </tbody>
         </v-table>
