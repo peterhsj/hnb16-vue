@@ -306,11 +306,12 @@
           @on-submit="submitEditForm"
         />
         <!-- 填寫開狀申請書-FPC -->
-        <!--
-        <LcAppEditFormFPC
+        <LcAppEditFormFpc
           v-if="typeForm.beneficiaryType === '2'"
+          :form-data="lcAppData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
         />
-        -->
         <!-- 填寫開狀申請書-other -->
         <!--
         <LcAppEditFormOther

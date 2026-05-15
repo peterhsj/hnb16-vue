@@ -116,3 +116,7 @@ export function createInitialLcFpcForm (): LcFpcApplicationPayload {
     rateFixedPercent: '',
   }
 }
+export interface LcAppData {
+  type: string
+  appNo: string
+}
