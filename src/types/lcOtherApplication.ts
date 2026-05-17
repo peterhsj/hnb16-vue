@@ -113,3 +113,7 @@ export function createInitialLcOtherForm (): LcOtherApplicationPayload {
     ratePaymentDayOfMonth: '',
   }
 }
+export interface LcAppData {
+  type: string
+  appNo: string
+}

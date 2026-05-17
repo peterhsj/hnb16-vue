@@ -28,6 +28,7 @@
                   <v-select
                     v-model="form.noticeBank"
                     clearable
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     item-title="title"
@@ -75,6 +76,7 @@
                   <div class="d-flex align-center flex-wrap ga-2">
                     <v-select
                       v-model="form.currency"
+                      color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
                       item-title="title"
@@ -87,6 +89,7 @@
                     <v-text-field
                       v-model="form.amount"
                       class="flex-grow-1"
+                      color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
                       style="min-width: 120px"
@@ -145,6 +148,7 @@
                 <td class="lc-td" colspan="3">
                   <v-text-field
                     v-model="form.beneEmail"
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     variant="outlined"
@@ -160,6 +164,7 @@
                 <td class="lc-td" colspan="3">
                   <v-text-field
                     v-model="form.benePhone"
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     variant="outlined"
@@ -175,6 +180,7 @@
                 <td class="lc-td" colspan="3">
                   <v-text-field
                     v-model="form.applicantName"
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     variant="outlined"
@@ -191,6 +197,7 @@
                   <div class="d-flex align-center ga-2 flex-wrap">
                     <v-text-field
                       v-model="form.applicantTaxId"
+                      color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
                       maxlength="8"
@@ -216,6 +223,7 @@
                 <td class="lc-td" colspan="3">
                   <v-text-field
                     v-model="form.applicantAddress"
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     variant="outlined"
@@ -241,6 +249,7 @@
                 <td class="lc-td" colspan="3">
                   <v-textarea
                     v-model="form.goodsDescription"
+                    color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
                     rows="3"
@@ -285,6 +294,7 @@
                   <div class="mt-2 ml-5">
                     <v-textarea
                       v-model="form.customElectronicNote"
+                      color="teal-darken-2"
                       density="compact"
                       :disabled="!customNoteEditable"
                       hide-details="auto"
@@ -325,6 +335,7 @@
                     <v-textarea
                       v-model="form.deliverOtherDetail"
                       class="mt-2"
+                      color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
                       rows="3"
@@ -377,6 +388,7 @@
 
                     <v-textarea
                       v-model="form.otherSpecialTerms"
+                      color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
                       placeholder="~ 其他特別指示條款 ~"

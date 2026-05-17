@@ -56,54 +56,13 @@
                 </th>
 
                 <td class="lc-td">
-                  <div class="d-flex align-center ga-2 flex-wrap">
-                    <v-text-field
-                      v-model="form.applicantTaxId"
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details="auto"
-                      maxlength="8"
-                      style="max-width: 200px"
-                      variant="outlined"
-                    />
-
-                    <v-btn
-                      class="mx-1 hnb__btn--default"
-                      @click="lookupApplicant"
-                    >
-                      查詢
-                    </v-btn>
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row">
-                  申請人聯絡人姓名：
-                </th>
-
-                <td class="lc-td">
                   <v-text-field
-                    v-model="form.contactName"
+                    v-model="form.applicantTaxId"
                     color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
-                    variant="outlined"
-                  />
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row">
-                  申請人聯絡人電話：
-                </th>
-
-                <td class="lc-td">
-                  <v-text-field
-                    v-model="form.contactPhone"
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
+                    maxlength="8"
+                    style="max-width: 200px"
                     variant="outlined"
                   />
                 </td>
@@ -116,7 +75,17 @@
 
                 <td class="lc-td">
                   <div class="d-flex align-center ga-2 flex-wrap">
-                    <span class="text-nowrap">新台幣</span>
+                    <v-select
+                      v-model="form.currency"
+                      color="teal-darken-2"
+                      density="compact"
+                      hide-details="auto"
+                      item-title="title"
+                      item-value="value"
+                      :items="[...OTHER_CURRENCY_OPTIONS]"
+                      style="max-width: 120px"
+                      variant="outlined"
+                    />
 
                     <v-text-field
                       v-model="form.amount"
@@ -169,7 +138,7 @@
                     hide-details="auto"
                     item-title="title"
                     item-value="value"
-                    :items="[...FPC_NOTICE_BANK_ITEMS]"
+                    :items="[...OTHER_NOTICE_BANK_ITEMS]"
                     placeholder="請選擇"
                     variant="outlined"
                   />
@@ -191,7 +160,7 @@
                     hide-details="auto"
                     item-title="title"
                     item-value="value"
-                    :items="[...FPC_BENE_ITEMS]"
+                    :items="[...OTHER_BENE_ITEMS]"
                     placeholder="請選擇受益人名稱"
                     variant="outlined"
                   />
@@ -230,7 +199,13 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ selectedBene?.managerName || '—' }}
+                  <v-text-field
+                    v-model="form.managerName"
+                    color="teal-darken-2"
+                    density="compact"
+                    hide-details="auto"
+                    variant="outlined"
+                  />
                 </td>
               </tr>
 
@@ -240,7 +215,13 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ selectedBene?.managerTitle || '—' }}
+                  <v-text-field
+                    v-model="form.managerTitle"
+                    color="teal-darken-2"
+                    density="compact"
+                    hide-details="auto"
+                    variant="outlined"
+                  />
                 </td>
               </tr>
 
@@ -250,7 +231,13 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ selectedBene?.address || '—' }}
+                  <v-text-field
+                    v-model="form.beneAddress"
+                    color="teal-darken-2"
+                    density="compact"
+                    hide-details="auto"
+                    variant="outlined"
+                  />
                 </td>
               </tr>
 
@@ -278,43 +265,6 @@
                 <td class="lc-td">
                   <v-text-field
                     v-model="form.beneEmail"
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    variant="outlined"
-                  />
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row">
-                  受益人事業部：
-                </th>
-
-                <td class="lc-td">
-                  <v-select
-                    v-model="form.department"
-                    clearable
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    item-title="title"
-                    item-value="value"
-                    :items="[...FPC_DEPT_ITEMS]"
-                    placeholder="請選擇"
-                    variant="outlined"
-                  />
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row">
-                  客戶編號：
-                </th>
-
-                <td class="lc-td">
-                  <v-text-field
-                    v-model="form.customerNo"
                     color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
@@ -352,7 +302,7 @@
 
                 <td class="lc-td">
                   <v-radio-group
-                    v-model="form.paymentKind"
+                    v-model="form.paymentMain"
                     color="cyan-darken-3"
                     density="compact"
                     hide-details="auto"
@@ -366,53 +316,48 @@
                     </v-radio>
                   </v-radio-group>
 
-                  <div v-if="form.paymentKind === 'fixed'" class="ml-4 mt-2">
+                  <div v-if="form.paymentMain === 'fixed'" class="ml-4 mt-2">
                     <v-radio-group
-                      v-model="form.fixedExpiryBasis"
+                      v-model="form.paymentExpBasis"
                       color="cyan-darken-3"
                       density="compact"
                       hide-details="auto"
                     >
-                      <v-radio label="匯票發票日" value="draft_invoice" />
-                      <v-radio label="統一發票日" value="unified_invoice" />
+                      <v-radio label="匯票發票日" value="draft" />
+                      <v-radio label="（統一）發票日" value="invoice" />
+
+                      <v-radio value="other">
+                        <template #label>
+                          <div class="d-flex align-center ga-2 flex-wrap">
+                            <span>其他：</span>
+
+                            <v-text-field
+                              v-model="form.paymentExpOtherText"
+                              color="teal-darken-2"
+                              density="compact"
+                              :disabled="form.paymentExpBasis !== 'other'"
+                              hide-details="auto"
+                              style="min-width: 200px"
+                              variant="outlined"
+                            />
+                          </div>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
                     <div class="d-flex align-center ga-2 flex-wrap mt-2">
                       <span>起算</span>
 
                       <v-text-field
-                        v-model="form.fixedDaysWithin"
+                        v-model="form.payDaysAfter"
+                        color="teal-darken-2"
                         density="compact"
                         hide-details="auto"
-                        style="max-width: 72px"
+                        style="max-width: 56px"
                         variant="outlined"
                       />
 
                       <span>天內。</span>
-                    </div>
-
-                    <div class="d-flex align-center ga-2 flex-wrap mt-3">
-                      <v-checkbox
-                        v-model="form.useNamedDueDate"
-                        color="cyan-darken-3"
-                        density="compact"
-                        hide-details
-                        label="指定期日為"
-                      />
-
-                      <v-date-input
-                        v-model="form.namedDueDate"
-                        append-inner-icon="mdi-calendar"
-                        bg-color="white"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="!form.useNamedDueDate"
-                        hide-details="auto"
-                        placeholder="例：2026/01/01"
-                        prepend-icon=""
-                        style="max-width: 220px"
-                        variant="outlined"
-                      />
                     </div>
                   </div>
                 </td>
@@ -424,7 +369,7 @@
                 </th>
 
                 <td class="lc-td text-body-2">
-                  須與相關發票上所列開金額一致或依照本信用狀其他指示。
+                  須與相關發票上所列開金額一致。
                 </td>
               </tr>
 
@@ -446,14 +391,14 @@
                     <span>2.</span>
 
                     <v-radio-group
-                      v-model="form.invoiceDocKind"
+                      v-model="form.invoiceKind"
                       color="cyan-darken-3"
                       density="compact"
                       hide-details="auto"
                       inline
                     >
                       <v-radio label="發票" value="invoice" />
-                      <v-radio label="或統一發票" value="unified" />
+                      <v-radio label="統一發票" value="unified" />
                     </v-radio-group>
                   </div>
 
@@ -463,7 +408,7 @@
                     </div>
 
                     <v-textarea
-                      v-model="form.otherDocumentsNote"
+                      v-model="form.otherDocumentsDetail"
                       color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
@@ -478,7 +423,7 @@
                     </div>
 
                     <v-textarea
-                      v-model="form.productDescriptionNote"
+                      v-model="form.productPurchaseNote"
                       color="teal-darken-2"
                       density="compact"
                       hide-details="auto"
@@ -495,11 +440,65 @@
                 </th>
 
                 <td class="lc-td text-body-2">
-                  <p>1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
-                  <p>2. 貨物可以分批交貨。</p>
+                  <div class="mb-3 d-inline-flex align-center">
+                    <span>1. 匯票承兌/付款申請書使用</span>
 
-                  <div class="d-flex flex-wrap align-center ga-2 my-2">
-                    <span>3. 最後交貨日期：</span>
+                    <v-radio-group
+                      v-model="form.draftFormat"
+                      class="d-inline-flex"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio label="貴行" value="bank" />
+                      <v-radio label="受益人" value="beneficiary" />
+                    </v-radio-group>
+
+                    <span>所訂格式，申請書上信用狀申請人所蓋印鑑應與原留印鑑相符。</span>
+                  </div>
+
+                  <div class="mb-3 d-inline-flex align-center">
+                    <span>2. 分批交貨：</span>
+
+                    <v-radio-group
+                      v-model="form.partialShipment"
+                      class="d-inline-flex"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio label="可以" value="allowed" />
+                      <v-radio label="不可以" value="not_allowed" />
+                    </v-radio-group>
+
+                    <span>（未填者視為得分批交貨）。</span>
+                  </div>
+
+                  <br />
+
+                  <div class="mb-3 d-inline-flex align-center">
+                    <span>3.</span>
+
+                    <v-radio-group
+                      v-model="form.discountInterest"
+                      class="d-inline-flex"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+
+                      <v-radio label="匯票墊款利息由買方負擔" value="buyer" />
+                      <v-radio label="匯票貼現利息由賣方負擔" value="seller" />
+                    </v-radio-group>
+
+                    <span>（未填者視為由買方負擔）。</span>
+                  </div>
+
+                  <div class="d-flex flex-wrap align-center ga-2 mb-3">
+                    <span>4. 最後交貨日期：</span>
 
                     <v-date-input
                       v-model="form.lastDeliveryDate"
@@ -514,31 +513,73 @@
                       variant="outlined"
                     />
 
-                    <span>（未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效日期）。</span>
+                    <span>（未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效期限）。</span>
                   </div>
 
-                  <p>4. 發票日期早於開狀日期可以接受。</p>
-                  <p>5. 發票金額大於開狀金額或匯票金額可以接受。</p>
-                  <p>6. 以受益人所屬分公司或分廠名義開立之發票押匯可以接受。</p>
-                  <p>7. 本信狀適用 eUCP2.0 版。</p>
-                  <p>8. 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯。</p>
-                  <p>9. 押匯電子文件透過網址: HTTPS://ecrm.fpg.com.tw 提示。</p>
+                  <div class="d-flex flex-wrap align-center ga-2 mb-3">
+                    <span>5. 限定押匯日期：自</span>
 
-                  <div class="d-flex align-center ga-2 my-2">
-                    <span>10. 遠期信用狀利息：</span>
+                    <v-date-input
+                      v-model="form.draftLimitStartDate"
+                      append-inner-icon="mdi-calendar"
+                      bg-color="white"
+                      color="teal-darken-2"
+                      density="compact"
+                      hide-details="auto"
+                      placeholder="例：2026/01/01"
+                      prepend-icon=""
+                      style="max-width: 220px"
+                      variant="outlined"
+                    />
 
-                    <v-checkbox
-                      v-model="form.usanceInterestBuyer"
+                    <span>起始可押匯。</span>
+                  </div>
+
+                  <div class="mb-3 d-inline-flex align-center">
+                    <span>6. 承兌手續費由</span>
+
+                    <v-radio-group
+                      v-model="form.feeBearer"
+                      class="d-inline-flex"
                       color="cyan-darken-3"
                       density="compact"
-                      hide-details
-                      label="買方負擔"
-                    />
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio label="買方" value="buyer" />
+                      <v-radio label="賣方" value="seller" />
+                    </v-radio-group>
+
+                    <span>負擔（未填者視為由買方負擔）。</span>
                   </div>
 
-                  <div class="my-2">
+                  <br />
+
+                  <div class="mb-3 d-inline-flex align-center">
+                    <span>7. 受益人押匯時，匯票承兌/付款申請書</span>
+
+                    <v-radio-group
+                      v-model="form.stampSingleParty"
+                      class="d-inline-flex"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio label="可以" value="allowed" />
+                      <v-radio label="不可以" value="not_allowed" />
+                    </v-radio-group>
+
+                    <span>僅由受益人單方蓋章。</span>
+                  </div>
+
+                  <p class="mb-3">
+                    8. 押匯文件透過通知銀行之櫃台提示。
+                  </p>
+
+                  <div>
                     <div class="mb-1">
-                      11. 其他：
+                      9. 其他：
                     </div>
 
                     <v-textarea
@@ -551,101 +592,26 @@
                       variant="outlined"
                     />
                   </div>
-
-                  <div class="d-flex flex-wrap align-center ga-2 my-2">
-                    <span>12. 限定押匯日期：自</span>
-
-                    <v-date-input
-                      v-model="form.draftStartDate"
-                      append-inner-icon="mdi-calendar"
-                      bg-color="white"
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details="auto"
-                      placeholder="例：2026/01/01"
-                      prepend-icon=""
-                      style="max-width: 220px"
-                      variant="outlined"
-                    />
-
-                    <span>起始可押匯。（未填寫者視為未限定押匯日期）</span>
-                  </div>
-
-                  <div class="d-flex flex-wrap align-center ga-2 my-2">
-                    <span>13. 發票起始開立日期：</span>
-
-                    <v-date-input
-                      v-model="form.invoiceStartDate"
-                      append-inner-icon="mdi-calendar"
-                      bg-color="white"
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details="auto"
-                      placeholder="例：2026/01/01"
-                      prepend-icon=""
-                      style="max-width: 220px"
-                      variant="outlined"
-                    />
-
-                    <span>。（以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期）</span>
-                  </div>
                 </td>
               </tr>
 
               <tr>
                 <td class="lc-td text-body-2" colspan="2">
-                  <p class="mb-2">
-                    <span class="font-weight-bold">利率約款：</span>
-                    貴行依本申請書開發信用狀所墊付之款項，申請人同意按貴我雙方所訂之利率訂價指標，按月計付利息。
+                  <p class="mb-2 d-flex flex-wrap align-center ga-1">
+                    <span class="font-weight-bold">利率條款：</span>
+                    <span>貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，自墊款日起每月</span>
+
+                    <v-text-field
+                      v-model="form.ratePaymentDayOfMonth"
+                      color="teal-darken-2"
+                      density="compact"
+                      hide-details="auto"
+                      style="max-width: 64px"
+                      variant="outlined"
+                    />
+
+                    <span>日（未填者視為撥貸日之相對日）按月計付利息。</span>
                   </p>
-
-                  <div>
-                    <div class="d-flex align-center flex-wrap ga-2 my-2">
-                      <v-checkbox
-                        v-model="form.rateBaseChecked"
-                        color="cyan-darken-3"
-                        density="compact"
-                        hide-details
-                      />
-
-                      <span>基準利率 加碼年率</span>
-
-                      <v-text-field
-                        v-model="form.rateBaseSpread"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="!form.rateBaseChecked"
-                        hide-details="auto"
-                        style="max-width: 72px"
-                        variant="outlined"
-                      />
-
-                      <span>% 計付利息，如貴行利率調整時亦隨同調整。</span>
-                    </div>
-
-                    <div class="d-flex align-center flex-wrap ga-2 my-2">
-                      <v-checkbox
-                        v-model="form.rateFixedChecked"
-                        color="cyan-darken-3"
-                        density="compact"
-                        hide-details
-                      />
-
-                      <span>年率</span>
-
-                      <v-text-field
-                        v-model="form.rateFixedPercent"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="!form.rateFixedChecked"
-                        hide-details="auto"
-                        style="max-width: 72px"
-                        variant="outlined"
-                      />
-
-                      <span>% 固定計息。</span>
-                    </div>
-                  </div>
 
                   <p class="mb-2">
                     <span class="font-weight-bold">新臺幣短期放款計期方式：</span>
@@ -656,17 +622,19 @@
                     手續費約款：
                   </p>
 
-                  <p>
-                    貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
-                    0.1% 補繳開狀手續費。
-                  </p>
+                  <ol class="lc-ol">
+                    <li>
+                      貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
+                      0.1% 補繳開狀手續費。
+                    </li>
 
-                  <p>
-                    貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
-                    補繳開狀手續費，最低金額為新台幣 1,000 元：<br>
-                    (1) 受益人押匯後，申請人立即還款而未向貴行借款者。<br>
-                    (2) 申請人提前清償借款，其利息加計原開狀手續費（分批押匯改貸，以第一筆押匯金額計算）合計低於新台幣 1,000 元者。
-                  </p>
+                    <li>
+                      貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
+                      補繳開狀手續費，最低金額為新台幣 1,000 元：<br>
+                      (1)受益人押匯後，申請人立即還款而未向貴行借款者。<br>
+                      (2)申請人提前清償借款，其利息加計原開狀手續費（分批押匯改貸，以第一筆押匯金額計算）合計低於新台幣 1,000 元者。
+                    </li>
+                  </ol>
                 </td>
               </tr>
             </tbody>
@@ -716,56 +684,55 @@
 </template>
 
 <script setup lang="ts">
-  import type { FpcBeneOption, LcAppData, LcFpcApplicationPayload } from '@/types/lcFpcApplication'
+  import type { LcAppData, LcOtherApplicationPayload, OtherBeneOption } from '@/types/lcOtherApplication'
   import { computed, reactive, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import {
-    createInitialLcFpcForm,
-    FPC_BENE_ITEMS,
-    FPC_DEPT_ITEMS,
-    FPC_NOTICE_BANK_ITEMS,
-  } from '@/types/lcFpcApplication'
+    createInitialLcOtherForm,
+    OTHER_BENE_ITEMS,
+    OTHER_CURRENCY_OPTIONS,
+    OTHER_NOTICE_BANK_ITEMS,
+  } from '@/types/lcOtherApplication'
 
   const props = defineProps<({
     formData: LcAppData
   })>()
 
   const lcFormRef = ref<InstanceType<typeof VForm> | null>(null)
-  const form = reactive<LcFpcApplicationPayload>({
+  const form = reactive<LcOtherApplicationPayload>({
     applicantName: '',
-    applicantTaxId: '12345678',
-    contactName: '',
-    contactPhone: '',
+    applicantTaxId: '',
+    currency: 'TWD',
     amount: '',
     expiryDate: '',
     noticeBank: null,
     beneCorp: null,
+    managerName: '',
+    managerTitle: '',
+    beneAddress: '',
     benePhone: '',
     beneEmail: '',
-    department: null,
-    customerNo: '',
-    paymentKind: null,
-    fixedExpiryBasis: null,
-    fixedDaysWithin: '',
-    useNamedDueDate: false,
-    namedDueDate: '',
-    invoiceDocKind: null,
-    otherDocumentsNote: '',
-    productDescriptionNote: '',
+    paymentMain: null,
+    paymentExpBasis: null,
+    paymentExpOtherText: '',
+    payDaysAfter: '',
+    invoiceKind: null,
+    otherDocumentsDetail: '',
+    productPurchaseNote: '',
+    draftFormat: null,
+    partialShipment: 'allowed',
+    discountInterest: null,
     lastDeliveryDate: '',
+    draftLimitStartDate: '',
+    feeBearer: null,
+    stampSingleParty: null,
     otherSpecialTerms: '',
-    usanceInterestBuyer: false,
-    draftStartDate: '',
-    invoiceStartDate: '',
-    rateBaseChecked: false,
-    rateBaseSpread: '',
-    rateFixedChecked: false,
-    rateFixedPercent: '',
+    ratePaymentDayOfMonth: '',
   })
-  const selectedBene = computed<FpcBeneOption | null>(() => {
+  const selectedBene = computed<OtherBeneOption | null>(() => {
     const v = form.beneCorp
     if (!v) return null
-    return FPC_BENE_ITEMS.find(b => b.value === v) ?? null
+    return OTHER_BENE_ITEMS.find(b => b.value === v) ?? null
   })
 
   const headerDate = '114 年 5 月 10 日'
@@ -796,7 +763,7 @@
       if (type === 'edit' && appNo) {
         // 模擬從 API 取得資料並填入表單
         Object.assign(form, {
-          ...createInitialLcFpcForm(),
+          ...createInitialLcOtherForm(),
         })
       } else if (type === 'new') {
         lcFormRef.value?.reset()

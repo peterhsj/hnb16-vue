@@ -4,6 +4,15 @@
     <v-container fluid>
       <div class="hnb16__breadcrumb mb-2">
         <v-breadcrumbs density="compact" :items="breadcrumbs">
+          <template #item="{ item }">
+            <v-breadcrumbs-item
+              :disabled="Boolean(item.disabled)"
+              :title="item.title"
+              :to="item.title === '申請作業' ? '' : item.to"
+              @click="onBreadcrumbClick(item)"
+            />
+          </template>
+
           <template #divider>
             <v-icon icon="mdi-chevron-right" size="small" />
           </template>
@@ -313,11 +322,12 @@
           @on-submit="submitEditForm"
         />
         <!-- 填寫開狀申請書-other -->
-        <!--
         <LcAppEditFormOther
           v-if="typeForm.beneficiaryType === '3'"
+          :form-data="lcAppData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
         />
-        -->
       </div>
     </v-container>
   </div>
@@ -330,9 +340,9 @@
   import { reactive, ref, watch } from 'vue'
 
   const breadcrumbs = [
-    { title: '首頁', href: '/' },
+    { title: '首頁', to: '/' },
     { title: '申請作業' },
-    { title: '開狀申請書', disabled: true },
+    { title: '開狀申請書', to: '/lcApp' },
   ]
 
   const beneficiaryTypeOptions = [
@@ -482,5 +492,19 @@
     console.log('編輯表單已送出，執行相關處理')
     // 這裡可以根據實際需求來決定是否要關閉編輯表單或是刷新列表等
     closeEditForm()
+  }
+
+  function onBreadcrumbClick(item: any): void {
+    if (item.disabled || !item.to) return
+    if (item.title === '開狀申請書' && typeof item.to === 'string') {
+      console.log('Breadcrumb clicked:', `/#${item.to}`)
+      // hash router 下用 location.href 重新導向可強制整頁重整
+      isEdit.value = false
+      currentView.value = 'selectType'
+      typeForm.beneficiaryType = null
+      typeForm.beneficiary = null
+      typeForm.inputType = null
+      // window.location.href = `/#${item.to}`
+    }
   }
 </script>
