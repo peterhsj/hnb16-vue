@@ -399,7 +399,7 @@
     beneficiaryType: '',
     beneficiary: '',
   })
-  const propsFormData = ref<SearchForm | {}>({})
+  const propsFormData = ref<SearchForm>({ ...searchForm })
 
   interface Rules {
     startDateRule: ((v: string) => boolean | string)[]
