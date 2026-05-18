@@ -30,7 +30,7 @@
             </v-col>
 
             <v-col class="py-1" cols="6">
-              <span class="my-1 fs-1-5 hnb__bankName">
+              <span class="my-1 text-h6 hnb__bankName">
                 <span class="pe-1">華南商業銀行</span>
                 <span class="pe-1">建成分行</span>
                 <span>台鑑</span>
@@ -43,7 +43,7 @@
           </v-row>
         </v-container>
 
-        <v-table class="hnb__table" density="compact">
+        <v-table class="hnb__table hnb__table--layout" density="compact">
           <tbody>
             <tr>
               <td class="w-50" rowspan="2">
@@ -106,8 +106,8 @@
                 <span class="font-weight-bold">負責人：</span><span class="pe-5">李志村</span> ( 職稱 ) 總經理<br>
                 <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號<br>
                 <span class="font-weight-bold">電話：</span>07-611-7171<br>
-                <span class="font-weight-bold">受益人事業部：</span>1 塑膠部<br>
-                <span class="font-weight-bold">客戶編號：</span>HSTKS<br>
+                <!-- <span class="font-weight-bold">受益人事業部：</span>1 塑膠部<br>
+                <span class="font-weight-bold">客戶編號：</span>HSTKS<br> -->
                 <span class="font-weight-bold">Email：</span>a1b2c3d4e5@example.com
               </td>
 
@@ -122,17 +122,17 @@
                 <p class="font-weight-bold my-1">一、匯票之條件：</p>
 
                 <ol class="hnb__list--ol ms-10">
-                  <li>甲、付款人：華南商業銀行 建成分行</li>
-                  <li>乙、付款期限：<span id="lcTypeDate">見票即付。</span></li>
-                  <li>丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
+                  <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
+                  <li class="mb-2">乙、付款期限：<span id="lcTypeDate">見票即付。</span></li>
+                  <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 
                 <p class="font-weight-bold my-1">二、應檢附之單據如下：</p>
 
                 <ol class="hnb__list--ol ms-10">
-                  <li>1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
-                  <li>2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
-                  <li>3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
+                  <li class="mb-2">2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
+                  <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
                 </ol>
 
                 <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
@@ -146,26 +146,26 @@
                 <p>1.電子押匯特別指示條款</p>
 
                 <ol class="hnb__list--ol">
-                  <li>(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中隆公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
-                  <li>(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
-                  <li>(3) 貨物可以分批交貨。</li>
-                  <li>(4) 貨物明細以發票為準。</li>
-                  <li>(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
-                  <li>(6) 本信用狀適用eUCP2.0版。</li>
-                  <li>(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
-                  <li>(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
+                  <li class="mb-2">(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
+                  <li class="mb-2">(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
+                  <li class="mb-2">(3) 貨物可以分批交貨。</li>
+                  <li class="mb-2">(4) 貨物明細以發票為準。</li>
+                  <li class="mb-2">(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
+                  <li class="mb-2">(6) 本信用狀適用eUCP2.0版。</li>
+                  <li class="mb-2">(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
+                  <li class="mb-2">(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
                 </ol>
               </td>
             </tr>
 
             <tr>
               <td colspan="3">
-                <p class="mb-0">
+                <p class="mb-2">
                   <span class="font-weight-bold">利率約款：</span>
                   貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，按月計付利息。
                 </p>
                 <!-- rateRule 在 CDS 狀態下不顯示 -->
-                <ol class="hnb__list--ol">
+                <!-- <ol class="hnb__list--ol">
                   <li>
                     <v-icon icon="mdi mdi-square" size="small" />
                     基準利率 加碼年率 %計付利息，如貴行利率調整時亦隨同調整。
@@ -175,14 +175,14 @@
                     <v-icon icon="mdi mdi-square-outline" size="small" />
                     年率 % 固定計息
                   </li>
-                </ol>
+                </ol> -->
 
-                <p class="my-1">
+                <p class="mb-2">
                   <span class="font-weight-bold">新臺幣短期放款計期方式：</span>
                   按日計息，以每年365天為利息計算基礎，逢閏年時亦同。利率=本金餘額×年利率×1/365×計息天數。
                 </p>
 
-                <p class="my-1">
+                <p class="mb-2">
                   <span class="font-weight-bold">手續費約款：</span>
                   申請人同意貴行目前所訂相關費用之收費標準，且同意貴行得隨時調整，但應於調整前以顯著方式於營業場所或網站上公開揭示，另(一)貴行依本申請書開發「利息及承兌手續費由賣方「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理提示請求承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率0.1%補繳開狀手續費。(二)貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之一者，申請人同意依押匯金額及信用狀有效期限(3個月為一期，未滿3個月者，視為一期)，按年率0.1%
                   補繳開狀手續費，補繳金額最低為新臺幣1，000元：1.受益人未押匯或押匯後，申請人立即還款而未向貴行借款者。2.申請人提前清償借款，其原開狀手續費加計利息(分批押匯改賃，以第一筆押匯金額計算)合計低於新臺幣1，000元者。
@@ -204,7 +204,7 @@
           </tbody>
         </v-table>
 
-        <v-table class="hnb__table-v mt-4" density="compact">
+        <v-table class="hnb__table hnb__table--vertical mt-4" density="compact">
           <tbody>
             <tr>
               <th class="hnb__tbhd2 w-25 text-end">

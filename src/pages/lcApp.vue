@@ -396,6 +396,8 @@
     status: null,
     startDate: null,
     endDate: null,
+    beneficiaryType: '',
+    beneficiary: '',
   })
   const propsFormData = ref<SearchForm | {}>({})
 
@@ -460,8 +462,9 @@
   // 查詢舊有開狀申請書
   function sendSearchForm (): void {
     console.log('送出表單', searchForm)
+    const { beneficiaryType, beneficiary } = typeForm
     isShowList.value = true
-    propsFormData.value = { ...searchForm }
+    propsFormData.value = { ...searchForm, beneficiaryType, beneficiary }
   }
 
   function resetSearchForm (): void {
@@ -494,12 +497,13 @@
     closeEditForm()
   }
 
-  function onBreadcrumbClick(item: any): void {
+  function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
     if (item.title === '開狀申請書' && typeof item.to === 'string') {
       console.log('Breadcrumb clicked:', `/#${item.to}`)
       // hash router 下用 location.href 重新導向可強制整頁重整
       isEdit.value = false
+      isShowList.value = false
       currentView.value = 'selectType'
       typeForm.beneficiaryType = null
       typeForm.beneficiary = null

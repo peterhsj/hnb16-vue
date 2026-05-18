@@ -302,9 +302,9 @@ body,
       // border: 1px solid #90bcbe;
       color: #FFFFFF;
 
-      &:hover, &:focus {
-        color: #FFFFFF !important;
-      }
+      // &:hover, &:focus {
+      //   color: #FFFFFF !important;
+      // }
     }
 
     th:not(:first-child),
@@ -316,6 +316,43 @@ body,
 
     th, td {
       padding: 8px 12px !important;
+    }
+
+    // Table 編排
+    &--layout {
+
+      th:not(:first-child),
+      td:not(:first-child),
+      &--left-border {
+        // border-left: 1px solid #90bcbe;
+        border-bottom: 1px solid #90bcbe !important;
+      }
+
+      th, td {
+        padding: 8px 12px !important;
+        border-bottom: 1px solid #90bcbe !important;
+      }
+    }
+
+    // 垂直表格
+    &--vertical {
+
+      th {
+        background-color: #e7f7f8;
+        color: #333333;
+      }
+
+      th:not(:first-child),
+      td:not(:first-child),
+      &--left-border {
+        // border-left: 1px solid #90bcbe;
+        border-bottom: 1px solid #90bcbe !important;
+      }
+
+      th, td {
+        padding: 8px 12px !important;
+        border-bottom: 1px solid #90bcbe !important;
+      }
     }
   }
 
@@ -331,12 +368,6 @@ body,
 
     th {
       background-color: #e7f7f8;
-      // border: 1px solid #90bcbe;
-      // color: #FFFFFF;
-
-      // &:hover, &:focus {
-      //   color: #FFFFFF !important;
-      // }
     }
 
     th:not(:first-child),

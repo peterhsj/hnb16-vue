@@ -426,7 +426,7 @@
     </v-card>
 
     <!-- 預覽開狀申請書 App Dialog -->
-    <AppDialog
+    <AppForCdsDialog
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"

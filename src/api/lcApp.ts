@@ -21,6 +21,8 @@ export interface SearchForm {
   status: string | null // 狀態
   startDate: string | null // 開狀日期起始日期
   endDate: string | null // 開狀日期結束日期
+  beneficiaryType: string | null // 受益人類型
+  beneficiary: string | null // 受益人 Id
 }
 
 export interface LcAppItem {
@@ -38,6 +40,8 @@ export interface LcAppItem {
 export interface LcAppListPayload {
   page?: number
   itemsPerPage?: number
+  // beneficiaryType?: string | null // 受益人類型
+  beneficiary?: string | null // 受益人 Id
 }
 
 /**

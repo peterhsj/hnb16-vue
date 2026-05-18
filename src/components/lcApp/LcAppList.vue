@@ -69,8 +69,23 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
-    <!-- App Dialog -->
-    <AppDialog
+    <!-- App For Cds Dialog -->
+    <AppForCdsDialog
+      v-if="searchForm.beneficiaryType === '1'"
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      @on-close="appDialogClose"
+    />
+    <!-- App For Fpc Dialog -->
+    <AppForFpcDialog
+      v-if="searchForm.beneficiaryType === '2'"
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      @on-close="appDialogClose"
+    />
+    <!-- App For Other Dialog -->
+    <AppForOtherDialog
+      v-if="searchForm.beneficiaryType === '3'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
@@ -156,10 +171,10 @@
   ]
 
   interface Props {
-    formData?: SearchForm | {}
+    formData?: SearchForm
   }
   const props = defineProps<Props>()
-  const searchForm = ref<SearchForm | {}>(props.formData || {
+  const searchForm = ref<SearchForm>(props.formData ?? {
     searchType: 'lcNo',
     lcNo: null,
     appNo: null,
@@ -168,6 +183,8 @@
     status: null,
     startDate: null,
     endDate: null,
+    beneficiaryType: null,
+    beneficiary: null,
   })
 
   interface PageOptions {
@@ -194,8 +211,22 @@
   watch(
     () => props.formData,
     newVal => {
-      searchForm.value = newVal || {}
+      searchForm.value = newVal
+        ? { ...newVal }
+        : {
+          searchType: 'lcNo',
+          lcNo: null,
+          appNo: null,
+          beneNo: null,
+          beneInNo: null,
+          status: null,
+          startDate: null,
+          endDate: null,
+          beneficiaryType: null,
+          beneficiary: null,
+        }
       pageOptions.value.page = 1
+      console.log('Search form data changed:', searchForm.value)
       fetchLcAppList()
     },
     { deep: true },
@@ -212,7 +243,7 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
-    const { lcNo, appNo, beneNo, beneInNo, status, startDate, endDate } = searchForm.value as SearchForm
+    const { lcNo, appNo, beneNo, beneInNo, status, startDate, endDate, beneficiary } = searchForm.value as SearchForm
     const { page, itemsPerPage } = pageOptions.value
     const payload = {
       lcNo,
@@ -224,6 +255,7 @@
       endDate,
       page,
       itemsPerPage,
+      beneficiary,
     }
     console.log('Fetching list with payload:', payload, 'Page:', page, 'Items per page:', itemsPerPage)
     isLoading.value = true

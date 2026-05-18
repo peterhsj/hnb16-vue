@@ -435,11 +435,11 @@
               </tr>
 
               <tr>
-                <th class="text-end text-no-wrap align-top" scope="row">
+                <th class="text-end text-no-wrap" scope="row">
                   特別指示：
                 </th>
 
-                <td class="lc-td text-body-2">
+                <td>
                   <div class="mb-3 d-inline-flex align-center">
                     <span>1. 匯票承兌/付款申請書使用</span>
 
@@ -475,8 +475,6 @@
 
                     <span>（未填者視為得分批交貨）。</span>
                   </div>
-
-                  <br />
 
                   <div class="mb-3 d-inline-flex align-center">
                     <span>3.</span>
@@ -553,8 +551,6 @@
                     <span>負擔（未填者視為由買方負擔）。</span>
                   </div>
 
-                  <br />
-
                   <div class="mb-3 d-inline-flex align-center">
                     <span>7. 受益人押匯時，匯票承兌/付款申請書</span>
 
@@ -577,7 +573,7 @@
                     8. 押匯文件透過通知銀行之櫃台提示。
                   </p>
 
-                  <div>
+                  <div class="mb-3">
                     <div class="mb-1">
                       9. 其他：
                     </div>
@@ -596,7 +592,7 @@
               </tr>
 
               <tr>
-                <td class="lc-td text-body-2" colspan="2">
+                <td colspan="2">
                   <p class="mb-2 d-flex flex-wrap align-center ga-1">
                     <span class="font-weight-bold">利率條款：</span>
                     <span>貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，自墊款日起每月</span>
@@ -622,14 +618,14 @@
                     手續費約款：
                   </p>
 
-                  <ol class="lc-ol">
+                  <ol class="hnb__list--ol">
                     <li>
-                      貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
+                      1. 貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
                       0.1% 補繳開狀手續費。
                     </li>
 
                     <li>
-                      貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
+                      2. 貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
                       補繳開狀手續費，最低金額為新台幣 1,000 元：<br>
                       (1)受益人押匯後，申請人立即還款而未向貴行借款者。<br>
                       (2)申請人提前清償借款，其利息加計原開狀手續費（分批押匯改貸，以第一筆押匯金額計算）合計低於新台幣 1,000 元者。
@@ -664,8 +660,8 @@
       </v-card-text>
     </v-card>
 
-    <!-- 預覽開狀申請書 App Dialog -->
-    <AppDialog
+    <!-- 預覽開狀申請書 App For Other Dialog -->
+    <AppForOtherDialog
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
