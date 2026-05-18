@@ -78,4 +78,5 @@ export const CURRENCY_OPTIONS = [{ title: '新台幣', value: 'TWD' }] as const
 export interface LcAppData {
   type: string
   appNo: string
+  beneType: string
 }

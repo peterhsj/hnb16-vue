@@ -42,7 +42,7 @@
                 />
               </v-col>
 
-              <template v-if="typeForm.beneficiaryType === '1'">
+              <template v-if="typeForm.beneficiaryType === 'cds'">
                 <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                   <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">受益人</div>
 
@@ -61,7 +61,7 @@
                 </v-col>
               </template>
 
-              <template v-if="typeForm.beneficiaryType === '2'">
+              <template v-if="typeForm.beneficiaryType === 'fpc'">
                 <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
                   <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">集團受益人</div>
 
@@ -307,27 +307,32 @@
       <!-- 填寫開狀申請書 -->
       <div v-if="isEdit">
         <!-- <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2> -->
+        <LcAppEditForm
+          :form-data="lcAppData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
+        />
         <!-- 填寫開狀申請書-CDS -->
-        <LcAppEditFormCds
+        <!-- <LcAppEditFormCds
           v-if="typeForm.beneficiaryType === '1'"
           :form-data="lcAppData"
           @on-cancel="closeEditForm"
           @on-submit="submitEditForm"
-        />
+        /> -->
         <!-- 填寫開狀申請書-FPC -->
-        <LcAppEditFormFpc
+        <!-- <LcAppEditFormFpc
           v-if="typeForm.beneficiaryType === '2'"
           :form-data="lcAppData"
           @on-cancel="closeEditForm"
           @on-submit="submitEditForm"
-        />
+        /> -->
         <!-- 填寫開狀申請書-other -->
-        <LcAppEditFormOther
+        <!-- <LcAppEditFormOther
           v-if="typeForm.beneficiaryType === '3'"
           :form-data="lcAppData"
           @on-cancel="closeEditForm"
           @on-submit="submitEditForm"
-        />
+        /> -->
       </div>
     </v-container>
   </div>
@@ -346,9 +351,9 @@
   ]
 
   const beneficiaryTypeOptions = [
-    { title: 'CDS 客戶 (中鋼、中鴻、中鋁、華新麗華、東和鋼鐵)', value: '1' },
-    { title: '台塑 e 化平台客戶 (台塑集團、奇美集團)', value: '2' },
-    { title: '其他客戶', value: '3' },
+    { title: 'CDS 客戶 (中鋼、中鴻、中鋁、華新麗華、東和鋼鐵)', value: 'cds' },
+    { title: '台塑 e 化平台客戶 (台塑集團、奇美集團)', value: 'fpc' },
+    { title: '其他客戶', value: 'other' },
   ]
 
   const beneListByType = [
@@ -379,7 +384,7 @@
   const isShowList = ref(false)
   const typeFormRef = ref()
   const searchFormRef = ref()
-  const lcAppData = ref<LcAppData>({ type: '', appNo: '' })
+  const lcAppData = ref<LcAppData>({ type: '', appNo: '', beneType: '' })
 
   const typeForm = reactive<TypeForm>({
     beneficiaryType: null,
@@ -476,7 +481,7 @@
   function handleEdit (payload: { type: string, appNo: string }): void {
     console.log('編輯事件觸發，接收到 payload:', payload)
     // 取得 appId
-    lcAppData.value = { type: payload.type, appNo: payload.appNo }
+    lcAppData.value = { type: payload.type, appNo: payload.appNo, beneType: typeForm.beneficiaryType || '' }
     currentView.value = ''
     isShowList.value = false
     isEdit.value = true
