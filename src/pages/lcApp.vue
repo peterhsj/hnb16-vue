@@ -299,7 +299,11 @@
 
       <!-- 開狀申請書清冊 -->
       <div v-if="isShowList" class="mt-4 mx-4">
-        <h2 class="hnb16__title">開狀申請書清冊</h2>
+        <h2 class="hnb16__title">
+          開狀申請書清冊 -
+          {{ typeForm.beneficiaryType === 'cds' ? 'CDS' : typeForm.beneficiaryType === 'fpc' ? '台塑 e 化平台' : '企業' }}
+        </h2>
+
         <LcAppList :form-data="propsFormData" @on-edit="handleEdit" />
 
       </div>

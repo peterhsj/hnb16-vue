@@ -2,7 +2,7 @@
   <div>
     <!-- 頁面標題 -->
     <h2 class="mx-4 hnb16__title">
-      填寫開狀申請書 - {{ formData.beneType === 'cds' ? 'CDS' : formData.beneType === 'fpc' ? '台塑 E 化平台' : '一般' }}
+      填寫開狀申請書 - {{ formData.beneType === 'cds' ? 'CDS' : formData.beneType === 'fpc' ? '台塑 E 化平台' : '企業' }}
     </h2>
 
     <!-- 主表單卡片 -->
@@ -435,7 +435,7 @@
 
                       <v-radio value="unified_invoice">
                         <template #label>
-                          <span class="text-body-2">統一發票日</span>
+                          <span class="text-body-2">( 統一 ) 發票日</span>
                         </template>
                       </v-radio>
                     </v-radio-group>

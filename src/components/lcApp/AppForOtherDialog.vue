@@ -29,7 +29,7 @@
               開發國內不可撤銷信用狀申請書
             </v-col>
 
-            <v-col class="py-1 text-center" cols="6">
+            <v-col class="py-1 text-center" cols="12">
               中華民國 114 年 5 月 10 日
             </v-col>
           </v-row>
@@ -185,11 +185,27 @@
               <th class="text-end">乙、付款期限：</th>
 
               <td>
-                <div v-if="form.paymentMain === 'sight'">見票即付。</div>
+                <div><v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                  見票即付。
+                </div>
 
-                <div v-if="form.paymentMain === 'fixed'">
-                  <span>以「定日付款」方式填寫到期日，其到期日為：</span><br />
-                  { 匯票發票日 | ( 統一 ) 發票日 | 其他：_______ } 起算 _______ 天內。
+                <div>
+                  <p class="mb-1">
+                    <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                    以「定日付款」方式填寫到期日，其到期日為：
+                  </p>
+
+                  <p class="ms-5 mb-1">
+                    <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
+                    <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
+                    <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
+                  </p>
+
+                  <p class="ms-5">
+                    <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" />
+                    指定期日為
+                    {{ form.namedDueDate || '-' }}
+                  </p>
                 </div>
               </td>
             </tr>
@@ -235,13 +251,15 @@
                   <li class="mb-2">
                     <span>分批交貨：</span>
 
-                    <span class="font-weight-bold">{{ form.partialShipment === 'allowed' ? '可以' : form.partialShipment === 'not_allowed' ? '不可以' : '' }}</span>
+                    <span class="mx-1"><v-icon :icon="form.partialShipment === 'allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 可以</span>
+                    <span class="mx-1"><v-icon :icon="form.partialShipment === 'not_allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 不可以</span>
 
                     <span>（未填者視為得分批交貨）。</span>
                   </li>
 
                   <li class="mb-2">
-                    <span class="font-weight-bold">{{ form.discountInterest === 'buyer' ? '匯票墊款利息由買方負擔' : form.discountInterest === 'seller' ? '匯票貼現利息由賣方負擔' : '' }}</span>
+                    <span class="mx-1"><v-icon :icon="form.discountInterest === 'buyer' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票墊款利息由買方負擔</span>
+                    <span class="mx-1"><v-icon :icon="form.discountInterest === 'seller' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票貼現利息由賣方負擔</span>
 
                     <span>（未填者視為由買方負擔）。</span>
                   </li>
@@ -264,14 +282,16 @@
 
                   <li class="mb-2">
                     <span>承兌手續費由</span>
-                    <span class="font-weight-bold">{{ form.feeBearer === 'buyer' ? '買方' : form.feeBearer === 'seller' ? '賣方' : '' }}</span>
+                    <span class="mx-1"><v-icon :icon="form.feeBearer === 'buyer' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 買方</span>
+                    <span class="mx-1"><v-icon :icon="form.feeBearer === 'seller' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 賣方</span>
 
                     <span>負擔（未填者視為由買方負擔）。</span>
                   </li>
 
                   <li class="mb-2">
                     <span>受益人押匯時，匯票承兌/付款申請書</span>
-                    <span class="font-weight-bold">{{ form.stampSingleParty === 'allowed' ? '可以' : form.stampSingleParty === 'not_allowed' ? '不可以' : '' }}</span>
+                    <span class="mx-1"><v-icon :icon="form.stampSingleParty === 'allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 可以</span>
+                    <span class="mx-1"><v-icon :icon="form.stampSingleParty === 'not_allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 不可以</span>
 
                     <span>僅由受益人單方蓋章。</span>
                   </li>
@@ -463,6 +483,10 @@
     feeBearer: 'buyer',
     stampSingleParty: 'allowed',
     otherSpecialTerms: '',
+    fixedExpiryBasis: '',
+    fixedDaysWithin: '',
+    useNamedDueDate: false,
+    namedDueDate: '',
 
   })
 

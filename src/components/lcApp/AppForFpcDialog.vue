@@ -123,7 +123,41 @@
 
                 <ol class="hnb__list--ol ms-10">
                   <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
-                  <li class="mb-2">乙、付款期限：<span id="lcTypeDate">見票即付。</span></li>
+
+                  <li class="mb-2">
+                    <div class="d-flex">
+                      <div>
+                        乙、付款期限：
+                      </div>
+
+                      <div style="text-indent: initial;">
+                        <div>
+                          <v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                          見票即付。
+                        </div>
+
+                        <div>
+                          <p class="mb-1">
+                            <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                            以「定日付款」方式填寫到期日，其到期日為：
+                          </p>
+
+                          <p class="ms-5 mb-1">
+                            <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
+                            <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
+                            <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
+                          </p>
+
+                          <p class="ms-5">
+                            <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" />
+                            指定期日為
+                            {{ form.namedDueDate || '-' }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+
                   <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 
@@ -144,18 +178,54 @@
             <tr>
               <td colspan="3">
                 <p class="font-weight-bold my-1">三、特別指示：</p>
-                <p>1.電子押匯特別指示條款</p>
+                <p class="font-weight-bold my-1">電子押匯特別指示條款</p>
 
-                <ol class="hnb__list--ol">
-                  <li class="mb-2">(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
-                  <li class="mb-2">(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
-                  <li class="mb-2">(3) 貨物可以分批交貨。</li>
-                  <li class="mb-2">(4) 貨物明細以發票為準。</li>
-                  <li class="mb-2">(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
-                  <li class="mb-2">(6) 本信用狀適用eUCP2.0版。</li>
-                  <li class="mb-2">(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
-                  <li class="mb-2">(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
-                </ol>
+                <p class="mb-1">1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
+                <p class="mb-1">2. 貨物可以分批交貨。</p>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>3. 最後交貨日期：{{ form.lastDeliveryDate || '-' }}</span>
+
+                  <span class="text-caption">( 未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效日期 )。</span>
+                </div>
+
+                <p class="mb-1">4. 發票日期早於開狀日期可以接受。</p>
+                <p class="mb-1">5. 發票金額大於開狀金額或匯票金額可以接受。</p>
+                <p class="mb-1">6. 以受益人所屬分公司或分廠名義開立之發票押匯可以接受。</p>
+                <p class="mb-1">7. 本信狀適用 eUCP2.0 版。</p>
+                <p class="mb-1">8. 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯。</p>
+                <p class="mb-1">9. 押匯電子文件透過網址: HTTPS://ecrm.fpg.com.tw 提示。</p>
+
+                <div class="d-flex align-center ga-2 my-2">
+                  <span>
+                    10. 遠期信用狀利息：
+                    <v-icon :icon="form.usanceInterestBuyer ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" /> 買方負擔
+                  </span>
+                </div>
+
+                <div class="my-2">
+                  <div class="mb-1">
+                    11. 其他：
+                  </div>
+
+                  {{ form.otherSpecialTerms || '' }}
+                </div>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>12. 限定押匯日期：自</span>
+
+                  {{ form.draftStartDate || '-' }}
+
+                  <span>起始可押匯。<span class="text-caption"> ( 未填寫者視為未限定押匯日期 )</span></span>
+                </div>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>13. 發票起始開立日期：</span>
+
+                  {{ form.invoiceStartDate || '-' }}
+
+                  <span class="text-caption">( 以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期 )。</span>
+                </div>
               </td>
             </tr>
 
@@ -354,6 +424,13 @@
     feeBearer: 'buyer',
     stampSingleParty: 'allowed',
     otherSpecialTerms: '',
+    fixedExpiryBasis: '',
+    fixedDaysWithin: '',
+    useNamedDueDate: false,
+    namedDueDate: '',
+    draftStartDate: '',
+    invoiceStartDate: '',
+    usanceInterestBuyer: false,
 
   })
 

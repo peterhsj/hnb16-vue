@@ -91,69 +91,69 @@ export interface LcApplicationPayload {
 export function createInitialLcApplicationForm (): LcApplicationPayload {
   return {
     // ── 共用 ──────────────────────────────────────────────────────────────
-    noticeBank: null,
-    lcType: null,
-    currency: 'TWD',
-    amount: '',
-    expiryDate: '',
-    applicantName: '',
-    applicantTaxId: '',
-    applicantAddress: '',
-    contactName: '',
-    contactPhone: '',
-    beneCorp: null,
-    benePhone: '',
-    beneEmail: '',
-    department: null,
-    customerNo: '',
-    lastDeliveryDate: '',
-    otherSpecialTerms: '',
-    partialShipment: 'allowed',
+    noticeBank: null, // 通知銀行
+    lcType: null, // 信用狀類型
+    currency: 'TWD', // 幣別
+    amount: '', // 金額
+    expiryDate: '', // 到期日
+    applicantName: '', // 申請人名稱
+    applicantTaxId: '', // 申請人稅號
+    applicantAddress: '', // 申請人地址
+    contactName: '', // 聯絡人姓名
+    contactPhone: '', // 聯絡人電話
+    beneCorp: null, // 受益人公司
+    benePhone: '', // 受益人電話
+    beneEmail: '', // 受益人電子郵件
+    department: null, // 部門
+    customerNo: '', // 客戶編號
+    lastDeliveryDate: '', // 最後交貨日期
+    otherSpecialTerms: '', // 其他特別條款
+    partialShipment: 'allowed', // 部分裝運
 
     // ── CDS ───────────────────────────────────────────────────────────────
-    goodsDescription: '',
-    electronicNote: null,
-    customElectronicNote: DEFAULT_CUSTOM_ELECTRONIC_NOTE,
-    deliverPaymentRequest: false,
-    deliverAcceptanceRequest: false,
-    deliverInvoice: false,
-    deliverOther: false,
-    deliverOtherDetail: '',
+    goodsDescription: '', // 貨物描述
+    electronicNote: null, // 電子票據
+    customElectronicNote: DEFAULT_CUSTOM_ELECTRONIC_NOTE, // 自訂電子票據
+    deliverPaymentRequest: false, // 提供付款請求
+    deliverAcceptanceRequest: false, // 提供承兌請求
+    deliverInvoice: false, // 提供發票
+    deliverOther: false, // 提供其他文件
+    deliverOtherDetail: '', // 其他文件細節
 
     // ── FPC ───────────────────────────────────────────────────────────────
-    paymentKind: null,
-    fixedExpiryBasis: null,
-    fixedDaysWithin: '',
-    useNamedDueDate: false,
-    namedDueDate: '',
-    invoiceDocKind: null,
-    otherDocumentsNote: '',
-    productDescriptionNote: '',
-    usanceInterestBuyer: false,
-    draftStartDate: '',
-    invoiceStartDate: '',
-    rateBaseChecked: false,
-    rateBaseSpread: '',
-    rateFixedChecked: false,
-    rateFixedPercent: '',
+    paymentKind: null, // 付款種類
+    fixedExpiryBasis: null, // 固定到期基準
+    fixedDaysWithin: '', // 固定天數範圍
+    useNamedDueDate: false, // 使用指定到期日
+    namedDueDate: '', // 指定到期日
+    invoiceDocKind: null, // 發票文件種類
+    otherDocumentsNote: '', // 其他文件備註
+    productDescriptionNote: '', // 產品描述備註
+    usanceInterestBuyer: false, // 遠期利息由買方承擔
+    draftStartDate: '', // 匯票起始日期
+    invoiceStartDate: '', // 發票起始日期
+    rateBaseChecked: false, // 利率基準是否勾選
+    rateBaseSpread: '', // 利率基準差額
+    rateFixedChecked: false, // 固定利率是否勾選
+    rateFixedPercent: '', // 固定利率百分比
 
     // ── Other ─────────────────────────────────────────────────────────────
-    managerName: '',
-    managerTitle: '',
-    beneAddress: '',
-    paymentMain: null,
-    paymentExpBasis: null,
-    paymentExpOtherText: '',
-    payDaysAfter: '',
-    invoiceKind: null,
-    otherDocumentsDetail: '',
-    productPurchaseNote: '',
-    draftFormat: null,
-    discountInterest: null,
-    draftLimitStartDate: '',
-    feeBearer: null,
-    stampSingleParty: null,
-    ratePaymentDayOfMonth: '',
+    managerName: '', // 經理姓名
+    managerTitle: '', // 經理職稱
+    beneAddress: '', // 受益人地址
+    paymentMain: null, // 主要付款方式
+    paymentExpBasis: null, // 付款到期基準
+    paymentExpOtherText: '', // 付款到期其他文字
+    payDaysAfter: '', // 付款後天數
+    invoiceKind: null, // 發票種類
+    otherDocumentsDetail: '', // 其他文件細節
+    productPurchaseNote: '', // 產品購買備註
+    draftFormat: null, // 匯票格式
+    discountInterest: null, // 貼現利息
+    draftLimitStartDate: '', // 匯票限制起始日期
+    feeBearer: null, // 手續費承擔方
+    stampSingleParty: null, // 單方蓋章
+    ratePaymentDayOfMonth: '', // 每月付款日
   }
 }
 
