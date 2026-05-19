@@ -133,6 +133,7 @@
                   <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
                   <li class="mb-2">2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
                   <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： </li>
                 </ol>
 
                 <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
@@ -164,18 +165,6 @@
                   <span class="font-weight-bold">利率約款：</span>
                   貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，按月計付利息。
                 </p>
-                <!-- rateRule 在 CDS 狀態下不顯示 -->
-                <!-- <ol class="hnb__list--ol">
-                  <li>
-                    <v-icon icon="mdi mdi-square" size="small" />
-                    基準利率 加碼年率 %計付利息，如貴行利率調整時亦隨同調整。
-                  </li>
-
-                  <li>
-                    <v-icon icon="mdi mdi-square-outline" size="small" />
-                    年率 % 固定計息
-                  </li>
-                </ol> -->
 
                 <p class="mb-2">
                   <span class="font-weight-bold">新臺幣短期放款計期方式：</span>

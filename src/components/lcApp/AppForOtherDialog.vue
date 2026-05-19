@@ -203,34 +203,18 @@
             </tr>
 
             <tr>
-              <th class="text-end">丁、應檢附之單證：</th>
+              <th class="text-end">丁、應檢附之單據：</th>
 
               <td>
-                <ol class="hnb__line--ol ms-4">
-                  <li class="mb-2">
-                    匯票承兌/付款申請書乙份。
-                  </li>
-
-                  <li class="mb-2">
-                    <span>{{ form.invoiceKind === 'invoice' ? '發票' : form.invoiceKind === 'unified' ? '統一發票' : '' }}</span>
-                  </li>
-
-                  <li class="mb-2">
-                    <div class="mb-1">
-                      其他（請註明）：
-                    </div>
-
-                    XXXXXXXXX
-                  </li>
-
-                  <li class="mb-2">
-                    <div class="mb-1">
-                      上項單據應載明申請人向受益人購買下列產品：
-                    </div>
-
-                    鋼品一批
-                  </li>
+                <ol class="hnb__list--ol ms-10">
+                  <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
+                  <li class="mb-2">2. <v-icon icon="mdi mdi-square" size="small" /> 匯票承兌申請書乙份。</li>
+                  <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> {{ form.invoiceKind === 'invoice' ? '發票' : form.invoiceKind === 'unified' ? '統一發票' : '' }}。</li>
+                  <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： XXXXXXXXX</li>
                 </ol>
+
+                <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
+                <p class="ms-3">鋼品一批</p>
               </td>
             </tr>
 
@@ -242,7 +226,8 @@
                   <li class="mb-2">
                     <span>匯票承兌/付款申請書使用 </span>
 
-                    <span class="font-weight-bold">{{ form.draftFormat === 'bank' ? '貴行' : form.draftFormat === 'beneficiary' ? '受益人' : '' }} </span>
+                    <span class="mx-1"><v-icon :icon="form.draftFormat === 'bank' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 貴行</span>
+                    <span class="mx-1"><v-icon :icon="form.draftFormat === 'beneficiary' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 受益人</span>
 
                     <span> 所訂格式，申請書上信用狀申請人所蓋印鑑應與原留印鑑相符。</span>
                   </li>

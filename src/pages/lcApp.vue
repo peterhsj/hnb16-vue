@@ -340,7 +340,7 @@
 
 <script setup lang="ts">
   import type { SearchForm, TypeForm } from '@/api/lcApp'
-  import type { LcAppData } from '@/types/lcCdsApplication'
+  import type { LcAppData } from '@/types/lcApplication'
   import { isAfter, isBefore } from 'date-fns'
   import { reactive, ref, watch } from 'vue'
 

@@ -131,8 +131,9 @@
 
                 <ol class="hnb__list--ol ms-10">
                   <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
-                  <li class="mb-2">2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
-                  <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li class="mb-2">2. <v-icon icon="mdi mdi-square" size="small" /> 匯票承兌申請書乙份。</li>
+                  <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> {{ form.invoiceKind === 'invoice' ? '發票' : form.invoiceKind === 'unified' ? '統一發票' : '' }}。</li>
+                  <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： XXXXXXXXX</li>
                 </ol>
 
                 <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
@@ -336,6 +337,25 @@
     'update:appDialog': [boolean]
     'on-close': []
   }>()
+
+  const form = ref({
+    paymentMain: 'sight',
+    paymentExpBasis: 'draft',
+    paymentExpOtherText: '',
+    payDaysAfter: '',
+    invoiceKind: 'invoice',
+    otherDocumentsDetail: '',
+    productPurchaseNote: '',
+    draftFormat: 'bank',
+    partialShipment: 'allowed',
+    discountInterest: 'buyer',
+    lastDeliveryDate: '',
+    draftLimitStartDate: '',
+    feeBearer: 'buyer',
+    stampSingleParty: 'allowed',
+    otherSpecialTerms: '',
+
+  })
 
   function onClose (): void {
     show.value = false

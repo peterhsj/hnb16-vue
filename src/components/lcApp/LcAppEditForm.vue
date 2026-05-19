@@ -1,7 +1,9 @@
 <template>
   <div>
     <!-- 頁面標題 -->
-    <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2>
+    <h2 class="mx-4 hnb16__title">
+      填寫開狀申請書 - {{ formData.beneType === 'cds' ? 'CDS' : formData.beneType === 'fpc' ? '台塑 E 化平台' : '一般' }}
+    </h2>
 
     <!-- 主表單卡片 -->
     <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
@@ -61,15 +63,29 @@
                 </th>
 
                 <td class="lc-td">
+                  <template v-if="formData.beneType === 'cds'">
+                    即期
+                  </template>
+
                   <v-radio-group
+                    v-else
                     v-model="form.lcType"
                     color="cyan-darken-3"
                     density="compact"
                     hide-details="auto"
                     inline
                   >
-                    <v-radio label="即期" value="sight" />
-                    <v-radio label="遠期" value="usance" />
+                    <v-radio class="me-3" value="sight">
+                      <template #label>
+                        <span class="text-body-2">即期</span>
+                      </template>
+                    </v-radio>
+
+                    <v-radio class="me-3" value="usance">
+                      <template #label>
+                        <span class="text-body-2">遠期</span>
+                      </template>
+                    </v-radio>
                   </v-radio-group>
                 </td>
               </tr>
@@ -111,7 +127,7 @@
               <tr>
                 <th class="text-end text-no-wrap" scope="row">
                   有效期限：<br>
-                  <span class="text-caption">（未填者自開狀日三個月視為最後有效期限）</span>
+                  <span class="text-caption">( 未填者自開狀日三個月視為最後有效期限 )</span>
                 </th>
 
                 <td class="lc-td">
@@ -217,7 +233,7 @@
                     hide-details="auto"
                     item-title="title"
                     item-value="value"
-                    :items="[...FPC_BENE_ITEMS]"
+                    :items="departmentOptions"
                     placeholder="請選擇受益人名稱"
                     variant="outlined"
                   />
@@ -312,7 +328,7 @@
                 </td>
               </tr>
 
-              <template v-if="beneType === 'fpc'">
+              <template v-if="formData.beneType === 'fpc'">
                 <tr>
                   <th class="text-end text-no-wrap" scope="row">
                     受益人事業部：
@@ -379,7 +395,7 @@
                   乙、付款期限：
                 </th>
 
-                <td v-if="beneType === 'cds'" class="lc-td">
+                <td v-if="formData.beneType === 'cds'" class="lc-td">
                   見票即付。
                 </td>
 
@@ -390,11 +406,15 @@
                     density="compact"
                     hide-details="auto"
                   >
-                    <v-radio label="見票即付。" value="sight" />
+                    <v-radio value="sight">
+                      <template #label>
+                        <span class="text-body-2">見票即付。</span>
+                      </template>
+                    </v-radio>
 
                     <v-radio value="fixed">
                       <template #label>
-                        <span>以「定日付款」方式填寫到期日，其到期日為：</span>
+                        <span class="text-body-2">以「定日付款」方式填寫到期日，其到期日為：</span>
                       </template>
                     </v-radio>
                   </v-radio-group>
@@ -405,9 +425,19 @@
                       color="cyan-darken-3"
                       density="compact"
                       hide-details="auto"
+                      inline
                     >
-                      <v-radio label="匯票發票日" value="draft_invoice" />
-                      <v-radio label="統一發票日" value="unified_invoice" />
+                      <v-radio class="me-3" value="draft_invoice">
+                        <template #label>
+                          <span class="text-body-2">匯票發票日</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio value="unified_invoice">
+                        <template #label>
+                          <span class="text-body-2">統一發票日</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
                     <div class="d-flex align-center ga-2 flex-wrap mt-2">
@@ -430,8 +460,11 @@
                         color="cyan-darken-3"
                         density="compact"
                         hide-details
-                        label="指定期日為"
-                      />
+                      >
+                        <template #label>
+                          <span class="text-body-2">指定期日為</span>
+                        </template>
+                      </v-checkbox>
 
                       <v-date-input
                         v-model="form.namedDueDate"
@@ -456,7 +489,7 @@
                   丙、金額：
                 </th>
 
-                <td class="lc-td text-body-2">
+                <td class="lc-td">
                   須與相關發票上所列開金額一致或依照本信用狀其他指示。
                 </td>
               </tr>
@@ -472,30 +505,50 @@
                   檢附單據：
                 </th>
 
-                <td v-if="beneType === 'cds'" class="lc-td text-body-2">
+                <td v-if="formData.beneType === 'cds'" class="lc-td">
                   <v-checkbox
                     v-model="form.deliverPaymentRequest"
                     color="cyan-darken-3"
                     density="compact"
                     hide-details
-                    label="匯票付款申請書乙份"
-                  />
+                  >
+                    <template #label>
+                      <span class="text-body-2">匯票付款申請書乙份</span>。
+                    </template>
+                  </v-checkbox>
+
+                  <v-checkbox
+                    v-model="form.deliverAcceptanceRequest"
+                    color="cyan-darken-3"
+                    density="compact"
+                    hide-details
+                  >
+                    <template #label>
+                      <span class="text-body-2">匯票承兌申請書乙份</span>。
+                    </template>
+                  </v-checkbox>
 
                   <v-checkbox
                     v-model="form.deliverInvoice"
                     color="cyan-darken-3"
                     density="compact"
                     hide-details
-                    label="統一發票"
-                  />
+                  >
+                    <template #label>
+                      <span class="text-body-2">統一發票</span>
+                    </template>
+                  </v-checkbox>
 
                   <v-checkbox
                     v-model="form.deliverOther"
                     color="cyan-darken-3"
                     density="compact"
                     hide-details
-                    label="其他"
-                  />
+                  >
+                    <template #label>
+                      <span class="text-body-2">其他</span>
+                    </template>
+                  </v-checkbox>
 
                   <v-textarea
                     v-model="form.deliverOtherDetail"
@@ -503,13 +556,14 @@
                     color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
+                    placeholder="請填寫其他應檢附之單據"
                     rows="3"
                     variant="outlined"
                   />
                 </td>
 
                 <td v-else>
-                  <div class="text-body-2 mb-2">
+                  <div class="mb-2">
                     1. 匯票承兌/付款申請書乙份。
                   </div>
 
@@ -523,14 +577,23 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="發票" value="invoice" />
-                      <v-radio label="或統一發票" value="unified" />
+                      <v-radio class="me-3" value="invoice">
+                        <template #label>
+                          <span class="text-body-2">發票</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio value="unified">
+                        <template #label>
+                          <span class="text-body-2">統一發票</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
                   </div>
 
                   <div class="mb-2">
                     <div class="mb-1">
-                      3. 其他（請註明）：
+                      3. 其他 ( 請註明 )：
                     </div>
 
                     <v-textarea
@@ -565,7 +628,7 @@
                   電子押匯之特別指示條款：
                 </th>
 
-                <td v-if="beneType === 'cds'" class="lc-td">
+                <td v-if="formData.beneType === 'cds'" class="lc-td">
                   <v-radio-group
                     v-model="form.electronicNote"
                     color="cyan-darken-3"
@@ -578,9 +641,9 @@
                       </template>
                     </v-radio>
 
-                    <div class="ml-4 mb-4">
-                      <ol class="hnb__list--ol text-body-1">
-                        <li v-for="(line, i) in cscClauses" :key="i">
+                    <div class="ml-4 mt-2 mb-4">
+                      <ol class="hnb__list--ol text-body-2">
+                        <li v-for="(line, i) in cscClauses" :key="i" class="mb-2">
                           {{ line }}
                         </li>
                       </ol>
@@ -596,6 +659,7 @@
                   <div class="mt-2 ml-5">
                     <v-textarea
                       v-model="form.customElectronicNote"
+                      class="text-body-2"
                       color="teal-darken-2"
                       density="compact"
                       :disabled="!cdsCustomNoteEditable"
@@ -617,11 +681,20 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="可以" value="allowed" />
-                      <v-radio label="不可以" value="not_allowed" />
+                      <v-radio class="me-3" value="allowed">
+                        <template #label>
+                          <span class="text-body-2">可以</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="not_allowed">
+                        <template #label>
+                          <span class="text-body-2">不可以</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
-                    <span class="text-body-2">（未填者視為得分批交貨）。</span>
+                    <span class="text-caption">( 未填者視為得分批交貨 )。</span>
                   </div>
 
                   <div class="mt-3 d-flex flex-wrap align-center ga-2">
@@ -640,7 +713,7 @@
                       variant="outlined"
                     />
 
-                    <span class="text-body-2">（未填者自開狀日起三個月視為最後交貨日）。</span>
+                    <span class="text-caption">( 未填者自開狀日起三個月視為最後交貨日 )。</span>
                   </div>
 
                   <div class="mt-4">
@@ -660,9 +733,9 @@
                   </div>
                 </td>
 
-                <td v-if="beneType === 'fpc'" class="lc-td">
-                  <p>1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
-                  <p>2. 貨物可以分批交貨。</p>
+                <td v-if="formData.beneType === 'fpc'" class="lc-td">
+                  <p class="mb-1">1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
+                  <p class="mb-1">2. 貨物可以分批交貨。</p>
 
                   <div class="d-flex flex-wrap align-center ga-2 my-2">
                     <span>3. 最後交貨日期：</span>
@@ -680,15 +753,15 @@
                       variant="outlined"
                     />
 
-                    <span>（未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效日期）。</span>
+                    <span class="text-caption">( 未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效日期 )。</span>
                   </div>
 
-                  <p>4. 發票日期早於開狀日期可以接受。</p>
-                  <p>5. 發票金額大於開狀金額或匯票金額可以接受。</p>
-                  <p>6. 以受益人所屬分公司或分廠名義開立之發票押匯可以接受。</p>
-                  <p>7. 本信狀適用 eUCP2.0 版。</p>
-                  <p>8. 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯。</p>
-                  <p>9. 押匯電子文件透過網址: HTTPS://ecrm.fpg.com.tw 提示。</p>
+                  <p class="mb-1">4. 發票日期早於開狀日期可以接受。</p>
+                  <p class="mb-1">5. 發票金額大於開狀金額或匯票金額可以接受。</p>
+                  <p class="mb-1">6. 以受益人所屬分公司或分廠名義開立之發票押匯可以接受。</p>
+                  <p class="mb-1">7. 本信狀適用 eUCP2.0 版。</p>
+                  <p class="mb-1">8. 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯。</p>
+                  <p class="mb-1">9. 押匯電子文件透過網址: HTTPS://ecrm.fpg.com.tw 提示。</p>
 
                   <div class="d-flex align-center ga-2 my-2">
                     <span>10. 遠期信用狀利息：</span>
@@ -698,8 +771,11 @@
                       color="cyan-darken-3"
                       density="compact"
                       hide-details
-                      label="買方負擔"
-                    />
+                    >
+                      <template #label>
+                        <span class="text-body-2">買方負擔</span>
+                      </template>
+                    </v-checkbox>
                   </div>
 
                   <div class="my-2">
@@ -734,7 +810,7 @@
                       variant="outlined"
                     />
 
-                    <span>起始可押匯。（未填寫者視為未限定押匯日期）</span>
+                    <span>起始可押匯。<span class="text-caption"> ( 未填寫者視為未限定押匯日期 )</span></span>
                   </div>
 
                   <div class="d-flex flex-wrap align-center ga-2 my-2">
@@ -753,11 +829,11 @@
                       variant="outlined"
                     />
 
-                    <span>。（以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期）</span>
+                    <span class="text-caption">( 以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期 )。</span>
                   </div>
                 </td>
 
-                <td v-if="beneType === 'other'" class="lc-td">
+                <td v-if="formData.beneType === 'other'" class="lc-td">
                   <div class="mb-3 d-inline-flex align-center">
                     <span>1. 匯票承兌/付款申請書使用</span>
 
@@ -769,12 +845,23 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="貴行" value="bank" />
-                      <v-radio label="受益人" value="beneficiary" />
+                      <v-radio class="me-3" value="bank">
+                        <template #label>
+                          <span class="text-body-2">貴行</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="beneficiary">
+                        <template #label>
+                          <span class="text-body-2">受益人</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
                     <span>所訂格式，申請書上信用狀申請人所蓋印鑑應與原留印鑑相符。</span>
                   </div>
+
+                  <br />
 
                   <div class="mb-3 d-inline-flex align-center">
                     <span>2. 分批交貨：</span>
@@ -787,12 +874,23 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="可以" value="allowed" />
-                      <v-radio label="不可以" value="not_allowed" />
+                      <v-radio class="me-3" value="allowed">
+                        <template #label>
+                          <span class="text-body-2">可以</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="not_allowed">
+                        <template #label>
+                          <span class="text-body-2">不可以</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
-                    <span>（未填者視為得分批交貨）。</span>
+                    <span class="text-caption">( 未填者視為得分批交貨 )。</span>
                   </div>
+
+                  <br />
 
                   <div class="mb-3 d-inline-flex align-center">
                     <span>3.</span>
@@ -805,11 +903,20 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="匯票墊款利息由買方負擔" value="buyer" />
-                      <v-radio label="匯票貼現利息由賣方負擔" value="seller" />
+                      <v-radio class="me-3" value="buyer">
+                        <template #label>
+                          <span class="text-body-2">匯票墊款利息由買方負擔</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="seller">
+                        <template #label>
+                          <span class="text-body-2">匯票貼現利息由賣方負擔</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
-                    <span>（未填者視為由買方負擔）。</span>
+                    <span class="text-caption">( 未填者視為由買方負擔 )。</span>
                   </div>
 
                   <div class="d-flex flex-wrap align-center ga-2 mb-3">
@@ -828,7 +935,7 @@
                       variant="outlined"
                     />
 
-                    <span>（未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效期限）。</span>
+                    <span class="text-caption">( 未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效期限 )。</span>
                   </div>
 
                   <div class="d-flex flex-wrap align-center ga-2 mb-3">
@@ -847,7 +954,7 @@
                       variant="outlined"
                     />
 
-                    <span>起始可押匯。</span>
+                    <span>起始可押匯。<span class="text-caption"> ( 未填寫者視為未限定押匯日期 )</span></span>
                   </div>
 
                   <div class="mb-3 d-inline-flex align-center">
@@ -861,12 +968,23 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="買方" value="buyer" />
-                      <v-radio label="賣方" value="seller" />
+                      <v-radio class="me-3" value="buyer">
+                        <template #label>
+                          <span class="text-body-2">買方</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="seller">
+                        <template #label>
+                          <span class="text-body-2">賣方</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
-                    <span>負擔（未填者視為由買方負擔）。</span>
+                    <span>負擔<span class="text-caption"> ( 未填者視為由買方負擔 )</span>。</span>
                   </div>
+
+                  <br />
 
                   <div class="mb-3 d-inline-flex align-center">
                     <span>7. 受益人押匯時，匯票承兌/付款申請書</span>
@@ -879,8 +997,17 @@
                       hide-details="auto"
                       inline
                     >
-                      <v-radio label="可以" value="allowed" />
-                      <v-radio label="不可以" value="not_allowed" />
+                      <v-radio class="me-3" value="allowed">
+                        <template #label>
+                          <span class="text-body-2">可以</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="not_allowed">
+                        <template #label>
+                          <span class="text-body-2">不可以</span>
+                        </template>
+                      </v-radio>
                     </v-radio-group>
 
                     <span>僅由受益人單方蓋章。</span>
@@ -908,10 +1035,10 @@
                 </td>
               </tr>
 
-              <tr v-if="beneType === 'fpc'">
-                <td>
+              <tr v-if="formData.beneType === 'fpc'">
+                <td colspan="2">
                   <p class="mb-2">
-                    <span class="font-weight-bold">利率約款：</span>
+                    <span class="font-weight-bold">利率條款：</span>
                     貴行依本申請書開發信用狀所墊付之款項，申請人同意按貴我雙方所訂之利率訂價指標，按月計付利息。
                   </p>
 
@@ -972,12 +1099,12 @@
                     手續費約款：
                   </p>
 
-                  <p>
+                  <p class="mb-1">
                     貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
                     0.1% 補繳開狀手續費。
                   </p>
 
-                  <p>
+                  <p class="mb-1">
                     貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
                     補繳開狀手續費，最低金額為新台幣 1,000 元：<br>
                     (1) 受益人押匯後，申請人立即還款而未向貴行借款者。<br>
@@ -986,8 +1113,8 @@
                 </td>
               </tr>
 
-              <tr v-if="beneType === 'other'">
-                <td>
+              <tr v-if="formData.beneType === 'other'">
+                <td colspan="2">
                   <p class="mb-2 d-flex flex-wrap align-center ga-1">
                     <span class="font-weight-bold">利率條款：</span>
                     <span>貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，自墊款日起每月</span>
@@ -1014,12 +1141,12 @@
                   </p>
 
                   <ol class="hnb__list--ol">
-                    <li>
+                    <li class="mb-1">
                       1. 貴行依本申請書開發「利息及承兌手續費由賣方負擔」之遠期信用狀，如於信用狀有效期限屆滿而受益人未向貴行辦理承兌或申請人申請註銷信用狀時，申請人同意依開狀金額，視信用狀有效期限以三個月為一期(未滿三個月者視為一期)，按年率
                       0.1% 補繳開狀手續費。
                     </li>
 
-                    <li>
+                    <li class="mb-1">
                       2. 貴行依本申請書開發「利息由買方負擔」之遠期信用狀，如有下列情形之ㄧ者，申請人同意依押匯金額及信用狀有效期限（三個月為一期，未滿三個月者視為一期），按年率 0.1%
                       補繳開狀手續費，最低金額為新台幣 1,000 元：<br>
                       (1)受益人押匯後，申請人立即還款而未向貴行借款者。<br>
@@ -1057,21 +1184,21 @@
 
     <!-- 預覽開狀申請書 Dialogs（依受益人類別顯示） -->
     <AppForCdsDialog
-      v-if="beneType === 'cds'"
+      v-if="formData.beneType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
 
     <AppForFpcDialog
-      v-if="beneType === 'fpc'"
+      v-if="formData.beneType === 'fpc'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
 
     <AppForOtherDialog
-      v-if="beneType === 'other'"
+      v-if="formData.beneType === 'other'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
@@ -1091,26 +1218,20 @@
 </template>
 
 <script setup lang="ts">
-  import type { BeneTypeOption } from '@/types/amendQuery'
-  import type { LcAppData, LcCdsApplicationPayload } from '@/types/lcCdsApplication'
-  import type { FpcBeneOption, LcFpcApplicationPayload } from '@/types/lcFpcApplication'
-  import type { LcOtherApplicationPayload } from '@/types/lcOtherApplication'
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
   import {
-    createInitialLcCdsForm,
+    CDS_BENE_ITEMS,
+    createInitialLcApplicationForm,
     CURRENCY_OPTIONS,
     DEFAULT_CUSTOM_ELECTRONIC_NOTE,
-    NOTICE_BANK_ITEMS,
-  } from '@/types/lcCdsApplication'
-  import {
-    createInitialLcFpcForm,
     FPC_BENE_ITEMS,
     FPC_DEPT_ITEMS,
-  } from '@/types/lcFpcApplication'
-  import {
-    createInitialLcOtherForm,
-  } from '@/types/lcOtherApplication'
+    type FpcBeneOption,
+    type LcAppData,
+    type LcApplicationPayload,
+    NOTICE_BANK_ITEMS,
+  } from '@/types/lcApplication'
 
   const props = defineProps<{
     // beneType: BeneTypeOption
@@ -1125,79 +1246,7 @@
   const lcFormRef = ref<InstanceType<typeof VForm> | null>(null)
 
   // ── 共用表單物件（單一 form） ─────────────────────────────────────────────
-  type LcCdsFormPayload = LcCdsApplicationPayload & {
-    contactPhone: string
-    beneCorp: string | null
-    department: string | null
-    customerNo: string
-  }
-
-  type UnifiedLcForm = Omit<LcCdsFormPayload & LcFpcApplicationPayload & LcOtherApplicationPayload, 'partialShipment'> & {
-    partialShipment: '' | 'allowed' | 'not_allowed'
-  }
-
-  function createInitialUnifiedForm (): UnifiedLcForm {
-    return {
-      noticeBank: null,
-      lcType: null,
-      currency: 'TWD',
-      amount: '',
-      expiryDate: '',
-      beneEmail: '',
-      benePhone: '',
-      contactPhone: '',
-      applicantName: '',
-      applicantTaxId: '',
-      applicantAddress: '',
-      beneCorp: null,
-      department: null,
-      customerNo: '',
-      goodsDescription: '',
-      electronicNote: null,
-      customElectronicNote: DEFAULT_CUSTOM_ELECTRONIC_NOTE,
-      deliverPaymentRequest: false,
-      deliverInvoice: false,
-      deliverOther: false,
-      deliverOtherDetail: '',
-      partialShipment: 'allowed',
-      lastDeliveryDate: '',
-      otherSpecialTerms: '',
-      contactName: '',
-      paymentKind: null,
-      fixedExpiryBasis: null,
-      fixedDaysWithin: '',
-      useNamedDueDate: false,
-      namedDueDate: '',
-      invoiceDocKind: null,
-      otherDocumentsNote: '',
-      productDescriptionNote: '',
-      usanceInterestBuyer: false,
-      draftStartDate: '',
-      invoiceStartDate: '',
-      rateBaseChecked: false,
-      rateBaseSpread: '',
-      rateFixedChecked: false,
-      rateFixedPercent: '',
-      managerName: '',
-      managerTitle: '',
-      beneAddress: '',
-      paymentMain: null,
-      paymentExpBasis: null,
-      paymentExpOtherText: '',
-      payDaysAfter: '',
-      invoiceKind: null,
-      otherDocumentsDetail: '',
-      productPurchaseNote: '',
-      draftFormat: null,
-      discountInterest: null,
-      draftLimitStartDate: '',
-      feeBearer: null,
-      stampSingleParty: null,
-      ratePaymentDayOfMonth: '',
-    }
-  }
-
-  const form = reactive<UnifiedLcForm>(createInitialUnifiedForm())
+  const form = reactive<LcApplicationPayload>(createInitialLcApplicationForm())
 
   const cdsCustomNoteEditable = computed(() => form.electronicNote === 'custom')
 
@@ -1216,6 +1265,16 @@
   const processStatus = ref<string>('')
   const appDialog = ref(false)
   const appNo = ref<string>('')
+
+  const departmentOptions = computed(() => {
+    if (props.formData.beneType === 'cds') {
+      return [...CDS_BENE_ITEMS]
+    }
+    if (props.formData.beneType !== 'cds') {
+      return [...FPC_BENE_ITEMS]
+    }
+    return []
+  })
 
   // ── CDS 固定常數 ──────────────────────────────────────────────────────────
   const issuingBankLabel = '華南商業銀行 高雄分行'
@@ -1238,15 +1297,16 @@
     () => props.formData,
     newData => {
       const { type, appNo: no, beneType } = newData as LcAppData
-      let nextData: Partial<UnifiedLcForm>
-      if (beneType === 'cds') nextData = createInitialLcCdsForm()
-      else if (beneType === 'fpc') nextData = createInitialLcFpcForm()
-      else nextData = createInitialLcOtherForm()
+      const nextData: Partial<LcApplicationPayload> = {}
+      if (beneType === 'cds') {
+        nextData.customElectronicNote = DEFAULT_CUSTOM_ELECTRONIC_NOTE
+        nextData.department = '75708007'
+      }
 
       if (type === 'edit' && no) {
-        Object.assign(form, createInitialUnifiedForm(), nextData)
+        Object.assign(form, createInitialLcApplicationForm(), nextData)
       } else if (type === 'new') {
-        Object.assign(form, createInitialUnifiedForm(), nextData)
+        Object.assign(form, createInitialLcApplicationForm(), nextData)
         lcFormRef.value?.reset()
       }
     },

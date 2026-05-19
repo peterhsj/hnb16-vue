@@ -71,21 +71,21 @@
     />
     <!-- App For Cds Dialog -->
     <AppForCdsDialog
-      v-if="searchForm.beneficiaryType === '1'"
+      v-if="searchForm.beneficiaryType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
     <!-- App For Fpc Dialog -->
     <AppForFpcDialog
-      v-if="searchForm.beneficiaryType === '2'"
+      v-if="searchForm.beneficiaryType === 'fpc'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
     <!-- App For Other Dialog -->
     <AppForOtherDialog
-      v-if="searchForm.beneficiaryType === '3'"
+      v-if="searchForm.beneficiaryType === 'other'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
