@@ -1,4 +1,4 @@
-/** 統一開狀申請書 Payload（合併 CDS / FPC / 一般） */
+/** 開狀申請書 Payload */
 
 // ── 共用 ──────────────────────────────────────────────────────────────────
 export type LcTypeOption = 'sight' | 'usance'
@@ -159,7 +159,7 @@ export function createInitialLcApplicationForm (): LcApplicationPayload {
 
 // ── 開狀申請書 Props（列表用）──────────────────────────────────────────────
 export interface LcAppData {
-  type: string
+  editType: string
   appNo: string
   beneType: string
 }

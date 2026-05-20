@@ -1296,16 +1296,16 @@
   watch(
     () => props.formData,
     newData => {
-      const { type, appNo: no, beneType } = newData as LcAppData
+      const { editType, appNo: no, beneType } = newData as LcAppData
       const nextData: Partial<LcApplicationPayload> = {}
       if (beneType === 'cds') {
         nextData.customElectronicNote = DEFAULT_CUSTOM_ELECTRONIC_NOTE
         nextData.department = '75708007'
       }
 
-      if (type === 'edit' && no) {
+      if (editType === 'edit' && no) {
         Object.assign(form, createInitialLcApplicationForm(), nextData)
-      } else if (type === 'new') {
+      } else if (editType === 'new') {
         Object.assign(form, createInitialLcApplicationForm(), nextData)
         lcFormRef.value?.reset()
       }

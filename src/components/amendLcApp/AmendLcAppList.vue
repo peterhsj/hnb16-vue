@@ -7,7 +7,7 @@
       density="compact"
       :headers="tableHeaders"
       hide-default-footer
-      item-value="appNo"
+      item-value="lcNo"
       :items="tableItems"
       :loading="isLoading"
       :page="pageOptions.page"
@@ -17,13 +17,6 @@
       striped="odd"
       @update:items-per-page="pageOptions.itemsPerPage = $event"
     >
-      <template #item.appNo="{ item }">
-        <a v-if="item.appNo" class="hnb__text--link" href="#" @click.prevent="handleAppView(item.appNo)">
-          {{ item.appNo }}
-        </a>
-
-        <span v-else>N/A</span>
-      </template>
 
       <template #item.lcNo="{ item }">
         <a v-if="item.lcNo" class="hnb__text--link" href="#" @click.prevent="handleLcView(item.lcNo)">
@@ -33,8 +26,12 @@
         <span v-else>N/A</span>
       </template>
 
-      <template #item.amount="{ item }">
-        ${{ thousandsFormatting(item.amount.toLocaleString()) }}
+      <template #item.totalAmount="{ item }">
+        ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
+      </template>
+
+      <template #item.availableBalance="{ item }">
+        ${{ thousandsFormatting(item.availableBalance.toLocaleString()) }}
       </template>
 
       <template #item.action="{ item }">
@@ -42,9 +39,9 @@
           class="hnb__btn--default mx-1 my-1"
           size="small"
           variant="flat"
-          @click="editItem('edit', item.appNo)"
+          @click="editItem('edit', item.lcNo)"
         >
-          編輯開狀申請書
+          編輯修改申請書
         </v-btn>
       </template>
     </v-data-table>
@@ -70,26 +67,26 @@
       @prompt-confirm="messageConfirm"
     />
     <!-- App For Cds Dialog -->
-    <AppForCdsDialog
+    <!-- <AppForCdsDialog
       v-if="searchForm.beneficiaryType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- App For Fpc Dialog -->
-    <AppForFpcDialog
+    <!-- <AppForFpcDialog
       v-if="searchForm.beneficiaryType === 'fpc'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- App For Other Dialog -->
-    <AppForOtherDialog
+    <!-- <AppForOtherDialog
       v-if="searchForm.beneficiaryType === 'other'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
@@ -107,21 +104,21 @@
       @on-close="lcDetailDialogClose"
     />
     <!-- 信用狀修改通知書 Notice Dialog -->
-    <NoticeDialog
+    <!-- <NoticeDialog
       v-model:notice-dialog="noticeDialog"
       :is-show-lc="true"
       :notice-no="noticeNo"
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
-    />
+    /> -->
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { LcAppItem, SearchForm } from '@/api/lcApp'
+  import type { AmendLcAppItem, AmendQueryFormPayload } from '@/types/amendLcList'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
-  import { getLcAppList } from '@/api/lcApp'
+  import { getAmendLcList } from '@/api/amendApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -129,7 +126,7 @@
 
   const { handleApiError } = useApiErrorHandler()
 
-  const tableItems = ref<LcAppItem[]>([])
+  const tableItems = ref<AmendLcAppItem[]>([])
   const isLoading = ref(false)
   // App Dialog
   const appDialog = ref(false)
@@ -158,33 +155,29 @@
   // })
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
-    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
-    { title: '申請人', key: 'applicant', sortable: false, nowrap: true },
-    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
-    { title: '申請日期', key: 'applyDate', align: 'center', sortable: false, nowrap: true },
-    { title: '金額', key: 'amount', align: 'end', sortable: false, nowrap: true },
-    { title: '受益人', key: 'beneficiary', sortable: false, nowrap: true },
+    { title: '開狀銀行', key: 'issuingBank', align: 'center', sortable: false, nowrap: true },
+    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
+    { title: '總金額', key: 'totalAmount', align: 'end', sortable: false, nowrap: true },
+    { title: '可用餘額', key: 'availableBalance', align: 'end', sortable: false, nowrap: true },
+    { title: '受益人統編', key: 'beneficiaryTaxId', align: 'center', sortable: false, nowrap: true },
     { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
     { title: '操作', key: 'action', align: 'center', sortable: false, width: 200, nowrap: true },
   ]
 
   interface Props {
-    formData?: SearchForm
+    formData?: AmendQueryFormPayload
   }
   const props = defineProps<Props>()
-  const searchForm = ref<SearchForm>(props.formData ?? {
-    searchType: 'lcNo',
-    lcNo: null,
-    appNo: null,
-    beneNo: null,
-    beneInNo: null,
-    status: null,
-    startDate: null,
-    endDate: null,
-    beneficiaryType: null,
-    beneficiary: null,
+  const searchForm = ref<AmendQueryFormPayload>(props.formData ?? {
+    beneType: null,
+    queryMode: '',
+    lcNo: '',
+    applicantLoanAccount: '',
+    beneficiaryTaxId: '',
+    lcStatus: null,
+    issueDateStart: '',
+    issueDateEnd: '',
   })
 
   interface PageOptions {
@@ -214,16 +207,14 @@
       searchForm.value = newVal
         ? { ...newVal }
         : {
-          searchType: 'lcNo',
-          lcNo: null,
-          appNo: null,
-          beneNo: null,
-          beneInNo: null,
-          status: null,
-          startDate: null,
-          endDate: null,
-          beneficiaryType: null,
-          beneficiary: null,
+          beneType: null,
+          queryMode: '',
+          lcNo: '',
+          applicantLoanAccount: '',
+          beneficiaryTaxId: '',
+          lcStatus: null,
+          issueDateStart: '',
+          issueDateEnd: '',
         }
       pageOptions.value.page = 1
       console.log('Search form data changed:', searchForm.value)
@@ -243,25 +234,24 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
-    const { lcNo, appNo, beneNo, beneInNo, status, startDate, endDate, beneficiary } = searchForm.value as SearchForm
+    const { lcNo, applicantLoanAccount, beneficiaryTaxId, lcStatus, issueDateStart, issueDateEnd } = searchForm.value as AmendQueryFormPayload
     const { page, itemsPerPage } = pageOptions.value
     const payload = {
       lcNo,
-      appNo,
-      beneNo,
-      beneInNo,
-      status,
-      startDate,
-      endDate,
+      applicantLoanAccount,
+      beneficiaryTaxId,
+      lcStatus,
+      issueDateStart,
+      issueDateEnd,
       page,
       itemsPerPage,
-      beneficiary,
     }
     console.log('Fetching list with payload:', payload, 'Page:', page, 'Items per page:', itemsPerPage)
     isLoading.value = true
     try {
-      const res = await getLcAppList(payload)
-      const { status, data: { data: sourceData, total, amount } } = res
+      const res = await getAmendLcList(payload)
+      console.log('API response:', res)
+      const { status, data: { items: sourceData, summary: { total, amount } } } = res
       if (status === 200) {
         tableItems.value = sourceData || []
         totalCount.value = total || 0
@@ -281,8 +271,8 @@
   }
 
   // 編輯項目
-  function editItem (editType: string, appNo: string): void {
-    emits('on-edit', { editType, appNo })
+  function editItem (type: string, appNo: string): void {
+    emits('on-edit', { type, appNo })
   }
 
   // 查看開狀申請書 App Dialog

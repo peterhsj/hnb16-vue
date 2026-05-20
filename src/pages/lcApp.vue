@@ -316,27 +316,6 @@
           @on-cancel="closeEditForm"
           @on-submit="submitEditForm"
         />
-        <!-- 填寫開狀申請書-CDS -->
-        <!-- <LcAppEditFormCds
-          v-if="typeForm.beneficiaryType === '1'"
-          :form-data="lcAppData"
-          @on-cancel="closeEditForm"
-          @on-submit="submitEditForm"
-        /> -->
-        <!-- 填寫開狀申請書-FPC -->
-        <!-- <LcAppEditFormFpc
-          v-if="typeForm.beneficiaryType === '2'"
-          :form-data="lcAppData"
-          @on-cancel="closeEditForm"
-          @on-submit="submitEditForm"
-        /> -->
-        <!-- 填寫開狀申請書-other -->
-        <!-- <LcAppEditFormOther
-          v-if="typeForm.beneficiaryType === '3'"
-          :form-data="lcAppData"
-          @on-cancel="closeEditForm"
-          @on-submit="submitEditForm"
-        /> -->
       </div>
     </v-container>
   </div>
@@ -388,7 +367,7 @@
   const isShowList = ref(false)
   const typeFormRef = ref()
   const searchFormRef = ref()
-  const lcAppData = ref<LcAppData>({ type: '', appNo: '', beneType: '' })
+  const lcAppData = ref<LcAppData>({ editType: '', appNo: '', beneType: '' })
 
   const typeForm = reactive<TypeForm>({
     beneficiaryType: null,
@@ -443,7 +422,7 @@
   })
 
   watch(() => searchForm.searchType, newType => {
-    searchFormRef.value.SearchForm()
+    searchFormRef.value.reset()
     searchForm.searchType = newType
   })
 
@@ -462,7 +441,7 @@
     if (inputType === 'edit') {
       currentView.value = 'search'
     } else {
-      handleEdit({ type: 'new', appNo: '' })
+      handleEdit({ editType: 'new', appNo: '' })
       currentView.value = ''
       isEdit.value = true
     }
@@ -482,10 +461,10 @@
   }
 
   // 編輯開狀申請書
-  function handleEdit (payload: { type: string, appNo: string }): void {
+  function handleEdit (payload: { editType: string, appNo: string }): void {
     console.log('編輯事件觸發，接收到 payload:', payload)
     // 取得 appId
-    lcAppData.value = { type: payload.type, appNo: payload.appNo, beneType: typeForm.beneficiaryType || '' }
+    lcAppData.value = { editType: payload.editType, appNo: payload.appNo, beneType: typeForm.beneficiaryType || '' }
     currentView.value = ''
     isShowList.value = false
     isEdit.value = true

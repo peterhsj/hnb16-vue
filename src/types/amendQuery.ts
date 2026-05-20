@@ -1,6 +1,6 @@
 export type BeneTypeOption = 'cds' | 'fpc' | 'other'
 
-export type AmendQueryMode = 'lcNo' | 'criteria'
+export type AmendQueryMode = 'lcNo' | 'criteria' | ''
 
 export type LcStatusOption = 'expired' | 'active'
 
@@ -15,8 +15,8 @@ export interface LcStatusItem {
 }
 
 export interface AmendQueryFormPayload {
-  beneType: BeneTypeOption | null
-  queryMode: AmendQueryMode
+  beneType?: BeneTypeOption | null
+  queryMode?: AmendQueryMode
   lcNo: string
   applicantLoanAccount: string
   beneficiaryTaxId: string
@@ -48,7 +48,7 @@ export const LC_STATUS_ITEMS: readonly LcStatusItem[] = [
 export function createInitialAmendQueryForm (): AmendQueryFormPayload {
   return {
     beneType: null,
-    queryMode: 'lcNo',
+    queryMode: '',
     lcNo: '',
     applicantLoanAccount: '',
     beneficiaryTaxId: '',
