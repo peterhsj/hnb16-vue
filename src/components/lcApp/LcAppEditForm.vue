@@ -63,7 +63,7 @@
                 </th>
 
                 <td class="lc-td">
-                  <template v-if="formData.beneType === 'cds'">
+                  <template v-if="formData.beneType === 'cds' || formData.beneType === 'fpc'">
                     即期
                   </template>
 
@@ -72,6 +72,7 @@
                     v-model="form.lcType"
                     color="cyan-darken-3"
                     density="compact"
+                    :disabled="formData.beneType !== 'other'"
                     hide-details="auto"
                     inline
                   >
@@ -385,8 +386,18 @@
                 </th>
 
                 <td class="lc-td">
-                  <!-- {{ payerBankLabel }} -->
-                  {{ paymentBankLabel }}
+                  <v-select
+                    v-model="form.payingBank"
+                    clearable
+                    color="teal-darken-2"
+                    density="compact"
+                    hide-details="auto"
+                    item-title="title"
+                    item-value="value"
+                    :items="[...PAYING_BANK_ITEMS]"
+                    placeholder="請選擇"
+                    variant="outlined"
+                  />
                 </td>
               </tr>
 
@@ -395,7 +406,7 @@
                   乙、付款期限：
                 </th>
 
-                <td v-if="formData.beneType === 'cds'" class="lc-td">
+                <td v-if="formData.beneType === 'cds' || formData.beneType === 'fpc'" class="lc-td">
                   見票即付。
                 </td>
 
@@ -417,70 +428,71 @@
                         <span class="text-body-2">以「定日付款」方式填寫到期日，其到期日為：</span>
                       </template>
                     </v-radio>
-                  </v-radio-group>
 
-                  <div v-if="form.paymentKind === 'fixed'" class="ml-4 mt-2">
-                    <v-radio-group
-                      v-model="form.fixedExpiryBasis"
-                      color="cyan-darken-3"
-                      density="compact"
-                      hide-details="auto"
-                      inline
-                    >
-                      <v-radio class="me-3" value="draft_invoice">
-                        <template #label>
-                          <span class="text-body-2">匯票發票日</span>
-                        </template>
-                      </v-radio>
-
-                      <v-radio value="unified_invoice">
-                        <template #label>
-                          <span class="text-body-2">( 統一 ) 發票日</span>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
-
-                    <div class="d-flex align-center ga-2 flex-wrap mt-2">
-                      <span>起算</span>
-
-                      <v-text-field
-                        v-model="form.fixedDaysWithin"
-                        density="compact"
-                        hide-details="auto"
-                        style="max-width: 72px"
-                        variant="outlined"
-                      />
-
-                      <span>天內。</span>
-                    </div>
-
-                    <div class="d-flex align-center ga-2 flex-wrap mt-3">
-                      <v-checkbox
-                        v-model="form.useNamedDueDate"
+                    <div class="ml-5 my-2">
+                      <v-radio-group
+                        v-model="form.fixedExpiryBasis"
                         color="cyan-darken-3"
                         density="compact"
-                        hide-details
-                      >
-                        <template #label>
-                          <span class="text-body-2">指定期日為</span>
-                        </template>
-                      </v-checkbox>
-
-                      <v-date-input
-                        v-model="form.namedDueDate"
-                        append-inner-icon="mdi-calendar"
-                        bg-color="white"
-                        color="teal-darken-2"
-                        density="compact"
-                        :disabled="!form.useNamedDueDate"
+                        :disabled="form.paymentKind !== 'fixed'"
                         hide-details="auto"
-                        placeholder="例：2026/01/01"
-                        prepend-icon=""
-                        style="max-width: 220px"
-                        variant="outlined"
-                      />
+                      >
+                        <div class="d-flex align-center ga-2 mb-2">
+                          <v-radio class="flex-grow-0" value="draft_invoice">
+                            <template #label>
+                              <span class="text-body-2 text-no-wrap">匯票發票日</span>
+                            </template>
+                          </v-radio>
+
+                          <v-radio class="flex-grow-0" value="unified_invoice">
+                            <template #label>
+                              <span class="text-body-2 text-no-wrap">( 統一 ) 發票日</span>
+                            </template>
+                          </v-radio>
+
+                          <div
+                            class="d-flex align-center text-body-2 ga-2"
+                          >
+                            <span>起算</span>
+
+                            <v-text-field
+                              v-model="form.fixedDaysWithin"
+                              color="cyan-darken-3"
+                              density="compact"
+                              :disabled="form.paymentKind !== 'fixed' || form.fixedExpiryBasis === 'named'"
+                              hide-details="auto"
+                              style="max-width: 72px"
+                              variant="outlined"
+                            />
+
+                            <span>天內。</span>
+                          </div>
+                        </div>
+
+                        <v-radio value="named">
+                          <template #label>
+                            <div class="d-flex align-center ga-2 flex-wrap">
+                              <span class="text-body-2">指定期日為</span>
+
+                              <v-date-input
+                                v-model="form.namedDueDate"
+                                append-inner-icon="mdi-calendar"
+                                bg-color="white"
+                                color="teal-darken-2"
+                                density="compact"
+                                :disabled="form.paymentKind !== 'fixed' || form.fixedExpiryBasis !== 'named'"
+                                hide-details="auto"
+                                placeholder="例：2026/01/01"
+                                prepend-icon=""
+                                style="max-width: 220px"
+                                variant="outlined"
+                              />
+                            </div>
+                          </template>
+                        </v-radio>
+                      </v-radio-group>
                     </div>
-                  </div>
+                  </v-radio-group>
                 </td>
               </tr>
 
@@ -505,28 +517,27 @@
                   檢附單據：
                 </th>
 
+                <!-- CDS -->
                 <td v-if="formData.beneType === 'cds'" class="lc-td">
-                  <v-checkbox
-                    v-model="form.deliverPaymentRequest"
+                  <v-radio-group
+                    v-model="form.cdsDeliverKind"
                     color="cyan-darken-3"
                     density="compact"
-                    hide-details
+                    hide-details="auto"
+                    inline
                   >
-                    <template #label>
-                      <span class="text-body-2">匯票付款申請書乙份</span>。
-                    </template>
-                  </v-checkbox>
+                    <v-radio value="payment">
+                      <template #label>
+                        <span class="text-body-2">匯票付款申請書乙份</span>。
+                      </template>
+                    </v-radio>
 
-                  <v-checkbox
-                    v-model="form.deliverAcceptanceRequest"
-                    color="cyan-darken-3"
-                    density="compact"
-                    hide-details
-                  >
-                    <template #label>
-                      <span class="text-body-2">匯票承兌申請書乙份</span>。
-                    </template>
-                  </v-checkbox>
+                    <v-radio class="ms-4" value="acceptance">
+                      <template #label>
+                        <span class="text-body-2">匯票承兌申請書乙份</span>。
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
 
                   <v-checkbox
                     v-model="form.deliverInvoice"
@@ -669,9 +680,68 @@
                     />
                   </div>
 
-                  <div class="mt-4 d-inline-flex align-center">
-                    <span class="font-weight-bold">特別指示條款：</span>
-                    <span class="ml-1">分批交貨：</span>
+                  <div class="mt-3 font-weight-bold">特別指示條款：</div>
+
+                  <div class="mt-2 d-inline-flex align-center">
+                    <span>遠期信用狀利息：</span>
+
+                    <v-radio-group
+                      v-model="form.cdsUsanceInterest"
+                      class="ml-2"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio class="me-3" value="buyer">
+                        <template #label>
+                          <span class="text-body-2">買方負擔</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="seller">
+                        <template #label>
+                          <span class="text-body-2">賣方負擔</span>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
+
+                    <span class="text-caption">( 未填者視為由買方負擔 )</span>
+                  </div>
+
+                  <br />
+
+                  <div class="mt-2 d-inline-flex align-center">
+                    <span>承兌手續費：由</span>
+
+                    <v-radio-group
+                      v-model="form.cdsAcceptanceFee"
+                      class="ml-2"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details="auto"
+                      inline
+                    >
+                      <v-radio class="me-3" value="buyer">
+                        <template #label>
+                          <span class="text-body-2">買方</span>
+                        </template>
+                      </v-radio>
+
+                      <v-radio class="me-3" value="seller">
+                        <template #label>
+                          <span class="text-body-2">賣方</span>
+                        </template>
+                      </v-radio>
+                    </v-radio-group>
+
+                    <span>負擔<span class="text-caption"> ( 未填者視為由買方負擔 )</span></span>
+                  </div>
+
+                  <br />
+
+                  <div class="mt-3 d-inline-flex align-center">
+                    <span>分批交貨：</span>
 
                     <v-radio-group
                       v-model="form.partialShipment"
@@ -698,7 +768,7 @@
                   </div>
 
                   <div class="mt-3 d-flex flex-wrap align-center ga-2">
-                    <span class="font-weight-bold text-no-wrap">最後交貨日期：</span>
+                    <span class="text-no-wrap">最後交貨日期：</span>
 
                     <v-date-input
                       v-model="form.lastDeliveryDate"
@@ -717,7 +787,7 @@
                   </div>
 
                   <div class="mt-4">
-                    <div class="font-weight-bold mb-2">
+                    <div class="mb-2">
                       其他：
                     </div>
 
@@ -733,6 +803,7 @@
                   </div>
                 </td>
 
+                <!-- FPC -->
                 <td v-if="formData.beneType === 'fpc'" class="lc-td">
                   <p class="mb-1">1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
                   <p class="mb-1">2. 貨物可以分批交貨。</p>
@@ -833,25 +904,26 @@
                   </div>
                 </td>
 
+                <!--  Other -->
                 <td v-if="formData.beneType === 'other'" class="lc-td">
-                  <div class="mb-3 d-inline-flex align-center">
-                    <span>1. 匯票承兌/付款申請書使用</span>
+                  <div class="mb-3 d-inline-flex justify-start align-center">
+                    <span class="text-no-wrap">1. 匯票承兌/付款申請書使用</span>
 
                     <v-radio-group
                       v-model="form.draftFormat"
-                      class="d-inline-flex"
+                      class="d-inline-flex mx-3"
                       color="cyan-darken-3"
                       density="compact"
                       hide-details="auto"
                       inline
                     >
-                      <v-radio class="me-3" value="bank">
+                      <v-radio class="me-3 flex-grow-0" value="bank">
                         <template #label>
                           <span class="text-body-2">貴行</span>
                         </template>
                       </v-radio>
 
-                      <v-radio class="me-3" value="beneficiary">
+                      <v-radio class="me-3 flex-grow-0" value="beneficiary">
                         <template #label>
                           <span class="text-body-2">受益人</span>
                         </template>
@@ -1231,6 +1303,7 @@
     type LcAppData,
     type LcApplicationPayload,
     NOTICE_BANK_ITEMS,
+    PAYING_BANK_ITEMS,
   } from '@/types/lcApplication'
 
   const props = defineProps<{
@@ -1278,7 +1351,6 @@
 
   // ── CDS 固定常數 ──────────────────────────────────────────────────────────
   const issuingBankLabel = '華南商業銀行 高雄分行'
-  const paymentBankLabel = '華南商業銀行 高雄分行'
   const cscClauses = [
     '1. 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定。如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格，各交易條件及優惠措施均不受影響。',
     '2. 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。',
@@ -1298,6 +1370,9 @@
     newData => {
       const { editType, appNo: no, beneType } = newData as LcAppData
       const nextData: Partial<LcApplicationPayload> = {}
+      if (beneType === 'cds' || beneType === 'fpc') {
+        nextData.lcType = 'sight'
+      }
       if (beneType === 'cds') {
         nextData.customElectronicNote = DEFAULT_CUSTOM_ELECTRONIC_NOTE
         nextData.department = '75708007'

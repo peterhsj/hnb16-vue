@@ -88,7 +88,6 @@
 
             <tr>
               <td class="w-50">
-                <span class="text-center">( 如有需要指定銀行時請填上 )</span><br>
                 <span class="font-weight-bold">通知銀行：</span>華南商業銀行 建成分行
               </td>
 
@@ -123,41 +122,7 @@
 
                 <ol class="hnb__list--ol ms-10">
                   <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
-
-                  <li class="mb-2">
-                    <div class="d-flex">
-                      <div>
-                        乙、付款期限：
-                      </div>
-
-                      <div style="text-indent: initial;">
-                        <div>
-                          <v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                          見票即付。
-                        </div>
-
-                        <div>
-                          <p class="mb-1">
-                            <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                            以「定日付款」方式填寫到期日，其到期日為：
-                          </p>
-
-                          <p class="ms-5 mb-1">
-                            <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
-                            <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
-                            <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
-                          </p>
-
-                          <p class="ms-5">
-                            <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" />
-                            指定期日為
-                            {{ form.namedDueDate || '-' }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
+                  <li class="mb-2">乙、付款期限：見票即付。</li>
                   <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 

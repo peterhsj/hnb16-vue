@@ -72,8 +72,19 @@
             <!-- 第 2 列：申請人 (colspan=2) -->
             <tr>
               <td class="hnb__table--left-border" colspan="2">
-                <span class="font-weight-bold">申請人：</span>
-                優勢股份有限公司
+                <p>
+                  <span class="font-weight-bold">申請人：</span>優勢股份有限公司
+                </p>
+
+                <p>
+                  <span class="pe-5">
+                    <span class="font-weight-bold">聯絡人姓名：</span>林小明
+                  </span>
+
+                  <span>
+                    <span class="font-weight-bold">聯絡人電話：</span>202-12346789
+                  </span>
+                </p>
               </td>
             </tr>
 
@@ -105,10 +116,17 @@
                 <br>
                 <span class="font-weight-bold">地址：</span>
                 高雄縣橋頭鄉芋寮村芋寮路317號
+                <br>
+                <span class="font-weight-bold">電話：</span>
+                07-611-7171
+                <br>
+                <span class="font-weight-bold">Email：</span>
+                a1b2c3d4e5@example.com
               </td>
 
               <td class="align-top" colspan="2">
-                <span class="font-weight-bold">有效期限至：</span>民國114年6月10日
+                <span class="font-weight-bold">有效期限至：</span>
+                民國 114 年 6 月 10 日
               </td>
             </tr>
 
@@ -122,17 +140,52 @@
                 <p class="font-weight-bold my-1">一、匯票之條件：</p>
 
                 <ol class="hnb__list--ol ms-10">
-                  <li>甲、付款人：華南商業銀行 建成分行</li>
-                  <li>乙、付款期限：<span id="lcTypeDate">見票即付。</span></li>
-                  <li>丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
+                  <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
+
+                  <li v-if="props.beneType === 'cds' || props.beneType === 'fpc'" class="mb-2">
+                    乙、付款期限：見票即付。
+                  </li>
+
+                  <li v-else class="mb-2 d-flex">
+                    <div>乙、付款期限：</div>
+
+                    <div style="text-indent: 0;">
+                      <div>
+                        <v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                        見票即付。
+                      </div>
+
+                      <div>
+                        <p class="mb-1">
+                          <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                          以「定日付款」方式填寫到期日，其到期日為：
+                        </p>
+
+                        <p class="ms-5 mb-1">
+                          <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
+                          <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
+                          <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
+                        </p>
+
+                        <p class="ms-5">
+                          <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                          指定期日為
+                          {{ form.namedDueDate || '-' }}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 
                 <p class="font-weight-bold my-1">二、應檢附之單據如下：</p>
 
                 <ol class="hnb__list--ol ms-10">
-                  <li>1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
-                  <li>2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
-                  <li>3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
+                  <li class="mb-2">2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
+                  <li class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
+                  <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： </li>
                 </ol>
 
                 <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
@@ -143,26 +196,27 @@
             <!-- 第 6 列：特別指示 -->
             <tr>
               <td colspan="3">
-                <p class="font-weight-bold my-1">三、特別指示：</p>
-                <p>1.電子押匯特別指示條款</p>
+                <p class="font-weight-bold mb-2">三、特別指示：</p>
+                <p class="font-weight-bold mb-2">1.電子押匯特別指示條款</p>
 
                 <ol class="hnb__list--ol">
-                  <li>(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中隆公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
-                  <li>(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
-                  <li>(3) 貨物可以分批交貨。</li>
-                  <li>(4) 貨物明細以發票為準。</li>
-                  <li>(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
-                  <li>(6) 本信用狀適用eUCP2.0版。</li>
-                  <li>(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
-                  <li>(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
+                  <li class="mb-2">(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中隆公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
+                  <li class="mb-2">(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
+                  <li class="mb-2">(3) 貨物可以分批交貨。</li>
+                  <li class="mb-2">(4) 貨物明細以發票為準。</li>
+                  <li class="mb-2">(5) 發票金額大於匯票金額及發票內容備註「受託代銷」字樣可以接受。</li>
+                  <li class="mb-2">(6) 本信用狀適用eUCP2.0版。</li>
+                  <li class="mb-2">(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
+                  <li class="mb-2">(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
                 </ol>
 
-                <p class="my-1">
-                  2.最後交貨日期：民國  年  月  日。（未填者自開狀日起三個月視為最後交貨日）
+                <p class="mb-2">
+                  <span class="font-weight-bold">2.最後交貨日期：</span>
+                  民國  年  月  日。（未填者自開狀日起三個月視為最後交貨日）
                 </p>
 
-                <p class="my-1">
-                  3.遠期信用狀利息：
+                <p class="mb-2">
+                  <span class="font-weight-bold">3.遠期信用狀利息：</span>
                   <v-icon icon="mdi mdi-square" size="small" /> 買方負擔
                   <v-icon icon="mdi mdi-square-outline" size="small" /> 賣方負擔
                   （未填者視為由買方負擔）
@@ -177,9 +231,16 @@
                   上述匯票須載明本信用狀之日期及編號並限於有效期限內向本行辦理提示請求承兌/付款。上述單證經審查結果核與本信用狀規定條款相符時，本行保證上開依規定簽發、提示之匯票必能如約獲得承兌/付款。
                 </p>
 
-                <div>
-                  <span class="hnb__bankName me-5">華南商業銀行</span>
-                  <span class="text-subtitle-1 font-weight-bold">啟</span>
+                <div class="d-flex align-center justify-space-between">
+                  <div>
+                    <span class="hnb__bankName me-5">華南商業銀行</span>
+                    <span class="text-subtitle-1">啟</span>
+                  </div>
+
+                  <div ckass="px-3 d-flex align-center">
+                    <v-img src="../../assets/images/cds_01.gif" />
+                    <div class="py-1">MIAGCSqGSI</div>
+                  </div>
                 </div>
               </td>
 
@@ -191,7 +252,9 @@
             <!-- 第 8 列：通知銀行簽章 -->
             <tr>
               <td class="hnb__table--left-border" colspan="2">
-                通知銀行之簽章及通知日期
+                <div>
+                  通知銀行之簽章及通知日期
+                </div>
               </td>
             </tr>
           </tbody>
@@ -280,12 +343,14 @@
   interface Props {
     lcDialog?: boolean
     lcNo?: string
+    beneType?: string
     isShowVersion?: boolean
     isShowNotice?: boolean
   }
   const props = withDefaults(defineProps<Props>(), {
     lcDialog: false,
     lcNo: '',
+    beneType: '',
     isShowNotice: false,
     isShowVersion: false,
   })
@@ -315,6 +380,14 @@
     'LC123400215_V01',
     'LC123400215_V02',
   ])
+
+  const form = ref({
+    paymentMain: 'sight',
+    fixedExpiryBasis: 'draft_invoice',
+    fixedDaysWithin: '',
+    useNamedDueDate: false,
+    namedDueDate: '',
+  })
 
   function downloadFile () {
     // 下載電子檔邏輯

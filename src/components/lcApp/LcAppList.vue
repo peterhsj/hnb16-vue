@@ -93,6 +93,7 @@
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
+      :bene-type="searchForm.beneficiaryType || ''"
       :is-show-notice="true"
       :is-show-version="true"
       :lc-no="lcNo"
@@ -103,6 +104,7 @@
     <!-- Lc Detail Dialog (版本詳細) -->
     <LcDialog
       v-model:lc-dialog="lcDetailDialog"
+      :bene-type="searchForm.beneficiaryType || ''"
       :lc-no="lcDetailNo"
       @on-close="lcDetailDialogClose"
     />

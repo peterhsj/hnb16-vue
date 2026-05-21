@@ -5,10 +5,11 @@ export type LcTypeOption = 'sight' | 'usance'
 
 // ── CDS ───────────────────────────────────────────────────────────────────
 export type LcElectronicNoteOption = 'csc' | 'custom'
+export type LcCdsDeliverKind = 'payment' | 'acceptance'
 
 // ── FPC ───────────────────────────────────────────────────────────────────
 export type LcPaymentKind = 'sight' | 'fixed'
-export type LcFixedExpiryBasis = 'draft_invoice' | 'unified_invoice'
+export type LcFixedExpiryBasis = 'draft_invoice' | 'unified_invoice' | 'named'
 export type LcInvoiceDocKind = 'invoice' | 'unified'
 
 // ── Other ─────────────────────────────────────────────────────────────────
@@ -24,6 +25,7 @@ export type LcStampSingle = 'allowed' | 'not_allowed'
 export interface LcApplicationPayload {
   // ── 共用 ────────────────────────────────────────────────────────────────
   noticeBank: string | null
+  payingBank: string | null
   lcType: LcTypeOption | null
   currency: string
   amount: string
@@ -46,17 +48,17 @@ export interface LcApplicationPayload {
   goodsDescription: string
   electronicNote: LcElectronicNoteOption | null
   customElectronicNote: string
-  deliverPaymentRequest: boolean
-  deliverAcceptanceRequest: boolean
+  cdsDeliverKind: LcCdsDeliverKind | null
   deliverInvoice: boolean
   deliverOther: boolean
   deliverOtherDetail: string
+  cdsUsanceInterest: LcFeeBearer | null
+  cdsAcceptanceFee: LcFeeBearer | null
 
   // ── FPC ─────────────────────────────────────────────────────────────────
   paymentKind: LcPaymentKind | null
   fixedExpiryBasis: LcFixedExpiryBasis | null
   fixedDaysWithin: string
-  useNamedDueDate: boolean
   namedDueDate: string
   invoiceDocKind: LcInvoiceDocKind | null
   otherDocumentsNote: string
@@ -92,6 +94,7 @@ export function createInitialLcApplicationForm (): LcApplicationPayload {
   return {
     // ── 共用 ──────────────────────────────────────────────────────────────
     noticeBank: null, // 通知銀行
+    payingBank: null, // 付款人銀行
     lcType: null, // 信用狀類型
     currency: 'TWD', // 幣別
     amount: '', // 金額
@@ -114,17 +117,17 @@ export function createInitialLcApplicationForm (): LcApplicationPayload {
     goodsDescription: '', // 貨物描述
     electronicNote: null, // 電子票據
     customElectronicNote: DEFAULT_CUSTOM_ELECTRONIC_NOTE, // 自訂電子票據
-    deliverPaymentRequest: false, // 提供付款請求
-    deliverAcceptanceRequest: false, // 提供承兌請求
+    cdsDeliverKind: null, // 匯票申請書種類（付款/承兌）
     deliverInvoice: false, // 提供發票
     deliverOther: false, // 提供其他文件
     deliverOtherDetail: '', // 其他文件細節
+    cdsUsanceInterest: 'buyer', // 遠期信用狀利息負擔（預設買方）
+    cdsAcceptanceFee: 'buyer', // 承兌手續費負擔（預設買方）
 
     // ── FPC ───────────────────────────────────────────────────────────────
     paymentKind: null, // 付款種類
     fixedExpiryBasis: null, // 固定到期基準
     fixedDaysWithin: '', // 固定天數範圍
-    useNamedDueDate: false, // 使用指定到期日
     namedDueDate: '', // 指定到期日
     invoiceDocKind: null, // 發票文件種類
     otherDocumentsNote: '', // 其他文件備註
@@ -187,6 +190,14 @@ export const NOTICE_BANK_ITEMS: readonly NoticeBankItem[] = [
   { title: '華南銀行桃園分行', value: 'taoyuan' },
   { title: '華南銀行南港分行', value: 'nangang' },
   { title: '華南銀行台北分行', value: 'taipei' },
+] as const
+
+export const PAYING_BANK_ITEMS: readonly NoticeBankItem[] = [
+  { title: '華南銀行 高雄分行', value: 'kaohsiung' },
+  { title: '華南銀行 台北分行', value: 'taipei' },
+  { title: '華南銀行 彰化分行', value: 'changhua' },
+  { title: '華南銀行 桃園分行', value: 'taoyuan' },
+  { title: '華南銀行 南港分行', value: 'nangang' },
 ] as const
 
 export const DEFAULT_CUSTOM_ELECTRONIC_NOTE = `1.賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定。如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格，各交易條件及優惠措施均不受影響。

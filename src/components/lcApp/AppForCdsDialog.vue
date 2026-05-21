@@ -88,42 +88,55 @@
 
             <tr>
               <td class="w-50">
-                <span class="text-center">( 如有需要指定銀行時請填上 )</span><br>
-                <span class="font-weight-bold">通知銀行：</span>華南商業銀行 建成分行
+                <span class="font-weight-bold">通知銀行：</span>
+                華南商業銀行 建成分行
               </td>
 
               <td colspan="2">
                 <span class="font-weight-bold">金額：</span>
                 新台幣
-                <span class="hnb__text--red">伍仟萬元整</span>
+                <span class="text-red font-weight-bold">伍仟萬元整</span>
               </td>
             </tr>
 
             <tr>
               <td class="w-50">
-                <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司<br>
-                <span class="font-weight-bold">統一編號：</span>75708007<br>
-                <span class="font-weight-bold">負責人：</span><span class="pe-5">李志村</span> ( 職稱 ) 總經理<br>
-                <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號<br>
-                <span class="font-weight-bold">電話：</span>07-611-7171<br>
-                <!-- <span class="font-weight-bold">受益人事業部：</span>1 塑膠部<br>
-                <span class="font-weight-bold">客戶編號：</span>HSTKS<br> -->
-                <span class="font-weight-bold">Email：</span>a1b2c3d4e5@example.com
+                <span class="font-weight-bold">受益人：</span>
+                中鴻鋼鐵股份有限公司
+                <br>
+                <span class="font-weight-bold">受益人負責人：</span>
+                林大華
+                <br>
+                <span class="font-weight-bold">負責人職稱：</span>
+                總經理
+                <br>
+                <span class="font-weight-bold">地址：</span>
+                高雄縣橋頭鄉芋寮村芋寮路317號
+                <br>
+                <span class="font-weight-bold">電話：</span>
+                07-611-7171
+                <br>
+                <span class="font-weight-bold">Email：</span>
+                a1b2c3d4e5@example.com
               </td>
 
               <td colspan="2">
-                <span class="font-weight-bold">有效期限至：</span>民國 114 年 6 月 10 日
+                <span class="font-weight-bold">有效期限至：</span>
+                民國 114 年 6 月 10 日
               </td>
             </tr>
 
             <tr>
               <td colspan="3">
-                <p class="font-weight-bold my-1">本信用狀可由上開受益人在不超過上開金額範圍內，依本狀規定條件簽發匯票承兌/付款：</p>
+                <p class="font-weight-bold my-1">
+                  本信用狀可由上開受益人在不超過上開金額範圍內，依本狀規定條件簽發匯票承兌/付款：
+                </p>
+
                 <p class="font-weight-bold my-1">一、匯票之條件：</p>
 
                 <ol class="hnb__list--ol ms-10">
                   <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
-                  <li class="mb-2">乙、付款期限：<span id="lcTypeDate">見票即付。</span></li>
+                  <li class="mb-2">乙、付款期限：見票即付。</li>
                   <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
 
@@ -143,10 +156,10 @@
 
             <tr>
               <td colspan="3">
-                <p class="font-weight-bold my-1">三、特別指示：</p>
-                <p>1.電子押匯特別指示條款</p>
+                <p class="font-weight-bold mb-2">三、特別指示：</p>
+                <p class="font-weight-bold mb-2">1.電子押匯特別指示條款</p>
 
-                <ol class="hnb__list--ol">
+                <ol class="hnb__list--ol mb-2">
                   <li class="mb-2">(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
                   <li class="mb-2">(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
                   <li class="mb-2">(3) 貨物可以分批交貨。</li>
@@ -156,6 +169,11 @@
                   <li class="mb-2">(7) 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯，另「受益人完整提示通知」得附加於匯票付款申請書之最後。</li>
                   <li class="mb-2">(8) 押匯電子文件透過網址: HTTPS://CDSLC.UXCDS.COM/CDSLC/提示</li>
                 </ol>
+
+                <p>
+                  <span class="font-weight-bold mb-2">2.最後交貨日期：</span>
+                  民國 　 年 　 月 　 日　(未填者自開狀日起三個月視為最後交貨日)
+                </p>
               </td>
             </tr>
 
@@ -184,7 +202,7 @@
                   </span>
 
                   <span class="px-3 text-center">
-                    <v-img src="../../assets/images/cds_03.gif" />
+                    <v-img src="../../assets/images/cds_01.gif" />
                     <div class="py-1">MIAGCSqGSI</div>
                   </span>
                 </div>

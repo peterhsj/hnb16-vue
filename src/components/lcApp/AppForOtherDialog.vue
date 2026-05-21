@@ -35,193 +35,119 @@
           </v-row>
         </v-container>
 
-        <v-table class="hnb__table hnb__table--vertical" density="compact">
+        <v-table class="hnb__table hnb__table--layout" density="compact">
           <tbody>
             <tr>
-              <td colspan="2">
-                <p class="text-h6 hnb__bankName">
-                  華南商業銀行 台北分行 台鋻
+              <td class="w-50" rowspan="2">
+                <p>茲請　貴行准照前訂委任開發國內即期信用狀契約之規定依下開條件開發信用狀。</p>
+                <p>本信用狀規定如有未盡事宜適用國際商會所訂現行「信用狀統一慣例與實務(含eUCP)」之規定</p>
+              </td>
+
+              <td>
+                <p>
+                  <span class="font-weight-bold">信用狀號碼：</span>
+                  <span>099700049161000861</span>
                 </p>
 
-                <ol class="mb-0 hnb__list--ol">
-                  <li>
-                    1. 茲請 　貴行准照前訂委任開發國內信用狀契約之約定依下開條件開發信用狀。
+                <p class="mb-0">
+                  <span class="font-weight-bold">開證日期：</span>
+                </p>
+              </td>
+
+              <td>
+                <span class="font-weight-bold">通知銀行編號：</span>
+                <span>01</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="hnb__table--left-border" colspan="2">
+                <p>
+                  <span class="font-weight-bold">申請人：</span>優勢股份有限公司
+                </p>
+
+                <p>
+                  <span class="pe-5">
+                    <span class="font-weight-bold">聯絡人姓名：</span>林小明
+                  </span>
+
+                  <span>
+                    <span class="font-weight-bold">聯絡人電話：</span>202-12346789
+                  </span>
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="w-50">
+                <span class="font-weight-bold">通知銀行：</span>華南商業銀行 建成分行
+              </td>
+
+              <td colspan="2">
+                <span class="font-weight-bold">金額：</span>
+                新台幣
+                <span class="hnb__text--red">伍仟萬元整</span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="w-50">
+                <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司<br>
+                <span class="font-weight-bold">統一編號：</span>75708007<br>
+                <span class="font-weight-bold">負責人：</span><span class="pe-5">李志村</span> ( 職稱 ) 總經理<br>
+                <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號<br>
+                <span class="font-weight-bold">電話：</span>07-611-7171<br>
+                <span class="font-weight-bold">Email：</span>a1b2c3d4e5@example.com
+              </td>
+
+              <td colspan="2">
+                <span class="font-weight-bold">有效期限至：</span>民國 114 年 6 月 10 日
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+                <p class="font-weight-bold my-1">本信用狀可由上開受益人在不超過上開金額範圍內，依本狀規定條件簽發匯票承兌/付款：</p>
+                <p class="font-weight-bold my-1">一、匯票之條件：</p>
+
+                <ol class="hnb__list--ol ms-10">
+                  <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
+
+                  <li class="mb-2 d-flex">
+                    <div>乙、付款期限：</div>
+
+                    <div style="text-indent: 0;">
+                      <div>
+                        <v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                        見票即付。
+                      </div>
+
+                      <div>
+                        <p class="mb-1">
+                          <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                          以「定日付款」方式填寫到期日，其到期日為：
+                        </p>
+
+                        <p class="ms-5 mb-1">
+                          <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
+                          <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
+                          <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
+                        </p>
+
+                        <p class="ms-5">
+                          <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                          指定期日為
+                          {{ form.namedDueDate || '-' }}
+                        </p>
+                      </div>
+                    </div>
                   </li>
 
-                  <li>
-                    2. 本信用狀規定如有未盡事宜適用國際商會所訂現行「信用狀統一慣例與實務(含eUCP)」之規定。
-                  </li>
+                  <li class="mb-2">丙、金額：須與相關發票上所列開金額一致，或照本信用狀其他指示。</li>
                 </ol>
-              </td>
-            </tr>
 
-            <tr>
-              <th class="w-30 text-end">申請人：</th>
+                <p class="font-weight-bold my-1">二、應檢附之單據如下：</p>
 
-              <td>
-                優勢股份有限公司
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">申請人統一編號：</th>
-
-              <td>
-                12345678
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">金額：</th>
-
-              <td>
-                新台幣 參千萬元整
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">
-                有效期限至：<br>
-                ( 未填者自開狀日三個月視為最後有效期限 )
-              </th>
-
-              <td>
-                115 年 4 月 10 日
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">通知銀行：( 如有需要指定銀行時請填上 )</th>
-
-              <td>
-                華南銀行 台北分行
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">受益人：</th>
-
-              <td>
-                <v-row align="center" dense>
-                  <v-col cols="12">
-                    網際股份有限公司
-                  </v-col>
-
-                  <v-col cols="2">
-                    統一編號：
-                  </v-col>
-
-                  <v-col cols="10">
-                    12345678
-                  </v-col>
-
-                  <v-col cols="2">
-                    名稱：
-                  </v-col>
-
-                  <v-col cols="10">
-                    網際股份有限公司
-                  </v-col>
-                </v-row>
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">受益人之負責人：</th>
-
-              <td>
-                林大華
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">負責人職稱：</th>
-
-              <td>
-                總經理
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">受益人地址：</th>
-
-              <td>
-                高雄縣橋頭鄉芋寮村芋寮路317號
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">受益人電話：</th>
-
-              <td>
-                07-1234-5678
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">受益人電子信箱：</th>
-
-              <td>
-                abc@ms23.hinet.net
-              </td>
-            </tr>
-
-            <tr>
-              <td class="font-weight-bold" colspan="2">
-                本信用狀可由上開受益人在不超過上開金額範圍內依本狀規定條件簽發匯票洽請洽兌/付款，該匯票之條件：
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">甲、付款人：</th>
-
-              <td>
-                <span class="me-1">華南商業銀行</span>
-                台北分行
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">乙、付款期限：</th>
-
-              <td>
-                <div><v-icon :icon="form.paymentMain === 'sight' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                  見票即付。
-                </div>
-
-                <div>
-                  <p class="mb-1">
-                    <v-icon :icon="form.paymentMain === 'fixed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    以「定日付款」方式填寫到期日，其到期日為：
-                  </p>
-
-                  <p class="ms-5 mb-1">
-                    <span><v-icon :icon="form.fixedExpiryBasis === 'draft_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票發票日</span>
-                    <span class="ms-3"><v-icon :icon="form.fixedExpiryBasis === 'unified_invoice' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> ( 統一 ) 發票日</span>
-                    <span class="ms-3">起算 {{ form.fixedDaysWithin || '-' }} 天內。</span>
-                  </p>
-
-                  <p class="ms-5">
-                    <v-icon :icon="form.useNamedDueDate ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" />
-                    指定期日為
-                    {{ form.namedDueDate || '-' }}
-                  </p>
-                </div>
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">丙、金額：</th>
-
-              <td>
-                須與相關發票上所列開金額一致。
-              </td>
-            </tr>
-
-            <tr>
-              <th class="text-end">丁、應檢附之單據：</th>
-
-              <td>
                 <ol class="hnb__list--ol ms-10">
                   <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
                   <li class="mb-2">2. <v-icon icon="mdi mdi-square" size="small" /> 匯票承兌申請書乙份。</li>
@@ -235,9 +161,10 @@
             </tr>
 
             <tr>
-              <th class="text-end">特別指示：</th>
+              <td colspan="3">
+                <p class="font-weight-bold my-1">三、特別指示：</p>
+                <p class="font-weight-bold my-1">電子押匯特別指示條款</p>
 
-              <td>
                 <ol class="hnb__line--ol ms-4">
                   <li class="mb-2">
                     <span>匯票承兌/付款申請書使用 </span>
@@ -308,12 +235,11 @@
                     <span class="font-weight-bold" v-html="form.otherSpecialTerms"></span>
                   </li>
                 </ol>
-
               </td>
             </tr>
 
             <tr>
-              <td colspan="2">
+              <td colspan="3">
                 <p class="mb-2">
                   <span class="font-weight-bold">利率條款：</span>
                   貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，按月計付利息。
@@ -342,6 +268,18 @@
                       2.申請人提前清償借款，其原開狀手續費加計利息(分批押匯改賃，以第一筆押匯金額計算)合計低於新臺幣1，000元者。
                     </li>
                   </ol>
+                </div>
+
+                <div class="d-flex align-center justify-space-between">
+                  <span>
+                    <span class="font-weight-bold">申請人：</span>
+                    優勢股份有限公司　(請蓋原留印鑑)
+                  </span>
+
+                  <span class="px-3 text-center">
+                    <v-img src="../../assets/images/cds_03.gif" />
+                    <div class="py-1">MIAGCSqGSI</div>
+                  </span>
                 </div>
               </td>
             </tr>
