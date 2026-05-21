@@ -46,7 +46,7 @@
         </v-container>
 
         <!-- 主要內容表格 -->
-        <v-table class="hnb__table" density="compact">
+        <v-table class="hnb__table hnb__table--vertical" density="compact">
           <tbody>
             <!-- 第 1 列：敬啟者 / 信用狀號碼 / 通知銀行編號 -->
             <tr>
@@ -195,7 +195,7 @@
 
             <!-- 第 6 列：特別指示 -->
             <tr>
-              <td colspan="3">
+              <td v-if="props.beneType === 'cds'" colspan="3">
                 <p class="font-weight-bold mb-2">三、特別指示：</p>
                 <p class="font-weight-bold mb-2">1.電子押匯特別指示條款</p>
 
@@ -222,6 +222,135 @@
                   （未填者視為由買方負擔）
                 </p>
               </td>
+
+              <td v-if="props.beneType === 'fpc'" colspan="3">
+                <p class="font-weight-bold my-1">三、特別指示：</p>
+                <p class="font-weight-bold my-1">電子押匯特別指示條款</p>
+
+                <p class="mb-1">1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
+                <p class="mb-1">2. 貨物可以分批交貨。</p>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>3. 最後交貨日期：{{ form.lastDeliveryDate || '-' }}</span>
+
+                  <span class="text-caption">( 未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效日期 )。</span>
+                </div>
+
+                <p class="mb-1">4. 發票日期早於開狀日期可以接受。</p>
+                <p class="mb-1">5. 發票金額大於開狀金額或匯票金額可以接受。</p>
+                <p class="mb-1">6. 以受益人所屬分公司或分廠名義開立之發票押匯可以接受。</p>
+                <p class="mb-1">7. 本信狀適用 eUCP2.0 版。</p>
+                <p class="mb-1">8. 允許受益人以匯票、匯票付款申請書及發票電子檔方式押匯。</p>
+                <p class="mb-1">9. 押匯電子文件透過網址: HTTPS://ecrm.fpg.com.tw 提示。</p>
+
+                <div class="d-flex align-center ga-2 my-2">
+                  <span>
+                    10. 遠期信用狀利息：
+                    <v-icon :icon="form.usanceInterestBuyer ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" /> 買方負擔
+                  </span>
+                </div>
+
+                <div class="my-2">
+                  <div class="mb-1">
+                    11. 其他：
+                  </div>
+
+                  {{ form.otherSpecialTerms || '' }}
+                </div>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>12. 限定押匯日期：自</span>
+
+                  {{ form.draftStartDate || '-' }}
+
+                  <span>起始可押匯。<span class="text-caption"> ( 未填寫者視為未限定押匯日期 )</span></span>
+                </div>
+
+                <div class="d-flex flex-wrap align-center ga-2 my-2">
+                  <span>13. 發票起始開立日期：</span>
+
+                  {{ form.invoiceStartDate || '-' }}
+
+                  <span class="text-caption">( 以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期 )。</span>
+                </div>
+              </td>
+
+              <!-- 其他受益人類型的特別指示 -->
+              <td v-if="props.beneType === 'other'" colspan="3">
+                <p class="font-weight-bold my-1">三、特別指示：</p>
+                <p class="font-weight-bold my-1">電子押匯特別指示條款</p>
+
+                <ol class="hnb__line--ol ms-4">
+                  <li class="mb-2">
+                    <span>匯票承兌/付款申請書使用 </span>
+
+                    <span class="mx-1"><v-icon :icon="form.draftFormat === 'bank' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 貴行</span>
+                    <span class="mx-1"><v-icon :icon="form.draftFormat === 'beneficiary' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 受益人</span>
+
+                    <span> 所訂格式，申請書上信用狀申請人所蓋印鑑應與原留印鑑相符。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span>分批交貨：</span>
+
+                    <span class="mx-1"><v-icon :icon="form.partialShipment === 'allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 可以</span>
+                    <span class="mx-1"><v-icon :icon="form.partialShipment === 'not_allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 不可以</span>
+
+                    <span>（未填者視為得分批交貨）。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span class="mx-1"><v-icon :icon="form.discountInterest === 'buyer' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票墊款利息由買方負擔</span>
+                    <span class="mx-1"><v-icon :icon="form.discountInterest === 'seller' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 匯票貼現利息由賣方負擔</span>
+
+                    <span>（未填者視為由買方負擔）。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span>最後交貨日期：</span>
+
+                    民國 114 年 5 月 10 日
+
+                    <span>（未填者自開狀日起三個月視為最後交貨日，惟不得超過信用狀有效期限）。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span>限定押匯日期：自</span>
+
+                    民國 114 年 5 月 10 日
+
+                    <span>起始可押匯。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span>承兌手續費由</span>
+                    <span class="mx-1"><v-icon :icon="form.feeBearer === 'buyer' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 買方</span>
+                    <span class="mx-1"><v-icon :icon="form.feeBearer === 'seller' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 賣方</span>
+
+                    <span>負擔（未填者視為由買方負擔）。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    <span>受益人押匯時，匯票承兌/付款申請書</span>
+                    <span class="mx-1"><v-icon :icon="form.stampSingleParty === 'allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 可以</span>
+                    <span class="mx-1"><v-icon :icon="form.stampSingleParty === 'not_allowed' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> 不可以</span>
+
+                    <span>僅由受益人單方蓋章。</span>
+                  </li>
+
+                  <li class="mb-2">
+                    押匯文件透過通知銀行之櫃台提示。
+                  </li>
+
+                  <li class="mb-2">
+                    <div class="mb-1">
+                      其他：
+                    </div>
+
+                    <span class="font-weight-bold" v-html="form.otherSpecialTerms"></span>
+                  </li>
+                </ol>
+              </td>
             </tr>
 
             <!-- 第 7 列：保證文字 / 通知銀行記載 -->
@@ -237,8 +366,13 @@
                     <span class="text-subtitle-1">啟</span>
                   </div>
 
-                  <div ckass="px-3 d-flex align-center">
-                    <v-img src="../../assets/images/cds_01.gif" />
+                  <div v-if="props.beneType === 'cds'" class="px-3 d-flex flex-column align-center">
+                    <v-img src="../../assets/images/cds_01.gif" width="90" />
+                    <div class="py-1">MIAGCSqGSI</div>
+                  </div>
+
+                  <div v-if="props.beneType === 'other'" class="px-3 d-flex flex-column align-center">
+                    <v-img src="../../assets/images/cds_03.gif" width="90" />
                     <div class="py-1">MIAGCSqGSI</div>
                   </div>
                 </div>
@@ -387,6 +521,16 @@
     fixedDaysWithin: '',
     useNamedDueDate: false,
     namedDueDate: '',
+    lastDeliveryDate: '',
+    usanceInterestBuyer: false,
+    otherSpecialTerms: '',
+    draftStartDate: '',
+    invoiceStartDate: '',
+    draftFormat: 'bank',
+    partialShipment: 'allowed',
+    discountInterest: 'buyer',
+    feeBearer: 'buyer',
+    stampSingleParty: 'allowed',
   })
 
   function downloadFile () {

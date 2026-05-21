@@ -244,10 +244,12 @@
                     優勢股份有限公司　(請蓋原留印鑑)
                   </span>
 
+                  <!--
                   <span class="px-3 text-center">
                     <v-img src="../../assets/images/cds_03.gif" />
                     <div class="py-1">MIAGCSqGSI</div>
                   </span>
+                  -->
                 </div>
               </td>
             </tr>
