@@ -39,9 +39,9 @@
           class="hnb__btn--default mx-1 my-1"
           size="small"
           variant="flat"
-          @click="editItem('edit', item.lcNo)"
+          @click="editItem(item.lcNo, searchForm.beneType || '')"
         >
-          編輯修改申請書
+          填寫修改申請書
         </v-btn>
       </template>
     </v-data-table>
@@ -90,6 +90,7 @@
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
+      :bene-type="searchForm.beneType || ''"
       :is-show-notice="true"
       :is-show-version="true"
       :lc-no="lcNo"
@@ -100,22 +101,23 @@
     <!-- Lc Detail Dialog (版本詳細) -->
     <LcDialog
       v-model:lc-dialog="lcDetailDialog"
+      :bene-type="searchForm.beneType || ''"
       :lc-no="lcDetailNo"
       @on-close="lcDetailDialogClose"
     />
     <!-- 信用狀修改通知書 Notice Dialog -->
-    <!-- <NoticeDialog
+    <NoticeDialog
       v-model:notice-dialog="noticeDialog"
       :is-show-lc="true"
       :notice-no="noticeNo"
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
-    /> -->
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { AmendLcAppItem, AmendQueryFormPayload } from '@/types/amendLcList'
+  import type { AmendLcAppItem, AmendQueryFormPayload } from '@/types/amendLc'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getAmendLcList } from '@/api/amendApp'
@@ -170,7 +172,7 @@
   }
   const props = defineProps<Props>()
   const searchForm = ref<AmendQueryFormPayload>(props.formData ?? {
-    beneType: null,
+    beneType: 'cds',
     queryMode: '',
     lcNo: '',
     applicantLoanAccount: '',
@@ -271,8 +273,8 @@
   }
 
   // 編輯項目
-  function editItem (type: string, appNo: string): void {
-    emits('on-edit', { type, appNo })
+  function editItem (appNo: string, beneType: string): void {
+    emits('on-edit', { appNo, beneType })
   }
 
   // 查看開狀申請書 App Dialog

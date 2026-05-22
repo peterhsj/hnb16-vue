@@ -301,7 +301,7 @@
       <div v-if="isShowList" class="mt-4 mx-4">
         <h2 class="hnb16__title">
           開狀申請書清冊 -
-          {{ typeForm.beneficiaryType === 'cds' ? 'CDS' : typeForm.beneficiaryType === 'fpc' ? '台塑 e 化平台' : '企業' }}
+          {{ typeForm.beneficiaryType === 'cds' ? 'CDS' : typeForm.beneficiaryType === 'fpc' ? '台塑 e 化平台' : '臨櫃' }}
         </h2>
 
         <LcAppList :form-data="propsFormData" @on-edit="handleEdit" />
@@ -310,7 +310,6 @@
 
       <!-- 填寫開狀申請書 -->
       <div v-if="isEdit">
-        <!-- <h2 class="mx-4 hnb16__title">填寫開狀申請書</h2> -->
         <LcAppEditForm
           :form-data="lcAppData"
           @on-cancel="closeEditForm"

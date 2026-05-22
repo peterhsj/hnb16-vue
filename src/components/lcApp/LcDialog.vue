@@ -10,7 +10,10 @@
       min-width="300"
     >
       <v-card-title class="d-flex px-4 font-weight-bold text-red-darken-3">
-        <span class="font-weight-bold">遠期</span>
+        <span class="font-weight-bold">
+          {{ props.beneType === 'cds' || props.beneType === 'fpc' ? '即期' : '遠期' }}
+        </span>
+
         <span>信用狀明細</span>
         <v-spacer />
 
@@ -120,6 +123,16 @@
                 <span class="font-weight-bold">電話：</span>
                 07-611-7171
                 <br>
+
+                <template v-if="props.beneType === 'fpc'">
+                  <span class="font-weight-bold">受益人事業部：</span>
+                  1 塑膠部
+                  <br>
+                  <span class="font-weight-bold">客戶編號：</span>
+                  HSTKS
+                  <br>
+                </template>
+
                 <span class="font-weight-bold">Email：</span>
                 a1b2c3d4e5@example.com
               </td>
@@ -460,7 +473,7 @@
         <v-spacer />
 
         <v-btn
-          class="hnb__btn--cancel"
+          class="hnb__btn--cancel my-2"
           variant="flat"
           @click="onClose"
         >

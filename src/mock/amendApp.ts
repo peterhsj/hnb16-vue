@@ -1,4 +1,4 @@
-import type { AmendLcListItem, AmendLcListResponse } from '@/types/amendLcList'
+import type { AmendLcListItem, AmendLcListResponse } from '@/types/amendLc'
 import type { AmendQueryFormPayload } from '@/types/amendQuery'
 import Mock from 'mockjs'
 

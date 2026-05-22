@@ -4,13 +4,22 @@
     <v-container fluid>
       <div class="hnb16__breadcrumb mb-2">
         <v-breadcrumbs density="compact" :items="breadcrumbs">
+          <template #item="{ item }">
+            <v-breadcrumbs-item
+              :disabled="Boolean(item.disabled)"
+              :title="item.title"
+              :to="item.title === '申請作業' ? '' : item.to"
+              @click="onBreadcrumbClick(item)"
+            />
+          </template>
+
           <template #divider>
             <v-icon icon="mdi-chevron-right" size="small" />
           </template>
         </v-breadcrumbs>
       </div>
 
-      <div>
+      <div v-if="currentView === 'search'">
         <h2 class="mx-4 hnb16__title">選擇修改申請書填寫方式</h2>
 
         <v-card class="border-sm mx-4 pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
@@ -189,18 +198,27 @@
       <div v-if="isShowList" class="mt-4 mx-4">
         <h2 class="hnb16__title">
           信用狀清冊 -
-          {{ searchForm.beneType === 'cds' ? 'CDS' : searchForm.beneType === 'fpc' ? '台塑 e 化平台' : '企業' }}
+          {{ currentBeneType === 'cds' ? 'CDS' : currentBeneType === 'fpc' ? '台塑 e 化平台' : '臨櫃' }}
         </h2>
 
         <AmendLcAppList :form-data="propsFormData" @on-edit="handleEdit" />
 
+      </div>
+
+      <!-- 填寫修改申請書 -->
+      <div v-if="isEdit">
+        <AmendLcEditForm
+          :form-data="amendLcData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
+        />
       </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { AmendQueryFormPayload, BeneTypeOption } from '@/types/amendLcList'
+  import type { AmendLcData, AmendQueryFormPayload, BeneTypeOption } from '@/types/amendLc'
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref } from 'vue'
   import { VForm } from 'vuetify/components'
@@ -208,30 +226,34 @@
     BENE_TYPE_ITEMS,
     createInitialAmendQueryForm,
     LC_STATUS_ITEMS,
-  } from '@/types/amendLcList'
+  } from '@/types/amendLc'
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '申請作業' },
-    { title: '修改申請書', disabled: true },
+    { title: '修改申請書', to: '/amendApp' },
   ]
 
+  const currentView = ref('search')
   const isEdit = ref(false)
   const isShowList = ref(false)
   const searchFormRef = ref<InstanceType<typeof VForm>>()
   const searchForm = reactive<AmendQueryFormPayload>(createInitialAmendQueryForm())
   const propsFormData = ref<AmendQueryFormPayload>({ ...searchForm })
-  const amendLcAppData = ref<{ type: string, appNo: string, beneType: string } | null>(null)
+  const currentBeneType = ref<BeneTypeOption>('cds')
+  const amendLcData = ref<AmendLcData>({ appNo: '', beneType: '' })
 
   watch(() => searchForm.queryMode, newType => {
+    const currentBeneType = searchForm.beneType || 'cds'
     searchFormRef.value?.reset()
+    searchForm.beneType = currentBeneType
     searchForm.queryMode = newType
   })
   const searchEnabled = computed(() => searchForm.queryMode !== '')
-  const emit = defineEmits<{
-    search: [AmendQueryFormPayload, BeneTypeOption]
-    // reset: []
-  }>()
+  // const emit = defineEmits<{
+  //   search: [AmendQueryFormPayload, BeneTypeOption]
+  //   // reset: []
+  // }>()
 
   interface Rules {
     beneTypeRule: ((v: BeneTypeOption | null) => boolean | string)[]
@@ -260,23 +282,56 @@
 
   function resetForm (): void {
     searchFormRef.value?.reset()
+    searchForm.beneType = null
     isShowList.value = false
   }
 
   function sendSearchForm (): void {
-    // submitSearch()
     console.log('送出表單', searchForm)
-    // const { beneficiaryType, beneficiary } = typeForm
+    currentBeneType.value = searchForm.beneType || 'cds'
     isShowList.value = true
     propsFormData.value = { ...searchForm }
   }
 
   // 編輯開狀申請書
-  function handleEdit (payload: { type: string, appNo: string }): void {
+  function handleEdit (payload: { appNo: string, beneType: string }): void {
     console.log('編輯事件觸發，接收到 payload:', payload)
     // 取得 appId
-    amendLcAppData.value = { type: payload.type, appNo: payload.appNo, beneType: searchForm.beneType || '' }
+    amendLcData.value = { appNo: payload.appNo, beneType: payload.beneType }
+    currentView.value = ''
     isShowList.value = false
     isEdit.value = true
+  }
+
+  function closeEditForm (): void {
+    isEdit.value = false
+    searchFormRef.value?.reset()
+    // typeForm.beneficiaryType = null
+    // typeForm.beneficiary = null
+    // typeForm.inputType = null
+  }
+
+  function submitEditForm (): void {
+    // 送出編輯表單後的處理邏輯（例如刷新列表、顯示成功訊息等）
+    console.log('編輯表單已送出，執行相關處理')
+    // 這裡可以根據實際需求來決定是否要關閉編輯表單或是刷新列表等
+    closeEditForm()
+  }
+
+  function onBreadcrumbClick (item: any): void {
+    if (item.disabled || !item.to) return
+    if (item.title === '修改申請書' && typeof item.to === 'string') {
+      console.log('Breadcrumb clicked:', `/#${item.to}`)
+      // hash router 下用 location.href 重新導向可強制整頁重整
+      isEdit.value = false
+      isShowList.value = false
+      currentView.value = 'search'
+      searchForm.beneType = null
+      searchForm.queryMode = ''
+      // typeForm.beneficiaryType = null
+      // typeForm.beneficiary = null
+      // typeForm.inputType = null
+      // window.location.href = `/#${item.to}`
+    }
   }
 </script>

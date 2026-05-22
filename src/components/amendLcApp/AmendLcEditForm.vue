@@ -1293,22 +1293,24 @@
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
   import {
-    CDS_BENE_ITEMS,
-    createInitialLcApplicationForm,
-    CURRENCY_OPTIONS,
+    type AmendLcData,
+    type AmendLcPayload,
+    createInitialAmendLcForm,
     DEFAULT_CUSTOM_ELECTRONIC_NOTE,
+  } from '@/types/amendLc'
+  import {
+    CDS_BENE_ITEMS,
+    CURRENCY_OPTIONS,
     FPC_BENE_ITEMS,
     FPC_DEPT_ITEMS,
     type FpcBeneOption,
-    type LcAppData,
-    type LcApplicationPayload,
     NOTICE_BANK_ITEMS,
     PAYING_BANK_ITEMS,
   } from '@/types/lcApplication'
 
   const props = defineProps<{
     // beneType: BeneTypeOption
-    formData: LcAppData
+    formData: AmendLcData
   }>()
 
   const emit = defineEmits<{
@@ -1319,7 +1321,7 @@
   const lcFormRef = ref<InstanceType<typeof VForm> | null>(null)
 
   // ── 共用表單物件（單一 form） ─────────────────────────────────────────────
-  const form = reactive<LcApplicationPayload>(createInitialLcApplicationForm())
+  const form = reactive<AmendLcPayload>(createInitialAmendLcForm())
 
   const cdsCustomNoteEditable = computed(() => form.electronicNote === 'custom')
 
@@ -1368,8 +1370,8 @@
   watch(
     () => props.formData,
     newData => {
-      const { editType, appNo: no, beneType } = newData as LcAppData
-      const nextData: Partial<LcApplicationPayload> = {}
+      const { appNo: no, beneType } = newData as AmendLcData
+      const nextData: Partial<AmendLcPayload> = {}
       if (beneType === 'cds' || beneType === 'fpc') {
         nextData.lcType = 'sight'
       }
@@ -1378,11 +1380,9 @@
         nextData.department = '75708007'
       }
 
-      if (editType === 'edit' && no) {
-        Object.assign(form, createInitialLcApplicationForm(), nextData)
-      } else if (editType === 'new') {
-        Object.assign(form, createInitialLcApplicationForm(), nextData)
+      if (no) {
         lcFormRef.value?.reset()
+        Object.assign(form, createInitialAmendLcForm(), nextData)
       }
     },
     { immediate: true },

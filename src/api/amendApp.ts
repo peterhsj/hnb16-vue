@@ -1,7 +1,7 @@
 import type {
   AmendLcListResponse,
   AmendLcListSearchParams,
-} from '@/types/amendLcList'
+} from '@/types/amendLc'
 import type { AmendQueryFormPayload, BeneTypeOption } from '@/types/amendQuery'
 import { api } from './axios'
 
