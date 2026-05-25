@@ -220,7 +220,7 @@
 <script setup lang="ts">
   import type { AmendLcData, AmendQueryFormPayload, BeneTypeOption } from '@/types/amendLc'
   import { isAfter, isBefore } from 'date-fns'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
   import {
     BENE_TYPE_ITEMS,

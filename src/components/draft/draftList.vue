@@ -39,9 +39,9 @@
           class="hnb__btn--default mx-1 my-1"
           size="small"
           variant="flat"
-          @click="editItem(item.lcNo, searchForm.beneType || '')"
+          @click="editItem(item.lcNo)"
         >
-          填寫修改申請書
+          填寫押匯申請書
         </v-btn>
       </template>
     </v-data-table>
@@ -69,7 +69,7 @@
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
-      :bene-type="searchForm.beneType || ''"
+      :bene-type="''"
       :is-show-notice="true"
       :is-show-version="true"
       :lc-no="lcNo"
@@ -80,7 +80,7 @@
     <!-- Lc Detail Dialog (版本詳細) -->
     <LcDialog
       v-model:lc-dialog="lcDetailDialog"
-      :bene-type="searchForm.beneType || ''"
+      :bene-type="''"
       :lc-no="lcDetailNo"
       @on-close="lcDetailDialogClose"
     />
@@ -96,10 +96,10 @@
 </template>
 
 <script setup lang="ts">
-  import type { AmendLcAppItem, AmendQueryFormPayload } from '@/types/amendLc'
+  import type { DraftLcListItem, DraftQueryFormPayload } from '@/types/draftApp'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
-  import { getAmendLcList } from '@/api/amendApp'
+  import { getDraftLcList } from '@/api/draftApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -107,7 +107,7 @@
 
   const { handleApiError } = useApiErrorHandler()
 
-  const tableItems = ref<AmendLcAppItem[]>([])
+  const tableItems = ref<DraftLcListItem[]>([])
   const isLoading = ref(false)
   // App Dialog
   const appDialog = ref(false)
@@ -141,20 +141,19 @@
     { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
     { title: '總金額', key: 'totalAmount', align: 'end', sortable: false, nowrap: true },
     { title: '可用餘額', key: 'availableBalance', align: 'end', sortable: false, nowrap: true },
-    { title: '受益人統編', key: 'beneficiaryTaxId', align: 'center', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiaryName', align: 'start', sortable: false, nowrap: true },
     { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
     { title: '操作', key: 'action', align: 'center', sortable: false, width: 200, nowrap: true },
   ]
 
   interface Props {
-    formData?: AmendQueryFormPayload
+    formData?: DraftQueryFormPayload
   }
   const props = defineProps<Props>()
-  const searchForm = ref<AmendQueryFormPayload>(props.formData ?? {
-    beneType: 'cds',
+  const searchForm = ref<DraftQueryFormPayload>(props.formData ?? {
     queryMode: '',
     lcNo: '',
-    applicantLoanAccount: '',
+    applicantTaxId: '',
     beneficiaryTaxId: '',
     lcStatus: null,
     issueDateStart: '',
@@ -188,10 +187,9 @@
       searchForm.value = newVal
         ? { ...newVal }
         : {
-          beneType: null,
           queryMode: '',
           lcNo: '',
-          applicantLoanAccount: '',
+          applicantTaxId: '',
           beneficiaryTaxId: '',
           lcStatus: null,
           issueDateStart: '',
@@ -215,11 +213,11 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
-    const { lcNo, applicantLoanAccount, beneficiaryTaxId, lcStatus, issueDateStart, issueDateEnd } = searchForm.value as AmendQueryFormPayload
+    const { lcNo, applicantTaxId, beneficiaryTaxId, lcStatus, issueDateStart, issueDateEnd } = searchForm.value
     const { page, itemsPerPage } = pageOptions.value
     const payload = {
       lcNo,
-      applicantLoanAccount,
+      applicantTaxId,
       beneficiaryTaxId,
       lcStatus,
       issueDateStart,
@@ -230,7 +228,7 @@
     console.log('Fetching list with payload:', payload, 'Page:', page, 'Items per page:', itemsPerPage)
     isLoading.value = true
     try {
-      const res = await getAmendLcList(payload)
+      const res = await getDraftLcList(payload)
       console.log('API response:', res)
       const { status, data: { items: sourceData, summary: { total, amount } } } = res
       if (status === 200) {
@@ -252,8 +250,8 @@
   }
 
   // 編輯項目
-  function editItem (appNo: string, beneType: string): void {
-    emits('on-edit', { appNo, beneType })
+  function editItem (appNo: string): void {
+    emits('on-edit', { appNo })
   }
 
   // 查看開狀申請書 App Dialog

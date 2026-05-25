@@ -1359,7 +1359,7 @@
 
   function confirmCancel (): void {
     messageTitle.value = '訊息通知'
-    message.value = '確定要離開填寫畫面？<br />未儲存的資料將遺失。'
+    message.value = '離開不會儲存此筆資料，<br />您確認要離開嗎？'
     messageStatus.value = 'alert'
     processStatus.value = 'cancel'
     isConfirmBtn.value = true
