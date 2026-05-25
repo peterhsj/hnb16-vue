@@ -1403,7 +1403,7 @@
 
   function confirmCancel (): void {
     messageTitle.value = '訊息通知'
-    message.value = '確定要離開填寫畫面？未儲存的資料將遺失。'
+    message.value = '確定要離開填寫畫面？<br />未儲存的資料將遺失。'
     messageStatus.value = 'alert'
     processStatus.value = 'cancel'
     isConfirmBtn.value = true
@@ -1413,7 +1413,14 @@
   function onSubmit (): void {
     console.log('Submit payload:', form)
     try {
-      emit('on-submit')
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成！<br />
+您的申請書號碼為<br />
+099700031161000861-A-011`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+      processStatus.value = 'success'
     } catch (error) {
       console.error('Error emitting submit event:', error)
     }
@@ -1425,6 +1432,7 @@
   }
 
   function messageClose (): void {
+    if (processStatus.value === 'success') emit('on-submit')
     messageDialog.value = false
   }
 

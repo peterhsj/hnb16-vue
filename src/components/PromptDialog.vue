@@ -40,7 +40,7 @@
           />
         </span>
 
-        <div v-html="props.message" />
+        <div class="text-teal-darken-2" v-html="props.message" />
       </v-card-text>
 
       <v-card-actions>

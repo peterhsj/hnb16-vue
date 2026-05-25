@@ -2,7 +2,7 @@
   <div>
     <!-- 頁面標題 -->
     <h2 class="mx-4 hnb16__title">
-      填寫開狀申請書 - {{ formData.beneType === 'cds' ? 'CDS' : formData.beneType === 'fpc' ? '台塑 E 化平台' : '臨櫃' }}
+      填寫信用狀修改申請書 - {{ formData.beneType === 'cds' ? 'CDS' : formData.beneType === 'fpc' ? '台塑 E 化平台' : '臨櫃' }}
     </h2>
 
     <!-- 主表單卡片 -->
@@ -32,7 +32,7 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ issuingBankLabel }}
+                  {{ issuingBankLabel ? issuingBankLabel : '華南商業銀行 高雄分行' }}
                 </td>
               </tr>
 
@@ -42,18 +42,7 @@
                 </th>
 
                 <td class="lc-td">
-                  <v-select
-                    v-model="form.noticeBank"
-                    clearable
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    item-title="title"
-                    item-value="value"
-                    :items="[...NOTICE_BANK_ITEMS]"
-                    placeholder="請選擇"
-                    variant="outlined"
-                  />
+                  {{ form.noticeBank ? form.noticeBank : '華南商業銀行 高雄分行' }}
                 </td>
               </tr>
 
@@ -225,45 +214,7 @@
                 </th>
 
                 <td class="lc-td">
-                  <v-select
-                    v-model="form.beneCorp"
-                    class="mb-2"
-                    clearable
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    item-title="title"
-                    item-value="value"
-                    :items="departmentOptions"
-                    placeholder="請選擇受益人名稱"
-                    variant="outlined"
-                  />
-
-                  <div class="d-flex align-center ga-2 mb-2">
-                    <span class="text-nowrap text-end" style="width: 80px">統一編號：</span>
-
-                    <v-text-field
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details="auto"
-                      :model-value="fpcSelectedBene?.taxId ?? ''"
-                      readonly
-                      variant="outlined"
-                    />
-                  </div>
-
-                  <div class="d-flex align-center ga-2">
-                    <span class="text-nowrap text-end" style="width: 80px">名稱：</span>
-
-                    <v-text-field
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details="auto"
-                      :model-value="fpcSelectedBene?.corpName ?? ''"
-                      readonly
-                      variant="outlined"
-                    />
-                  </div>
+                  {{ selectedBene?.taxId ? `${selectedBene.taxId} ${selectedBene.corpName}` : '' }}
                 </td>
               </tr>
 
@@ -273,7 +224,7 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ fpcSelectedBene?.managerName || '—' }}
+                  {{ selectedBene?.managerName || '—' }}
                 </td>
               </tr>
 
@@ -283,7 +234,7 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ fpcSelectedBene?.managerTitle || '—' }}
+                  {{ selectedBene?.managerTitle || '—' }}
                 </td>
               </tr>
 
@@ -293,7 +244,7 @@
                 </th>
 
                 <td class="lc-td">
-                  {{ fpcSelectedBene?.address || '—' }}
+                  {{ selectedBene?.address || '—' }}
                 </td>
               </tr>
 
@@ -386,18 +337,7 @@
                 </th>
 
                 <td class="lc-td">
-                  <v-select
-                    v-model="form.payingBank"
-                    clearable
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    item-title="title"
-                    item-value="value"
-                    :items="[...PAYING_BANK_ITEMS]"
-                    placeholder="請選擇"
-                    variant="outlined"
-                  />
+                  {{ form.payingBank ? form.payingBank : '華南商業銀行 台北分行' }}
                 </td>
               </tr>
 
@@ -1254,27 +1194,33 @@
       </v-card-text>
     </v-card>
 
-    <!-- 預覽開狀申請書 Dialogs（依受益人類別顯示） -->
-    <AppForCdsDialog
+    <!-- 預覽修改申請書 Dialogs（依受益人類別顯示） -->
+    <AmendLcDialog
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      :ben-type="props.formData.beneType"
+      @on-close="appDialogClose"
+    />
+    <!-- <AmendForCdsDialog
       v-if="formData.beneType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
 
-    <AppForFpcDialog
+    <AmendForFpcDialog
       v-if="formData.beneType === 'fpc'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
     />
 
-    <AppForOtherDialog
+    <AmendForOtherDialog
       v-if="formData.beneType === 'other'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
 
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
@@ -1325,9 +1271,12 @@
 
   const cdsCustomNoteEditable = computed(() => form.electronicNote === 'custom')
 
-  const fpcSelectedBene = computed<FpcBeneOption | null>(() => {
+  const selectedBene = computed<FpcBeneOption | null>(() => {
     const v = form.beneCorp
     if (!v) return null
+    if (props.formData.beneType === 'cds') {
+      return CDS_BENE_ITEMS.find(b => b.value === v) ?? null
+    }
     return FPC_BENE_ITEMS.find(b => b.value === v) ?? null
   })
 
@@ -1372,12 +1321,18 @@
     newData => {
       const { appNo: no, beneType } = newData as AmendLcData
       const nextData: Partial<AmendLcPayload> = {}
-      if (beneType === 'cds' || beneType === 'fpc') {
-        nextData.lcType = 'sight'
-      }
       if (beneType === 'cds') {
+        nextData.lcType = 'sight'
         nextData.customElectronicNote = DEFAULT_CUSTOM_ELECTRONIC_NOTE
-        nextData.department = '75708007'
+        nextData.department = '75708008'
+        nextData.beneCorp = '75708008'
+      }
+      if (beneType === 'fpc') {
+        nextData.lcType = 'sight'
+        nextData.beneCorp = '75708007'
+      }
+      if (beneType === 'other') {
+        nextData.beneCorp = '20201258'
       }
 
       if (no) {
@@ -1397,13 +1352,14 @@
     console.log('查詢申請人資料：此為原型畫面，尚未串接後端 API。')
   }
 
+  // 開啟預覽修狀申請書 Dialog
   function openPreview (): void {
     appDialog.value = true
   }
 
   function confirmCancel (): void {
     messageTitle.value = '訊息通知'
-    message.value = '確定要離開填寫畫面？未儲存的資料將遺失。'
+    message.value = '確定要離開填寫畫面？<br />未儲存的資料將遺失。'
     messageStatus.value = 'alert'
     processStatus.value = 'cancel'
     isConfirmBtn.value = true
@@ -1413,7 +1369,14 @@
   function onSubmit (): void {
     console.log('Submit payload:', form)
     try {
-      emit('on-submit')
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成！<br />
+您的申請書號碼為<br />
+099700031161000861-A-011`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+      processStatus.value = 'success'
     } catch (error) {
       console.error('Error emitting submit event:', error)
     }
@@ -1425,6 +1388,7 @@
   }
 
   function messageClose (): void {
+    if (processStatus.value === 'success') emit('on-submit')
     messageDialog.value = false
   }
 

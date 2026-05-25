@@ -305,6 +305,8 @@
 
   function closeEditForm (): void {
     isEdit.value = false
+    isShowList.value = true
+    currentView.value = 'search'
     searchFormRef.value?.reset()
     // typeForm.beneficiaryType = null
     // typeForm.beneficiary = null

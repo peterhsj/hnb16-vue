@@ -234,9 +234,9 @@ export const FPC_BENE_ITEMS: readonly FpcBeneOption[] = [
 
 export const CDS_BENE_ITEMS: readonly FpcBeneOption[] = [
   {
-    title: '75708007 中國鋼鐵股份有限公司',
-    value: '75708007',
-    taxId: '75708007',
+    title: '75708008 中國鋼鐵股份有限公司',
+    value: '75708008',
+    taxId: '75708008',
     corpName: '中國鋼鐵股份有限公司',
     managerName: '',
     managerTitle: '',
