@@ -4,6 +4,7 @@ import Mock from 'mockjs'
 // 引入各個模組的 mock API
 import './auth' // '登入/登出'
 import './info' // '訊息匣'
+import './amendAccept' // '修改信用狀接受註記'
 import './lcApp' // '開狀申請書'
 import './amendApp' // '修改申請書可用信用狀清冊'
 import './draftApp' // '押匯申請可用信用狀清冊'

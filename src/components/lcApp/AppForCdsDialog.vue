@@ -322,7 +322,7 @@
         <v-spacer />
 
         <v-btn
-          class="hnb__btn--cancel"
+          class="hnb__btn--cancel my-2 mx-1"
           variant="flat"
           @click="onClose"
         >

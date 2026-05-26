@@ -263,6 +263,7 @@
     isLoading.value = true
     try {
       const res = await getLcAppList(payload)
+      console.log('API response:', res)
       const { status, data: { data: sourceData, total, amount } } = res
       if (status === 200) {
         tableItems.value = sourceData || []

@@ -141,7 +141,7 @@
     { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
     { title: '總金額', key: 'totalAmount', align: 'end', sortable: false, nowrap: true },
     { title: '可用餘額', key: 'availableBalance', align: 'end', sortable: false, nowrap: true },
-    { title: '受益人', key: 'beneficiaryName', align: 'start', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
     { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
     { title: '操作', key: 'action', align: 'center', sortable: false, width: 200, nowrap: true },
   ]

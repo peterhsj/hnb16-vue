@@ -27,7 +27,6 @@
               <span class="my-1 hnb__bankName">
                 <span class="pe-1">華南商業銀行</span>
                 <span class="pe-1">建成分行</span>
-                <span>台鑑</span>
               </span>
             </v-col>
 
@@ -132,22 +131,22 @@
               <td>
                 <div class="h-100">
                   <p class="mb-3">
-                    <span class="font-weight-bold">金額：</span>
+                    <span class="font-weight-bold">金額：</span><br>
                     新台幣 陸仟萬元整
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">有效期限：</span>
+                    <span class="font-weight-bold">有效期限：</span><br>
                     114/04/30
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">受益人電話：</span>
+                    <span class="font-weight-bold">受益人電話：</span><br>
                     07-12345678
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">貨物名稱：</span>
+                    <span class="font-weight-bold">貨物名稱：</span><br>
                     測試水泥一車
                   </p>
                 </div>
@@ -156,22 +155,22 @@
               <td>
                 <div class="h-100">
                   <p class="mb-3">
-                    <span class="font-weight-bold">金額：</span>
+                    <span class="font-weight-bold">金額：</span><br>
                     新台幣 陸仟萬元整
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">有效期限：</span>
+                    <span class="font-weight-bold">有效期限：</span><br>
                     114/04/30
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">受益人電話：</span>
+                    <span class="font-weight-bold">受益人電話：</span><br>
                     07-12345678
                   </p>
 
                   <p class="mb-3">
-                    <span class="font-weight-bold">貨物名稱：</span>
+                    <span class="font-weight-bold">貨物名稱：</span><br>
                     測試水泥一車
                   </p>
                 </div>
@@ -223,7 +222,7 @@
         <v-spacer />
 
         <v-btn
-          class="hnb__btn--cancel"
+          class="hnb__btn--cancel my-2 mx-1"
           variant="flat"
           @click="onClose"
         >

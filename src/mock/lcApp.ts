@@ -33,7 +33,30 @@ const lcAppItems: LcAppItem[] = [
 ]
 
 // 查詢開狀申請書列表
-Mock.mock(/\/api\/lcApp\/list(\?.*)?$/, 'get', (options: any) => {
+Mock.mock('/api/lcApp/list', 'post', (options: any) => {
+  const body = options.body ? JSON.parse(options.body) : {}
+  const { page, itemsPerPage } = body as { page: number, itemsPerPage: number }
+
+  console.log('Received payload for /api/lcApp/list:', { page, itemsPerPage })
+  // const lcNo = params.get('lcNo') || ''
+  // const appNo = params.get('appNo') || ''
+  // const beneNo = params.get('beneNo') || ''
+  // const beneInNo = params.get('beneInNo') || ''
+  // const status = params.get('status') || ''
+  // const startDate = params.get('startDate') || ''
+  // const endDate = params.get('endDate') || ''
+  // const beneficiary = params.get('beneficiary') || ''
+
+  // let filtered = lcAppItems
+  // if (lcNo) filtered = filtered.filter(i => i.lcNo.includes(lcNo))
+  // if (appNo) filtered = filtered.filter(i => i.appNo.includes(appNo))
+  // if (beneNo) filtered = filtered.filter(i => i.applicant.includes(beneNo))
+  // if (beneInNo) filtered = filtered.filter(i => i.beneficiary.includes(beneInNo))
+  // if (status) filtered = filtered.filter(i => i.status === status)
+  // if (beneficiary) filtered = filtered.filter(i => i.beneficiary.includes(beneficiary))
+  // if (startDate) filtered = filtered.filter(i => i.applyDate >= startDate)
+  // if (endDate) filtered = filtered.filter(i => i.applyDate <= endDate)
+
   const { data, total } = paginate(lcAppItems, options)
   return {
     code: 200,

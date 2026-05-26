@@ -23,79 +23,81 @@
 
       <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;">
 
-        <!-- 主要內容表格 -->
-        <v-table class="hnb__table mt-4" density="compact">
-          <tbody>
+        <!-- 銀行抬頭 -->
+        <v-container fluid>
+          <v-row align="center">
+            <v-col class="py-1 text-center" cols="12">
+              <span class="my-1 hnb__bankName">
+                <span class="pe-1">國內信用狀修改通知書</span>
+              </span>
+            </v-col>
 
-            <!-- 第 1 列：基本資料 (全寬, colspan=2) -->
+            <v-col class="py-1 hnb__bankName text-center" cols="12">
+              網際商業銀行 南門分行
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- 主要內容表格 -->
+        <v-table class="hnb__table" density="compact">
+          <tbody>
             <tr>
               <td colspan="2">
-                <v-container fluid>
-                  <v-row align="center">
-                    <!-- 標題 -->
-                    <!-- 銀行名稱 -->
-                    <v-col class="text-center my-2" cols="12">
-                      <span class="hnb__bankName">國內信用狀修改通知書</span>
-                      <br>
-                      <span class="text-h6">網際商業銀行 南門分行</span>
-                    </v-col>
-                    <!-- 基本欄位 (兩欄排列) -->
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">修改編號：</span>第 1 次
-                    </v-col>
+                <v-row align="center" no-gutters>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">修改編號：</span>第 1 次
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">修改日期：</span>民國 114 年 3 月 25 日
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">修改日期：</span>民國 114 年 3 月 25 日
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">信用狀號碼：</span>099700049161000861
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">信用狀號碼：</span>099700049161000861
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">金額：</span>新台幣陸仟萬元整
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">金額：</span>新台幣陸仟萬元整
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">通知銀行：</span>華南商業銀行 台北分行
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">通知銀行：</span>華南商業銀行 台北分行
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">通知銀行編號：</span>01
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">通知銀行編號：</span>01
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">受益人：</span>中鴻鋼鐵股份有限公司
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">有效期限至：</span>至民國 114 年 3 月 31 日
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">有效期限至：</span>至民國 114 年 3 月 31 日
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">地址：</span>高雄縣橋頭鄉芋寮村芋寮路317號
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">信用狀申請人：</span>優勢股份有限公司
-                    </v-col>
+                  <v-col class="py-1" cols="6">
+                    <span class="font-weight-bold">信用狀申請人：</span>優勢股份有限公司
+                  </v-col>
 
-                    <v-col class="py-1" cols="6">
-                      <span class="font-weight-bold">修改事項：</span>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                  <v-col class="mt-3 mb-0" cols="6">
+                    <span class="text-subtitle-1">修改事項：</span>
+                  </v-col>
+                </v-row>
               </td>
             </tr>
 
             <!-- 第 2 列：欄位標頭 -->
             <tr>
-              <td class="text-center compare-header">
-                <span class="font-weight-bold">原規定情形</span>
+              <td class="text-center">
+                <span class="text-subtitle-1">原規定情形</span>
               </td>
 
-              <td class="text-center compare-header">
-                <span class="font-weight-bold">修改情形</span>
+              <td class="text-center">
+                <span class="text-subtitle-1">修改情形</span>
               </td>
             </tr>
 
@@ -221,7 +223,7 @@
         <v-spacer />
 
         <v-btn
-          class="hnb__btn--cancel"
+          class="hnb__btn--cancel my-2 mx-1"
           variant="flat"
           @click="onClose"
         >

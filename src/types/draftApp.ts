@@ -44,7 +44,7 @@ export interface DraftLcListItem {
   issueDate: string
   totalAmount: number
   availableBalance: number
-  beneficiaryName: string
+  beneficiary: string
   beneficiaryTaxId: string
   status: DraftLcStatusLabel
 }

@@ -2,12 +2,10 @@
   <v-dialog
     v-model="show"
     persistent
-    width="auto"
+    :width="dialogWidth"
   >
     <v-card
       class="hnb__dialog"
-      max-width="400"
-      min-width="300"
     >
       <v-card-title class="d-flex px-4 font-weight-bold text-red-darken-3">
         <span>{{ props.messageTitle }}</span>
@@ -47,7 +45,7 @@
         <v-spacer />
 
         <v-btn
-          class="hnb__btn--cancel"
+          class="hnb__btn--cancel mx-1 my-2"
           @click="onClose"
         >
           關閉
@@ -55,7 +53,7 @@
 
         <v-btn
           v-if="props.isConfirmBtn"
-          class="hnb__btn--default"
+          class="hnb__btn--default mx-1 my-2"
           @click="promptConfirm"
         >
           確定
@@ -74,6 +72,7 @@
     message?: string
     messageStatus?: string
     isConfirmBtn?: boolean
+    dialogWidth?: number | string
   }
   const props = withDefaults(defineProps<Props>(), {
     messageDialog: false,
@@ -81,6 +80,7 @@
     message: '',
     messageStatus: '',
     isConfirmBtn: false,
+    dialogWidth: 'auto',
   })
 
   const show = ref<boolean>(props.messageDialog)

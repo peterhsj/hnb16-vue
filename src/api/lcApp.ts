@@ -40,16 +40,45 @@ export interface LcAppItem {
 export interface LcAppListPayload {
   page?: number
   itemsPerPage?: number
-  // beneficiaryType?: string | null // 受益人類型
-  beneficiary?: string | null // 受益人 Id
+  lcNo?: string | null
+  appNo?: string | null
+  beneNo?: string | null
+  beneInNo?: string | null
+  status?: string | null
+  startDate?: string | null
+  endDate?: string | null
+  beneficiary?: string | null
 }
 
 /**
  * 查詢開狀申請書列表
  */
 export function getLcAppList (payload: LcAppListPayload = {}) {
-  const { page = 1, itemsPerPage = 20 } = payload
-  return api.get<ApiResponse<LcAppItem[]>>('/api/lcApp/list', {
-    params: { page, itemsPerPage },
-  })
+  const { page = 1, itemsPerPage = 20, lcNo, appNo, beneNo, beneInNo, status, startDate, endDate, beneficiary } = payload
+  const params: Record<string, any> = { page, itemsPerPage }
+  if (lcNo) {
+    params.lcNo = lcNo
+  }
+  if (appNo) {
+    params.appNo = appNo
+  }
+  if (beneNo) {
+    params.beneNo = beneNo
+  }
+  if (beneInNo) {
+    params.beneInNo = beneInNo
+  }
+  if (status) {
+    params.status = status
+  }
+  if (startDate) {
+    params.startDate = startDate
+  }
+  if (endDate) {
+    params.endDate = endDate
+  }
+  if (beneficiary) {
+    params.beneficiary = beneficiary
+  }
+  return api.post<ApiResponse<LcAppItem[]>>('/api/lcApp/list', payload)
 }
