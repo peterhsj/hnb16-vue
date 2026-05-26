@@ -365,9 +365,11 @@
 
   // 確認 message
   function messageConfirm (): void {
-    if (processStatus.value === 'save') {
-      confirmSave()
-    }
     messageDialog.value = false
+    if (processStatus.value === 'save') {
+      nextTick(() => {
+        confirmSave()
+      })
+    }
   }
 </script>
