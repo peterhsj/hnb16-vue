@@ -27,95 +27,45 @@
               </v-col>
             </v-row>
           </v-container>
-          <!-- ================================================================
-              表格
-          ================================================================ -->
-          <v-table class="table-sm hnb__table-v bg-white" density="compact">
+
+          <v-table class="table-sm hnb__table bg-white" density="compact">
             <tbody>
               <tr>
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  信用狀號碼：
-                </th>
+                <td>
+                  <p class="ma-4">茲請　貴行註銷下列信用狀，其未用餘額，受益人已不再利用，嗣後倘因該信用狀之受益人仍有出貨及押匯等情事，以致發生任何糾紛並使 貴行遭受損失時，一經 貴行通知，本公司當即依照前所提及之開發國內不可撤銷信用狀申請書及其他相關約定事項，負責清償，絕不拖延。</p>
+                  <p class="text-end me-4">單位：新台幣元</p>
+                  <!-- ================================================================
+                      表格
+                  ================================================================ -->
+                  <v-table class="table-sm hnb__table bg-white ma-4" color="blue-darken-2" density="compact">
+                    <thead>
+                      <tr>
+                        <th class="text-center">信用狀號碼</th>
+                        <th class="text-center">申請人</th>
+                        <th class="text-center">受益人</th>
+                        <th class="text-end">信用狀金額</th>
+                        <th class="text-end">未押匯金額</th>
+                        <th class="text-center">信用狀到期日</th>
+                      </tr>
+                    </thead>
 
-                <td class="lc-td">
-                  099700024161000861
-                </td>
-
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  信用狀可用餘額：
-                </th>
-
-                <td class="lc-td text-end">
-                  NT$ 200,000
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  受益人名稱：
-                </th>
-
-                <td class="lc-td">
-                  網際測試股份有限公司
-                </td>
-
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  押匯/承兌金額：
-                </th>
-
-                <td class="lc-td">
-                  <v-text-field
-                    v-model="form.negotiationAmount"
-                    class="flex-grow-1"
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    style="min-width: 120px"
-                    variant="outlined"
-                  />
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  押匯/承兌日期：
-                </th>
-
-                <td class="lc-td">
-                  2025/11/10
-                </td>
-
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  匯票到期日：
-                </th>
-
-                <td class="lc-td">
-                  2025/11/10
-                </td>
-              </tr>
-
-              <tr>
-                <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
-                  匯票發票日：
-                </th>
-
-                <td class="lc-td" colspan="3">
-                  <v-date-input
-                    v-model="form.draftIssueDate"
-                    append-inner-icon="mdi-calendar"
-                    bg-color="white"
-                    color="teal-darken-2"
-                    density="compact"
-                    hide-details="auto"
-                    placeholder="例：2026/01/01"
-                    prepend-icon=""
-                    style="max-width: 220px"
-                    variant="outlined"
-                  />
+                    <tbody>
+                      <tr>
+                        <td class="text-center">008LLCt2</td>
+                        <td class="text-center">林大華</td>
+                        <td class="text-center">網際測試股份有限公司</td>
+                        <td class="text-end">NT$ 500,000</td>
+                        <td class="text-end">NT$ 200,000</td>
+                        <td class="text-center">民國 114 年 05 月 26 日</td>
+                      </tr>
+                    </tbody>
+                  </v-table>
                 </td>
               </tr>
             </tbody>
           </v-table>
+
+
 
           <!-- ===== 共用底部按鈕列 ===== -->
           <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
