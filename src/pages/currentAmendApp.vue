@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
   import type { PageOptions } from '@/types/common'
-  import type { AmendLcItem } from '@/types/currentAmendApp'
+  import type { ListItem } from '@/types/currentAmendApp'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/currentAmendApp'
@@ -111,15 +111,15 @@
   ]
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, width: 100 },
-    { title: '修改申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false },
-    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false },
-    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false },
-    { title: '修改通知書號碼', key: 'amendNoticeNo', align: 'center', sortable: false },
-    { title: '申請日期', key: 'issueDate', align: 'center', sortable: false },
-    { title: '申請人', key: 'applicant', align: 'start', sortable: false },
-    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false },
-    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false },
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 100 },
+    { title: '修改申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
+    { title: '修改通知書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '申請日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
+    { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
+    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
   ]
 
   // Prompt Message Dialog
@@ -149,7 +149,7 @@
     sortBy: [{ key: 'companyId', order: 'asc' }],
   })
   const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
-  const listItems = ref<AmendLcItem[]>([]) // 列表資料
+  const listItems = ref<ListItem[]>([]) // 列表資料
   const totalCount = ref<number>(0) // 總筆數
   const totalAmount = ref<number>(0) // 總金額
 

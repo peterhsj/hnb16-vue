@@ -1,19 +1,17 @@
 import type { LcTypeOption } from '@/types/common'
 
-// ── amendLcApp (開狀沖正 EC) ──────────────────────────────────────────────
+// ── currentCancelApp (註銷信用狀沖正 EC) ──────────────────────────────────
 
 export interface ListItem {
   seqNo: number
   amendNoticeNo: string | null
   lcNo: string
   lcType: LcTypeOption
+  issueDate: string
   applicant: string
   notifyBank: string
-  applicationDate: string
-  issueDate: string
-  totalAmount: number
   beneficiary: string
-  isAccepted?: boolean
+  totalAmount: number
 }
 
 export interface ListPayload {

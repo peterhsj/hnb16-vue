@@ -83,11 +83,11 @@
 </template>
 
 <script setup lang="ts">
-  import type { AmendLcItem } from '@/types/amendLcApp'
+  import type { ListItem } from '@/types/amendLcApp'
   import type { PageOptions } from '@/types/common'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
-  import { getAmendLcList } from '@/api/amendLcApp'
+  import { getDataList } from '@/api/amendLcApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -103,15 +103,15 @@
   ]
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, width: 50 },
-    { title: '開狀申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false },
-    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false },
-    { title: '申請人', key: 'applicant', align: 'start', sortable: false },
-    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false },
-    { title: '申請日期', key: 'applicationDate', align: 'center', sortable: false },
-    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false },
-    { title: '總金額', key: 'totalAmount', align: 'end', sortable: false },
-    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false },
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 100 },
+    { title: '開狀申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
+    { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
+    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
+    { title: '申請日期', key: 'applicationDate', align: 'center', sortable: false, nowrap: true },
+    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
+    { title: '總金額', key: 'totalAmount', align: 'end', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
   ]
 
   // Prompt Message Dialog
@@ -141,7 +141,7 @@
     sortBy: [{ key: 'companyId', order: 'asc' }],
   })
   const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
-  const listItems = ref<AmendLcItem[]>([]) // 列表資料
+  const listItems = ref<ListItem[]>([]) // 列表資料
   const totalCount = ref<number>(0) // 總筆數
   const totalAmount = ref<number>(0) // 總金額
 
@@ -167,7 +167,7 @@
     }
     isLoading.value = true
     try {
-      const res = await getAmendLcList(payload)
+      const res = await getDataList(payload)
       const { status, data: { data: sorceData, total, amount } } = res
       if (status === 200) {
         listItems.value = sorceData || []

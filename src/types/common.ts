@@ -22,3 +22,5 @@ export interface PageOptions {
     order?: 'asc' | 'desc'
   }[]
 }
+
+export type LcTypeOption = 'sight' | 'usance' // 即期 / 遠期

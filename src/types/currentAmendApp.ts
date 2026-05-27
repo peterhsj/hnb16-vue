@@ -1,7 +1,7 @@
-// ── currentAmendApp (修狀沖正 EC) ─────────────────────────────────────────
-export type LcTypeOption = 'sight' | 'usance'
+import type { LcTypeOption } from '@/types/common'
 
-export interface AmendLcItem {
+// ── currentAmendApp (修狀沖正 EC) ─────────────────────────────────────────
+export interface ListItem {
   seqNo: number
   amendNoticeNo: string | null
   lcNo: string
@@ -13,13 +13,13 @@ export interface AmendLcItem {
   totalAmount: number
 }
 
-export interface CurrentAmendListPayload {
+export interface ListPayload {
   page: number
   itemsPerPage: number
 }
 
-export interface CurrentAmendListResponse {
-  data: AmendLcItem[]
+export interface ListResponse {
+  data: ListItem[]
   total: number
   amount: number
 }
