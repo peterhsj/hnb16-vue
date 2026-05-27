@@ -3,27 +3,203 @@
     <v-container fluid>
       <div class="hnb16__breadcrumb mb-2">
         <v-breadcrumbs density="compact" :items="breadcrumbs">
+          <template #item="{ item }">
+            <v-breadcrumbs-item
+              :disabled="Boolean(item.disabled)"
+              :title="item.title"
+              :to="item.title === '申請作業' ? '' : item.to"
+              @click="onBreadcrumbClick(item)"
+            />
+          </template>
+
           <template #divider>
             <v-icon icon="mdi-chevron-right" size="small" />
           </template>
         </v-breadcrumbs>
       </div>
 
-      <h1 class="mx-4 hnb16__title">開狀沖正(EC)</h1>
+      <div v-if="isShowList" class="mt-4 mx-4">
+        <h1 class="hnb16__title">開狀沖正(EC)清冊</h1>
 
-      <v-card class="pa-6 mt-4" flat>
-        <p class="text-blue-grey-darken-2">此功能頁面開發中...</p>
-      </v-card>
+        <v-card class="mt-4" flat>
+          <v-data-table
+            class="table-sm hnb__table bg-white"
+            color="blue-darken-2"
+            density="compact"
+            :headers="tableHeaders"
+            hide-default-footer
+            item-value="lcNo"
+            :items="listItems"
+            :items-per-page="pageOptions.itemsPerPage"
+            :loading="isLoading"
+            :page="pageOptions.page"
+            sort-asc-icon="mdi-sort-ascending"
+            sort-desc-icon="mdi-sort-descending"
+            sort-icon="mdi-swap-vertical"
+            striped="odd"
+            @update:items-per-page="pageOptions.itemsPerPage = $event"
+          >
+            <template #item.lcType="{ item }">
+              {{ item.lcType === 'sight' ? '即期' : '遠期' }}
+            </template>
 
+            <template #item.amendNoticeNo="{ item }">
+              <a v-if="item.amendNoticeNo" class="hnb__text--link" href="#" @click.prevent="handleAmendNoticeView(item.amendNoticeNo)">
+                {{ item.amendNoticeNo }}
+              </a>
+
+              <span v-else>N/A</span>
+            </template>
+
+            <template #item.totalAmount="{ item }">
+              ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
+            </template>
+          </v-data-table>
+
+          <TablePagination
+            v-model:items-per-page="pageOptions.itemsPerPage"
+            v-model:page="pageOptions.page"
+            :is-show-total-amount="true"
+            :total-amount="totalAmount"
+            :total-items="listItems.length"
+            :total-pages="totalPages"
+            @update:items-per-page="pageOptions.page = 1"
+          />
+        </v-card>
+      </div>
+
+      <!-- Prompt Dialog -->
+      <PromptDialog
+        v-model:message-dialog="messageDialog"
+        :is-confirm-btn="isConfirmBtn"
+        :message="message"
+        :message-status="messageStatus"
+        :message-title="messageTitle"
+        @on-close="messageClose"
+        @prompt-confirm="messageConfirm"
+      />
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
+  import type { AmendLcItem } from '@/types/amendLcApp'
+  import type { PageOptions } from '@/types/common'
+  import type { DataTableHeader } from 'vuetify'
+  import { computed, onMounted, ref, watch } from 'vue'
+  import { getAmendLcList } from '@/api/amendLcApp'
+  import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { thousandsFormatting } from '@/utils/format'
+
+  const { handleApiError } = useApiErrorHandler()
+  const isLoading = ref(false)
+  const isShowList = ref(true)
+
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '申請作業' },
     { title: '當日沖正交易' },
-    { title: '開狀沖正(EC)', disabled: true },
+    { title: '開狀沖正(EC)', to: '/amendLcApp' },
   ]
+
+  const tableHeaders: DataTableHeader[] = [
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, width: 50 },
+    { title: '開狀申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false },
+    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false },
+    { title: '申請人', key: 'applicant', align: 'start', sortable: false },
+    { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false },
+    { title: '申請日期', key: 'applicationDate', align: 'center', sortable: false },
+    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false },
+    { title: '總金額', key: 'totalAmount', align: 'end', sortable: false },
+    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false },
+  ]
+
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<string>('')
+
+  function onBreadcrumbClick (item: any): void {
+    if (item.disabled || !item.to) return
+    if (item.title === '開狀沖正(EC)' && typeof item.to === 'string') {
+      console.log('Breadcrumb clicked:', `/#${item.to}`)
+      // hash router 下用 location.href 重新導向可強制整頁重整
+      // isEdit.value = false
+      isShowList.value = true
+      // currentView.value = 'search'
+      // searchForm.beneType = null
+      // searchForm.queryMode = ''
+    }
+  }
+
+  const pageOptionsInit = ref<PageOptions>({
+    page: 1,
+    itemsPerPage: 10,
+    sortBy: [{ key: 'companyId', order: 'asc' }],
+  })
+  const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
+  const listItems = ref<AmendLcItem[]>([]) // 列表資料
+  const totalCount = ref<number>(0) // 總筆數
+  const totalAmount = ref<number>(0) // 總金額
+
+  const totalPages = computed(() =>
+    Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
+  )
+
+  watch(
+    () => pageOptions.value,
+    newVal => {
+      console.log('Page options changed:', newVal)
+      fetchAmendAcceptList()
+    },
+    { deep: true },
+  )
+
+  // 取得列表資料
+  async function fetchAmendAcceptList () {
+    const { page, itemsPerPage } = pageOptions.value
+    const payload = {
+      page,
+      itemsPerPage,
+    }
+    isLoading.value = true
+    try {
+      const res = await getAmendLcList(payload)
+      const { status, data: { data: sorceData, total, amount } } = res
+      if (status === 200) {
+        listItems.value = sorceData || []
+        totalCount.value = total || 0
+        totalAmount.value = amount || 0
+      }
+    } catch (error: any) {
+      await handleApiError(error, fetchAmendAcceptList, {
+        messageTitle,
+        message,
+        messageStatus,
+        isConfirmBtn,
+        messageDialog,
+      })
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  function handleAmendNoticeView (amendNoticeNo: string): void {
+    console.log('View Amend Notice:', amendNoticeNo)
+  }
+
+  onMounted(fetchAmendAcceptList)
+
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
+
+  // 確認 message
+  function messageConfirm (): void {
+    messageDialog.value = false
+  }
 </script>
