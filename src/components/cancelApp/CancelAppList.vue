@@ -109,9 +109,6 @@
 
   const tableItems = ref<CancelAppItem[]>([])
   const isLoading = ref(false)
-  // App Dialog
-  const appDialog = ref(false)
-  const appNo = ref<string>('')
   // Lc Dialog
   const lcDialog = ref(false)
   const lcNo = ref<string>('')
@@ -188,7 +185,7 @@
       searchForm.value = newVal
         ? { ...newVal }
         : {
-          beneType: null,
+          beneType: 'cds',
           queryMode: '',
           lcNo: '',
           applicantLoanAccount: '',
@@ -254,18 +251,6 @@
   // 編輯項目
   function editItem (appNo: string, beneType: string): void {
     emits('on-edit', { appNo, beneType })
-  }
-
-  // 查看開狀申請書 App Dialog
-  function handleAppView (value: string): void {
-    appNo.value = value
-    appDialog.value = true
-  }
-
-  // 離開 App Dialog
-  function appDialogClose (): void {
-    appDialog.value = false
-    appNo.value = ''
   }
 
   // 查看信用狀 Lc Dialog

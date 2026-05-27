@@ -64,9 +64,6 @@
               </tr>
             </tbody>
           </v-table>
-
-
-
           <!-- ===== 共用底部按鈕列 ===== -->
           <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
             <v-btn class="hnb__btn--cancel mx-1" @click="confirmCancel">
@@ -80,6 +77,12 @@
         </v-form>
       </v-card-text>
     </v-card>
+
+    <CancelAppEditPromptDialog
+      v-model:message-dialog="CancelAppEditDialog"
+      @on-close="CancelAppEditDialogClose"
+      @send-confirm="sendConfirm"
+    />
 
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
@@ -125,6 +128,8 @@
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
+  const CancelAppEditDialog = ref<boolean>(false)
+
   // ── 監聽 formData 以初始化 / 重設表單 ─────────────────────────────────────
   watch(
     () => props.formData,
@@ -150,17 +155,25 @@
   function onSubmit (): void {
     console.log('Submit payload:', form)
     try {
-      messageTitle.value = '作業訊息'
-      message.value = `作業已完成！<br />
-您的申請書號碼為<br />
-099700031161000861-A-011`
-      messageStatus.value = 'success'
-      isConfirmBtn.value = false
-      messageDialog.value = true
-      processStatus.value = 'success'
+      CancelAppEditDialog.value = true
     } catch (error) {
       console.error('Error emitting submit event:', error)
     }
+  }
+
+  function sendConfirm (): void {
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成！<br />
+您的申請書號碼為<br />
+099700031161000861-A-011`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+    processStatus.value = 'success'
+  }
+
+  function CancelAppEditDialogClose (): void {
+    CancelAppEditDialog.value = false
   }
 
   function messageConfirm (): void {

@@ -2,13 +2,13 @@
   <v-dialog
     v-model="show"
     persistent
-    :width="dialogWidth"
+    width="900"
   >
     <v-card
       class="hnb__dialog"
     >
       <v-card-title class="d-flex px-4 font-weight-bold text-red-darken-3">
-        <span>{{ props.messageTitle }}</span>
+        <span>作業訊息</span>
         <v-spacer />
 
         <v-btn
@@ -20,32 +20,31 @@
       </v-card-title>
 
       <v-card-text class="d-flex align-center bg-grey-lighten-4">
-        <span class="mr-4">
-          <v-icon
-            v-if="props.messageStatus === 'alert'"
-            class="my-4"
-            color="orange-darken-1"
-            icon="mdi-alert-circle-outline"
-            size="60"
-          />
+        <div>
+          <ol class="hnb__list--ol">
+            <li class="mb-2">1. 若註銷「未過期」信用狀，<span class="text-red">請務必確認已取得受益人同意書</span>，若未取得逕予註銷，恐遭受益人訴諸法律求償。</li>
+            <li class="mb-2">2. 若<span class="text-red">「電子信用狀」</span>內容有誤 ( 受益人為<span class="text-red">中鋼</span>集團、<span class="text-red">台塑</span>集團、<span class="text-red">華新麗華</span>、<span class="text-red">奇美</span>集團、<span class="text-red">東和鋼鐵</span>等 )，<span class="text-red">請以修狀方式修正，切勿隨意以先註銷再重新開狀之方式辦理。</span></li>
+            <li class="mb-2">3. 若註銷「電子信用狀」後，<span class="text-red">將無法執行當日更正交易</span>。</li>
 
-          <v-icon
-            v-else-if="props.messageStatus === 'success'"
-            class="my-4"
-            color="green-darken-1"
-            icon="mdi-check-circle-outline"
-            size="60"
-          />
-        </span>
-
-        <div class="text-teal-darken-2" v-html="props.message" />
+            <li class="mb-2 d-flex align-center">
+              4. 輸入本次欲註銷之信用狀號碼：
+              <v-text-field
+                v-model="lcNo"
+                class="ml-2"
+                color="teal-darken-2"
+                density="compact"
+                hide-details="auto"
+                variant="outlined"
+              />
+            </li>
+          </ol>
+        </div>
       </v-card-text>
 
       <v-card-actions>
         <v-spacer />
 
         <v-btn
-          v-if="props.isCancelBtn"
           class="hnb__btn--cancel mx-1 my-2"
           @click="onClose"
         >
@@ -53,9 +52,8 @@
         </v-btn>
 
         <v-btn
-          v-if="props.isConfirmBtn"
           class="hnb__btn--default mx-1 my-2"
-          @click="promptConfirm"
+          @click="confirm"
         >
           確定
         </v-btn>
@@ -87,6 +85,7 @@
   })
 
   const show = ref<boolean>(props.messageDialog)
+  const lcNo = ref<string>('')
   watch(
     () => props.messageDialog,
     newVal => {
@@ -102,7 +101,7 @@
 
   const emit = defineEmits<{
     'update:messageDialog': [boolean]
-    'prompt-confirm': []
+    'send-confirm': []
     'on-close': []
   }>()
 
@@ -111,8 +110,8 @@
     emit('on-close')
   }
 
-  function promptConfirm (): void {
-    emit('prompt-confirm')
+  function confirm (): void {
+    emit('send-confirm')
     show.value = false
   }
 </script>

@@ -200,6 +200,17 @@
         />
       </div>
     </v-container>
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :is-cancel-btn="isCancelBtn"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
   </div>
 </template>
 
@@ -219,6 +230,19 @@
     { title: '申請作業' },
     { title: '註銷申請/切結書', to: '/cancelApp' },
   ]
+
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isCancelBtn = ref<boolean>(false)
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<string>('')
+  // const processStatus = ref<{ action: string, status: number }>({
+  //   action: '',
+  //   status: 0,
+  // })
 
   const currentView = ref('search')
   const isEdit = ref(false)
@@ -284,9 +308,20 @@
     console.log('編輯事件觸發，接收到 payload:', payload)
     // 取得 appId
     cancleAppData.value = { appNo: payload.appNo, beneType: payload.beneType }
-    currentView.value = ''
-    isShowList.value = false
-    isEdit.value = true
+    if (payload.beneType === 'fpc') {
+      messageTitle.value = '作業訊息'
+      message.value = `注意：欲註銷未過期信狀餘額，<br />
+請先取得受益人之同意書。`
+      messageStatus.value = 'alert'
+      isCancelBtn.value = false
+      isConfirmBtn.value = true
+      messageDialog.value = true
+      processStatus.value = 'editAlert'
+    } else {
+      currentView.value = ''
+      isShowList.value = false
+      isEdit.value = true
+    }
   }
 
   function closeEditForm (): void {
@@ -308,7 +343,7 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '修改申請書' && typeof item.to === 'string') {
+    if (item.title === '註銷申請/切結書' && typeof item.to === 'string') {
       console.log('Breadcrumb clicked:', `/#${item.to}`)
       // hash router 下用 location.href 重新導向可強制整頁重整
       isEdit.value = false
@@ -316,10 +351,21 @@
       currentView.value = 'search'
       searchForm.beneType = null
       searchForm.queryMode = ''
-      // typeForm.beneficiaryType = null
-      // typeForm.beneficiary = null
-      // typeForm.inputType = null
-      // window.location.href = `/#${item.to}`
     }
+  }
+
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
+
+  // 確認 message
+  function messageConfirm (): void {
+    if (processStatus.value === 'editAlert') {
+      currentView.value = ''
+      isShowList.value = false
+      isEdit.value = true
+    }
+    messageDialog.value = false
   }
 </script>
