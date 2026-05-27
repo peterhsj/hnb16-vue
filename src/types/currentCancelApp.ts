@@ -4,14 +4,14 @@ import type { LcTypeOption } from '@/types/common'
 
 export interface ListItem {
   seqNo: number
-  amendNoticeNo: string | null
+  cancelAppNo: string | null
   lcNo: string
   lcType: LcTypeOption
   issueDate: string
   applicant: string
   notifyBank: string
   beneficiary: string
-  totalAmount: number
+  expiryDate: string
 }
 
 export interface ListPayload {

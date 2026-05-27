@@ -43,9 +43,9 @@
               {{ item.lcType === 'sight' ? '即期' : '遠期' }}
             </template>
 
-            <template #item.amendNoticeNo="{ item }">
-              <a v-if="item.amendNoticeNo" class="hnb__text--link" href="#" @click.prevent="handleAmendNoticeView(item.amendNoticeNo)">
-                {{ item.amendNoticeNo }}
+            <template #item.cancelAppNo="{ item }">
+              <a v-if="item.cancelAppNo" class="hnb__text--link" href="#" @click.prevent="handleCancelAppView(item.cancelAppNo)">
+                {{ item.cancelAppNo }}
               </a>
 
               <span v-else>N/A</span>
@@ -57,10 +57,6 @@
               </a>
 
               <span v-else>N/A</span>
-            </template>
-
-            <template #item.totalAmount="{ item }">
-              ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
             </template>
           </v-data-table>
 
@@ -97,7 +93,6 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/currentCancelApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
@@ -112,14 +107,14 @@
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 100 },
-    { title: '修改申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '註銷申請書號碼', key: 'cancelAppNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
-    { title: '修改通知書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
     { title: '申請日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
     { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
     { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
     { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
+    { title: '有效期限', key: 'expiryDate', align: 'center', sortable: false, nowrap: true },
   ]
 
   // Prompt Message Dialog
@@ -132,7 +127,7 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '修狀沖正(EC)' && typeof item.to === 'string') {
+    if (item.title === '註銷信用狀沖正(EC)' && typeof item.to === 'string') {
       console.log('Breadcrumb clicked:', `/#${item.to}`)
       // hash router 下用 location.href 重新導向可強制整頁重整
       // isEdit.value = false
@@ -195,7 +190,7 @@
     }
   }
 
-  function handleAmendNoticeView (amendNoticeNo: string): void {
+  function handleCancelAppView (amendNoticeNo: string): void {
     console.log('View Amend Notice:', amendNoticeNo)
   }
 

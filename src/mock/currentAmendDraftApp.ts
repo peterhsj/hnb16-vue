@@ -1,5 +1,4 @@
-import type { LcTypeOption } from '@/types/common'
-import type { ListItem, ListResponse } from '@/types/currentAmendApp'
+import type { ListItem, ListResponse } from '@/types/currentAmendDraftApp'
 import Mock from 'mockjs'
 
 const applicants = [
@@ -10,12 +9,12 @@ const applicants = [
   '中華電信股份有限公司',
 ]
 
-const notifyBanks = [
-  '臺北分行',
-  '高雄分行',
-  '台中分行',
-  '新竹分行',
-  '板橋分行',
+const applicantTaxIds = [
+  '22099131',
+  '03077208',
+  '04541302',
+  '23892556',
+  '96979933',
 ]
 
 const beneficiaries = [
@@ -28,23 +27,24 @@ const beneficiaries = [
 
 const mockItems: ListItem[] = Array.from({ length: 15 }, (_, i) => ({
   seqNo: i + 1,
-  amendNoticeNo: i % 4 === 3 ? null : `M${String(2_025_001 + i).padStart(7, '0')}`,
-  lcNo: `09970004916200${String(1000 + i).padStart(4, '0')}`,
-  lcType: (i % 2 === 0 ? 'sight' : 'usance') as LcTypeOption,
-  issueDate: `2025/0${(i % 9) + 1}/${String((i % 28) + 1).padStart(2, '0')}`,
+  draftNo: i % 4 === 3 ? null : `D${String(2_025_001 + i).padStart(7, '0')}`,
   applicant: applicants[i % applicants.length]!,
-  notifyBank: notifyBanks[i % notifyBanks.length]!,
+  applicantTaxId: applicantTaxIds[i % applicantTaxIds.length]!,
+  lcNo: `09970004916400${String(1000 + i).padStart(4, '0')}`,
+  lcAmount: (i + 1) * 200_000 + 100_000,
+  expiryDate: `2025/${String((i % 9) + 1).padStart(2, '0')}/${String((i % 28) + 1).padStart(2, '0')}`,
+  issuingDate: `2025/${String((i % 9) + 1).padStart(2, '0')}/${String((i % 28) + 3).padStart(2, '0')}`,
+  issuingAmount: (i + 1) * 75_000 + 20_000,
   beneficiary: beneficiaries[i % beneficiaries.length]!,
-  totalAmount: (i + 1) * 98_000 + 30_000,
 }))
 
-// 查詢修狀沖正(EC)清冊
-Mock.mock('/api/currentAmendApp/list', 'post', (options: any): ListResponse => {
+// 查詢押匯沖正(EC)清冊
+Mock.mock('/api/currentAmendDraftApp/list', 'post', (options: any): ListResponse => {
   const body = JSON.parse(options.body ?? '{}')
   const { page = 1, itemsPerPage = 10 } = body
 
   const total = mockItems.length
-  const amount = mockItems.reduce((sum, item) => sum + item.totalAmount, 0)
+  const amount = mockItems.reduce((sum, item) => sum + item.issuingAmount, 0)
   const totalPages = Math.max(1, Math.ceil(total / itemsPerPage))
   const safePage = Math.min(Math.max(1, page), totalPages)
   const start = (safePage - 1) * itemsPerPage

@@ -1,4 +1,5 @@
-import type { AmendLcAppListResponse, AmendLcItem, LcTypeOption } from '@/types/amendLcApp'
+import type { ListItem, ListResponse } from '@/types/amendLcApp'
+import type { LcTypeOption } from '@/types/common'
 import Mock from 'mockjs'
 
 const applicants = [
@@ -25,7 +26,7 @@ const beneficiaries = [
   '豐興鋼鐵股份有限公司',
 ]
 
-const mockItems: AmendLcItem[] = Array.from({ length: 15 }, (_, i) => ({
+const mockItems: ListItem[] = Array.from({ length: 15 }, (_, i) => ({
   seqNo: i + 1,
   amendNoticeNo: i % 4 === 3 ? null : `A${String(2_025_001 + i).padStart(7, '0')}`,
   lcNo: `09970004916100${String(1000 + i).padStart(4, '0')}`,
@@ -39,7 +40,7 @@ const mockItems: AmendLcItem[] = Array.from({ length: 15 }, (_, i) => ({
 }))
 
 // 查詢開狀沖正(EC)清冊
-Mock.mock('/api/amendLcApp/list', 'post', (options: any): AmendLcAppListResponse => {
+Mock.mock('/api/amendLcApp/list', 'post', (options: any): ListResponse => {
   const body = JSON.parse(options.body ?? '{}')
   const { page = 1, itemsPerPage = 10 } = body
 
