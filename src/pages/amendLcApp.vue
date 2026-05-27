@@ -103,7 +103,7 @@
   ]
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 100 },
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 60 },
     { title: '開狀申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
     { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },

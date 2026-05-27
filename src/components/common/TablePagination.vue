@@ -4,8 +4,8 @@
       active-color="teal-darken-2"
       color="teal-darken-2"
       density="compact"
-      :length="totalPages"
-      :model-value="page"
+      :length="props.totalPages"
+      :model-value="props.page"
       show-first-last-page
       :total-visible="7"
       @update:model-value="$emit('update:page', $event)"
@@ -19,8 +19,8 @@
         color="teal-darken-2"
         density="compact"
         hide-details
-        :items="itemsPerPageOptions"
-        :model-value="itemsPerPage"
+        :items="props.itemsPerPageOptions"
+        :model-value="props.itemsPerPage"
         variant="outlined"
         @update:model-value="$emit('update:itemsPerPage', $event)"
       />
@@ -28,17 +28,23 @@
 
     <v-spacer />
 
-    <span class="mx-2 text-body-2">
+    <span class="mx-2 text-body-2 text-right">
       <span class="text-red-darken-3">總筆數：</span>
-      {{ totalItems }}
-      <span v-if="isShowTotalPages">
+      {{ props.totalItems }}
+      <span v-if="props.isShowTotalPages">
         <span class="text-red-darken-3">/ 總頁數：</span>
-        {{ totalPages }}
+        {{ props.totalPages }}
       </span>
 
-      <span v-if="isShowTotalAmount">
+      <span v-if="props.isShowCurrentPageTotalAmount">
+        <span class="text-red-darken-3">/ 本頁總金額：</span>
+        NT$ {{ thousandsFormatting(props.totalPageAmount ?? 0) }}
+        <br />
+      </span>
+
+      <span v-if="props.isShowTotalAmount">
         <span class="text-red-darken-3">/ 總金額：</span>
-        NT$ {{ thousandsFormatting(totalAmount) }}
+        NT$ {{ thousandsFormatting(props.totalAmount ?? 0) }}
       </span>
     </span>
   </div>
@@ -47,7 +53,7 @@
 <script setup lang="ts">
   import { thousandsFormatting } from '@/utils/format'
 
-  withDefaults(defineProps<{
+  const props = withDefaults(defineProps<{
     page: number
     itemsPerPage: number
     totalPages: number
@@ -55,6 +61,8 @@
     totalAmount: number
     isShowTotalPages?: boolean
     isShowTotalAmount?: boolean
+    isShowCurrentPageTotalAmount?: boolean
+    totalPageAmount?: number
     itemsPerPageOptions?: number[]
   }>(), {
     itemsPerPageOptions: () => [10, 20, 50, 100],

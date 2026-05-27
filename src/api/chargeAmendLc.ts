@@ -1,0 +1,14 @@
+import type { ListPayload, ListResponse } from '@/types/chargeAmendLc'
+import { api } from './axios'
+
+/**
+ * 查詢補收開狀手續費沖正(EC)清冊
+ */
+export function getDateList (payload: ListPayload) {
+  const { page = 1, itemsPerPage = 10 } = payload
+  return api.post<ListResponse>('/api/chargeAmendLc/list', {
+    ...payload,
+    page,
+    itemsPerPage,
+  })
+}

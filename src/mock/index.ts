@@ -14,7 +14,7 @@ import './currentAmendApp' // '修狀沖正(EC)清冊'
 import './currentCancelApp' // '註銷信用狀沖正(EC)清冊'
 import './currentAmendDraftApp' // '押匯沖正(EC)清冊'
 import './loanTermModification' // '利率約定改貸沖正(EC)清冊'
-import './loanTermModification' // '利率約定改貸沖正(EC)清冊'
+import './chargeAmendLc' // '補收開狀手續費沖正(EC)清冊'
 
 // 設定 mock 配置
 Mock.setup({

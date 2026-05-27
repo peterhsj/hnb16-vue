@@ -111,7 +111,7 @@
   ]
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 100 },
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 60 },
     { title: '匯票號碼', key: 'draftNo', align: 'center', sortable: false, nowrap: true },
     { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
     { title: '申請人統一編號', key: 'applicantTaxId', align: 'center', sortable: false, nowrap: true },
