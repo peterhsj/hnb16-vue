@@ -99,7 +99,7 @@
   const isShowList = ref(true)
 
   const breadcrumbs = [
-    { title: '首頁', href: '/' },
+    { title: '首頁', to: '/' },
     { title: '申請作業' },
     { title: '當日沖正交易' },
     { title: '註銷信用狀沖正(EC)', to: '/currentCancelApp' },
@@ -127,7 +127,7 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '註銷信用狀沖正(EC)' && typeof item.to === 'string') {
+    if ((item.title === '首頁' || item.title === '註銷信用狀沖正(EC)') && typeof item.to === 'string') {
       console.log('Breadcrumb clicked:', `/#${item.to}`)
       // hash router 下用 location.href 重新導向可強制整頁重整
       // isEdit.value = false

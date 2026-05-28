@@ -156,7 +156,7 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '註銷信用狀沖正(EC)' && typeof item.to === 'string') {
+    if (item.title === '補收開狀手續費沖正(EC)' && typeof item.to === 'string') {
       console.log('Breadcrumb clicked:', `/#${item.to}`)
       // hash router 下用 location.href 重新導向可強制整頁重整
       // isEdit.value = false
@@ -219,8 +219,8 @@
     }
   }
 
-  function handleCancelAppView (amendNoticeNo: string): void {
-    console.log('View Amend Notice:', amendNoticeNo)
+  function handleDraftView (draftNo: string): void {
+    console.log('View Draft:', draftNo)
   }
 
   function handleLcView (lcNo: string): void {
