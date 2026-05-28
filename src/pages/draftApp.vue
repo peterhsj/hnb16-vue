@@ -205,7 +205,7 @@
   } from '@/types/draftApp'
 
   const breadcrumbs = [
-    { title: '首頁', href: '/' },
+    { title: '首頁', to: '/' },
     { title: '申請作業' },
     { title: '押匯申請', to: '/draftApp' },
   ]
@@ -284,12 +284,16 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '押匯申請' && typeof item.to === 'string') {
-      console.log('Breadcrumb clicked:', `/#${item.to}`)
-      // hash router 下用 location.href 重新導向可強制整頁重整
-      isEdit.value = false
-      isShowList.value = false
-      currentView.value = 'search'
+    if (typeof item.to === 'string') {
+      if (item.title === '首頁') {
+        location.href = '/'
+      }
+
+      if (item.title === '押匯申請') {
+        isEdit.value = false
+        isShowList.value = false
+        currentView.value = 'search'
+      }
     }
   }
 </script>

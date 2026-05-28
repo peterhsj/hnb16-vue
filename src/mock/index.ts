@@ -18,6 +18,8 @@ import './chargeAmendLc' // '補收開狀手續費沖正(EC)清冊'
 import './lcAdjustment' // '開狀申請當日調整帳務清冊'
 import './amendAdjustment' // '修狀沖正(EC)當日調整帳務清冊'
 import './cancelAdjustment' // '註銷申請當日調整帳務清冊'
+import './draftAdjustment' // '押匯申請當日調整帳務清冊'
+import './sentTrfStatus' // '傳送已轉帳狀態清冊'
 
 // 設定 mock 配置
 Mock.setup({
