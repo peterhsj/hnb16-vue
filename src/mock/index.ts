@@ -23,6 +23,8 @@ import './sentTrfStatus' // '傳送已轉帳狀態清冊'
 import './expiredLc' // 'CDS 過期案件主動註銷清冊'
 import './reviewLcApp' // '開狀申請書待審核清冊'
 import './reviewAmendApp' // '修改申請書待審核清冊'
+import './reviewCancelApp' // '註銷申請待審核清冊'
+import './reviewDraftApp' // '押匯申請待審核清冊'
 
 // 設定 mock 配置
 Mock.setup({
