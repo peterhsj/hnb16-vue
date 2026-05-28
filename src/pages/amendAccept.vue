@@ -11,7 +11,7 @@
 
       <h1 class="ms-4 hnb16__title">修改信用狀接受註記</h1>
 
-      <v-card class="mx-4" flat>
+      <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
         <v-data-table
           class="table-sm hnb__table bg-white"
           color="blue-darken-2"
@@ -90,73 +90,73 @@
 
             <span v-else>N/A</span>
           </template>
-
         </v-data-table>
-
-        <TablePagination
-          v-model:items-per-page="pageOptions.itemsPerPage"
-          v-model:page="pageOptions.page"
-          :total-amount="totalAmount"
-          :total-items="listItems.length"
-          :total-pages="totalPages"
-          @update:items-per-page="pageOptions.page = 1"
-        />
-
-        <v-divider class="my-4" />
-
-        <div class="d-flex justify-center mt-4">
-          <v-btn
-            class="hnb__btn--cancel mx-1"
-            @click="resetAll"
-          >
-            重設
-          </v-btn>
-
-          <v-btn
-            class="hnb__btn--default mx-1"
-            @click="saveAll"
-          >
-            確定
-          </v-btn>
-        </div>
-
-        <!-- Prompt Dialog -->
-        <PromptDialog
-          v-model:message-dialog="messageDialog"
-          :is-confirm-btn="isConfirmBtn"
-          :message="message"
-          :message-status="messageStatus"
-          :message-title="messageTitle"
-          @on-close="messageClose"
-          @prompt-confirm="messageConfirm"
-        />
-        <!-- Lc Dialog -->
-        <LcDialog
-          v-model:lc-dialog="lcDialog"
-          :bene-type="''"
-          :is-show-notice="true"
-          :is-show-version="true"
-          :lc-no="lcNo"
-          @on-close="lcDialogClose"
-          @open-lc-detail="handleOpenLcDetail"
-          @open-notice-detail="handleOpenNoticeDetail"
-        />
-        <!-- Lc Detail Dialog (版本詳細) -->
-        <LcDialog
-          v-model:lc-dialog="lcDetailDialog"
-          :bene-type="''"
-          :lc-no="lcDetailNo"
-          @on-close="lcDetailDialogClose"
-        />
-        <!-- 信用狀修改通知書 Notice Dialog -->
-        <NoticeDialog
-          v-model:notice-dialog="noticeDialog"
-          :is-show-lc="true"
-          :notice-no="noticeNo"
-          @on-close="noticeDialogClose"
-          @open-lc-detail="handleOpenLcDetail"
-        />
       </v-card>
+
+      <TablePagination
+        v-model:items-per-page="pageOptions.itemsPerPage"
+        v-model:page="pageOptions.page"
+        class="mx-4"
+        :total-amount="totalAmount"
+        :total-items="listItems.length"
+        :total-pages="totalPages"
+        @update:items-per-page="pageOptions.page = 1"
+      />
+
+      <v-divider class="ma-4" />
+
+      <div class="d-flex justify-center mt-4 mx-4">
+        <v-btn
+          class="hnb__btn--cancel mx-1"
+          @click="resetAll"
+        >
+          重設
+        </v-btn>
+
+        <v-btn
+          class="hnb__btn--default mx-1"
+          @click="saveAll"
+        >
+          確定
+        </v-btn>
+      </div>
+
+      <!-- Prompt Dialog -->
+      <PromptDialog
+        v-model:message-dialog="messageDialog"
+        :is-confirm-btn="isConfirmBtn"
+        :message="message"
+        :message-status="messageStatus"
+        :message-title="messageTitle"
+        @on-close="messageClose"
+        @prompt-confirm="messageConfirm"
+      />
+      <!-- Lc Dialog -->
+      <LcDialog
+        v-model:lc-dialog="lcDialog"
+        :bene-type="''"
+        :is-show-notice="true"
+        :is-show-version="true"
+        :lc-no="lcNo"
+        @on-close="lcDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+        @open-notice-detail="handleOpenNoticeDetail"
+      />
+      <!-- Lc Detail Dialog (版本詳細) -->
+      <LcDialog
+        v-model:lc-dialog="lcDetailDialog"
+        :bene-type="''"
+        :lc-no="lcDetailNo"
+        @on-close="lcDetailDialogClose"
+      />
+      <!-- 信用狀修改通知書 Notice Dialog -->
+      <NoticeDialog
+        v-model:notice-dialog="noticeDialog"
+        :is-show-lc="true"
+        :notice-no="noticeNo"
+        @on-close="noticeDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+      />
     </v-container>
   </div>
 </template>

@@ -21,7 +21,7 @@
       <div v-if="isShowList" class="mt-4 mx-4">
         <h1 class="hnb16__title">押匯申請當日調整帳務清冊</h1>
 
-        <v-card class="mt-4" flat>
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
           <v-data-table
             class="table-sm hnb__table bg-white"
             color="blue-darken-2"
@@ -74,17 +74,17 @@
               </v-btn>
             </template>
           </v-data-table>
-
-          <TablePagination
-            v-model:items-per-page="pageOptions.itemsPerPage"
-            v-model:page="pageOptions.page"
-            :is-show-total-amount="true"
-            :total-amount="totalAmount"
-            :total-items="listItems.length"
-            :total-pages="totalPages"
-            @update:items-per-page="pageOptions.page = 1"
-          />
         </v-card>
+
+        <TablePagination
+          v-model:items-per-page="pageOptions.itemsPerPage"
+          v-model:page="pageOptions.page"
+          :is-show-total-amount="true"
+          :total-amount="totalAmount"
+          :total-items="listItems.length"
+          :total-pages="totalPages"
+          @update:items-per-page="pageOptions.page = 1"
+        />
       </div>
 
       <!-- Prompt Dialog -->

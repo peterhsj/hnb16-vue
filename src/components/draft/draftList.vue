@@ -1,50 +1,52 @@
 <template>
   <div>
-    <v-data-table
-      v-model:items-per-page="pageOptions.itemsPerPage"
-      class="table-sm hnb__table bg-white"
-      color="blue-darken-2"
-      density="compact"
-      :headers="tableHeaders"
-      hide-default-footer
-      item-value="lcNo"
-      :items="tableItems"
-      :loading="isLoading"
-      :page="pageOptions.page"
-      sort-asc-icon="mdi-sort-ascending"
-      sort-desc-icon="mdi-sort-descending"
-      sort-icon="mdi-swap-vertical"
-      striped="odd"
-      @update:items-per-page="pageOptions.itemsPerPage = $event"
-    >
+    <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+      <v-data-table
+        v-model:items-per-page="pageOptions.itemsPerPage"
+        class="table-sm hnb__table bg-white"
+        color="blue-darken-2"
+        density="compact"
+        :headers="tableHeaders"
+        hide-default-footer
+        item-value="lcNo"
+        :items="tableItems"
+        :loading="isLoading"
+        :page="pageOptions.page"
+        sort-asc-icon="mdi-sort-ascending"
+        sort-desc-icon="mdi-sort-descending"
+        sort-icon="mdi-swap-vertical"
+        striped="odd"
+        @update:items-per-page="pageOptions.itemsPerPage = $event"
+      >
 
-      <template #item.lcNo="{ item }">
-        <a v-if="item.lcNo" class="hnb__text--link" href="#" @click.prevent="handleLcView(item.lcNo)">
-          {{ item.lcNo }}
-        </a>
+        <template #item.lcNo="{ item }">
+          <a v-if="item.lcNo" class="hnb__text--link" href="#" @click.prevent="handleLcView(item.lcNo)">
+            {{ item.lcNo }}
+          </a>
 
-        <span v-else>N/A</span>
-      </template>
+          <span v-else>N/A</span>
+        </template>
 
-      <template #item.totalAmount="{ item }">
-        ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
-      </template>
+        <template #item.totalAmount="{ item }">
+          ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
+        </template>
 
-      <template #item.availableBalance="{ item }">
-        ${{ thousandsFormatting(item.availableBalance.toLocaleString()) }}
-      </template>
+        <template #item.availableBalance="{ item }">
+          ${{ thousandsFormatting(item.availableBalance.toLocaleString()) }}
+        </template>
 
-      <template #item.action="{ item }">
-        <v-btn
-          class="hnb__btn--default mx-1 my-1"
-          size="small"
-          variant="flat"
-          @click="editItem(item.lcNo)"
-        >
-          填寫押匯申請書
-        </v-btn>
-      </template>
-    </v-data-table>
+        <template #item.action="{ item }">
+          <v-btn
+            class="hnb__btn--default mx-1 my-1"
+            size="small"
+            variant="flat"
+            @click="editItem(item.lcNo)"
+          >
+            填寫押匯申請書
+          </v-btn>
+        </template>
+      </v-data-table>
+    </v-card>
 
     <TablePagination
       v-model:items-per-page="pageOptions.itemsPerPage"
