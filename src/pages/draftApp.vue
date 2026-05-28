@@ -30,7 +30,7 @@
                 hide-details="auto"
               >
                 <v-row class="ma-0">
-                  <v-col class="px-0 pt-3 d-flex align-start" cols="auto">
+                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
                     <v-radio
                       color="teal-darken-2"
                       density="compact"
@@ -57,7 +57,7 @@
                 <v-divider class="my-1" />
 
                 <v-row class="ma-0">
-                  <v-col class="px-0 pt-3 d-flex align-start" cols="auto">
+                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
                     <v-radio
                       color="teal-darken-2"
                       density="compact"
@@ -293,6 +293,7 @@
         isEdit.value = false
         isShowList.value = false
         currentView.value = 'search'
+        searchForm.queryMode = '' // 重置查詢方式，強制使用者重新選擇
       }
     }
   }

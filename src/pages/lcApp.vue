@@ -486,16 +486,20 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '開狀申請書' && typeof item.to === 'string') {
-      console.log('Breadcrumb clicked:', `/#${item.to}`)
-      // hash router 下用 location.href 重新導向可強制整頁重整
-      isEdit.value = false
-      isShowList.value = false
-      currentView.value = 'selectType'
-      typeForm.beneficiaryType = null
-      typeForm.beneficiary = null
-      typeForm.inputType = null
-      // window.location.href = `/#${item.to}`
+
+    if (typeof item.to === 'string') {
+      if (item.title === '首頁') {
+        location.href = '/'
+      }
+
+      if (item.title === '開狀申請書') {
+        isEdit.value = false
+        isShowList.value = false
+        currentView.value = 'selectType'
+        typeForm.beneficiaryType = null
+        typeForm.beneficiary = null
+        typeForm.inputType = null
+      }
     }
   }
 </script>

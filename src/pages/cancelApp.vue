@@ -52,7 +52,7 @@
                 hide-details="auto"
               >
                 <v-row class="ma-0">
-                  <v-col class="px-0 pt-3 d-flex align-start" cols="auto">
+                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
                     <v-radio
                       color="teal-darken-2"
                       density="compact"
@@ -79,7 +79,7 @@
                 <v-divider class="my-1" />
 
                 <v-row class="ma-0">
-                  <v-col class="px-0 pt-3 d-flex align-start" cols="auto">
+                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
                     <v-radio
                       color="teal-darken-2"
                       density="compact"
@@ -226,7 +226,7 @@
   } from '@/types/cancelApp'
 
   const breadcrumbs = [
-    { title: '首頁', href: '/' },
+    { title: '首頁', to: '/' },
     { title: '申請作業' },
     { title: '註銷申請/切結書', to: '/cancelApp' },
   ]
@@ -343,14 +343,19 @@
 
   function onBreadcrumbClick (item: any): void {
     if (item.disabled || !item.to) return
-    if (item.title === '註銷申請/切結書' && typeof item.to === 'string') {
-      console.log('Breadcrumb clicked:', `/#${item.to}`)
-      // hash router 下用 location.href 重新導向可強制整頁重整
-      isEdit.value = false
-      isShowList.value = false
-      currentView.value = 'search'
-      searchForm.beneType = null
-      searchForm.queryMode = ''
+
+    if (typeof item.to === 'string') {
+      if (item.title === '首頁') {
+        location.href = '/'
+      }
+
+      if (item.title === '註銷申請/切結書') {
+        isEdit.value = false
+        isShowList.value = false
+        currentView.value = 'search'
+        searchForm.beneType = null
+        searchForm.queryMode = ''
+      }
     }
   }
 

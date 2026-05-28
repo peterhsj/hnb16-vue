@@ -141,11 +141,7 @@
       }
 
       if (item.title === '押匯沖正(EC)') {
-        // isEdit.value = false
         isShowList.value = true
-        // currentView.value = 'search'
-        // searchForm.beneType = null
-        // searchForm.queryMode = ''
       }
     }
   }

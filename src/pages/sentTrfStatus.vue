@@ -139,17 +139,17 @@
           </v-form>
         </v-card>
       </div>
+
+      <!-- 傳送已轉帳狀態清冊 -->
+      <div v-if="isShowList" class="mt-4 mx-4">
+        <h2 class="hnb16__title">
+          傳送已轉帳狀態清冊
+        </h2>
+
+        <SentTrfStatusList :form-data="propsFormData" @on-edit="handleEdit" />
+
+      </div>
     </v-container>
-  </div>
-
-  <!-- 傳送已轉帳狀態清冊 -->
-  <div v-if="isShowList" class="mt-4 mx-4">
-    <h2 class="hnb16__title">
-      傳送已轉帳狀態清冊
-    </h2>
-
-    <sentTrfStatusList :form-data="propsFormData" @on-edit="handleEdit" />
-
   </div>
 </template>
 
@@ -231,6 +231,7 @@
         isEdit.value = false
         isShowList.value = false
         currentView.value = 'search'
+        searchFormRef.value?.reset()
       }
     }
   }
