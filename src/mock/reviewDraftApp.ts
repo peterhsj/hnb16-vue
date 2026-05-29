@@ -1,4 +1,4 @@
-import type { ListItem, ListResponse } from '@/types/reviewDraftApp'
+import type { BeneListItem, BeneListResponse, ListItem, ListResponse } from '@/types/reviewDraftApp'
 import Mock from 'mockjs'
 
 const mockListItems: ListItem[] = [
@@ -89,5 +89,31 @@ Mock.mock('/api/reviewDraftApp/list', 'post', (options: any): ListResponse => {
     data: paged,
     total,
     amount: paged.reduce((sum, item) => sum + item.draftAmount, 0),
+  }
+})
+
+// ── 受益人清冊 ────────────────────────────────────────────────────────────────
+const mockBeneItems: BeneListItem[] = [
+  { beneficiary: '中鸿龋鐵股份有限公司', beneficiaryId: '30414175', count: 3 },
+  { beneficiary: '全台物流股份有限公司', beneficiaryId: '12345678', count: 2 },
+  { beneficiary: '北部供應股份有限公司', beneficiaryId: '87654321', count: 1 },
+  { beneficiary: '東部製造股份有限公司', beneficiaryId: '11223344', count: 4 },
+  { beneficiary: '南部食品股份有限公司', beneficiaryId: '55667788', count: 2 },
+]
+
+Mock.mock('/api/reviewDraftApp/beneList', 'post', (options: any): BeneListResponse => {
+  const body = JSON.parse(options.body ?? '{}')
+  const { page = 1, itemsPerPage = 10 } = body
+
+  const total = mockBeneItems.length
+  const totalPages = Math.max(1, Math.ceil(total / itemsPerPage))
+  const safePage = Math.min(Math.max(1, page), totalPages)
+  const start = (safePage - 1) * itemsPerPage
+  const paged = mockBeneItems.slice(start, start + itemsPerPage)
+
+  return {
+    data: paged,
+    total,
+    amount: paged.reduce((sum, item) => sum + item.count, 0),
   }
 })

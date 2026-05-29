@@ -112,7 +112,7 @@
     { title: '* 通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
     { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
     { title: '* 有效期限', key: 'expiryDate', align: 'center', sortable: false, nowrap: true },
-    { title: '尚待核准人員', key: 'pendingApprover', align: 'start', sortable: false, nowrap: true },
+    { title: '尚待核准人員', key: 'pendingApprover', align: 'start', sortable: false, nowrap: false, minWidth: 200 },
     { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
   ]
 

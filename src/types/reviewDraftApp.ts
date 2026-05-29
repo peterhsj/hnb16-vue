@@ -1,5 +1,17 @@
-// ── reviewDraftApp (押匯申請待審核) ──────────────────────────────────────────
+// ── 受益人清冊相關型別定義 ──────────────────────────────────────────
+export interface BeneListItem {
+  beneficiary: string // 受益人名稱
+  beneficiaryId: string // 受益人 ID
+  count: number // 筆數
+}
 
+export interface BeneListResponse {
+  data: BeneListItem[]
+  total: number
+  amount: number
+}
+
+// ── reviewDraftApp (押匯申請待審核) ──────────────────────────────────────────
 export interface ListItem {
   seqNo: number // 編號
   draftNo: string | null // 匯票號碼
@@ -24,4 +36,8 @@ export interface ListResponse {
   data: ListItem[]
   total: number
   amount: number
+}
+
+export type FormPayload = {
+  beneficiaryId: string // 受益人 ID
 }
