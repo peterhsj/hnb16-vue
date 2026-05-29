@@ -25,6 +25,7 @@ import './reviewLcApp' // '開狀申請書待審核清冊'
 import './reviewAmendApp' // '修改申請書待審核清冊'
 import './reviewCancelApp' // '註銷申請待審核清冊'
 import './reviewDraftApp' // '押匯申請待審核清冊'
+import './reviewInterestRate' // '利率約定改貸待審核清冊'
 
 // 設定 mock 配置
 Mock.setup({
