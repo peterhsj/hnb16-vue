@@ -11,7 +11,7 @@
       </div>
 
       <div v-if="currentView === 'search'">
-        <h2 class="mx-4 hnb16__title">請選擇查詢方式</h2>
+        <h2 class="mx-4 hnb16__title">查詢開狀申請書</h2>
 
         <v-card class="border-sm mx-4 pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
           <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">

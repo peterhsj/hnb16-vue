@@ -11,7 +11,7 @@
       </div>
 
       <div v-if="currentView === 'search'">
-        <h2 class="mx-4 hnb16__title">請選擇查詢方式</h2>
+        <h2 class="mx-4 hnb16__title">查詢修改通知書</h2>
 
         <v-card class="border-sm mx-4 pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
           <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
@@ -58,7 +58,7 @@
                   </v-col>
 
                   <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
-                    <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">開狀申請書號碼</div>
+                    <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">修改通知書號碼</div>
 
                     <v-text-field
                       v-model="searchForm.lcAppNo"
@@ -134,7 +134,7 @@
                       </v-col>
 
                       <v-col class="d-flex align-start ga-4" cols="12" lg="5" md="6">
-                        <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label pt-2">開狀日期</div>
+                        <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label pt-2">開立日期</div>
 
                         <v-date-input
                           v-model="searchForm.issueDateStart"
@@ -143,6 +143,7 @@
                           color="teal-darken-2"
                           density="compact"
                           :disabled="searchForm.queryMode !== 'criteria'"
+                          hide-details="auto"
                           placeholder="起日"
                           prepend-icon=""
                           :rules="rules.issueDateStartRule"
@@ -158,6 +159,7 @@
                           color="teal-darken-2"
                           density="compact"
                           :disabled="searchForm.queryMode !== 'criteria'"
+                          hide-details="auto"
                           placeholder="訖日"
                           prepend-icon=""
                           :rules="rules.issueDateEndRule"
@@ -179,24 +181,6 @@
                       v-for="item in LC_STATUS_ITEMS"
                       :key="item.value"
                       v-model="searchForm.lcStatus"
-                      color="teal-darken-2"
-                      density="compact"
-                      :disabled="searchForm.queryMode !== 'criteria'"
-                      hide-details
-                      :label="item.title"
-                      :value="item.value"
-                    />
-                  </div>
-                </v-col>
-
-                <v-col class="d-flex align-center ga-4" cols="12" lg="6" md="8">
-                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">信用狀別</div>
-
-                  <div class="d-flex flex-wrap ga-1">
-                    <v-checkbox
-                      v-for="item in LC_TYPE_ITEMS"
-                      :key="item.value"
-                      v-model="searchForm.lcType"
                       color="teal-darken-2"
                       density="compact"
                       :disabled="searchForm.queryMode !== 'criteria'"
@@ -244,7 +228,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { LcData, QueryFormPayload } from '@/types/queryLcApp'
+  import type { LcData, QueryFormPayload } from '@/types/queryAmendNotice'
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
@@ -253,7 +237,7 @@
     ISSUING_BANK_ITEMS,
     LC_STATUS_ITEMS,
     LC_TYPE_ITEMS,
-  } from '@/types/queryLcApp'
+  } from '@/types/queryAmendNotice'
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
