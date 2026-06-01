@@ -29,6 +29,7 @@ import './reviewInterestRate' // '利率約定改貸待審核清冊'
 import './queryLcApp' // '開狀申請書查詢清冊'
 import './queryAmendNotice' // '修改通知書查詢清冊'
 import './queryAmendApp' // '修改申請書查詢清冊'
+import './queryCancelApp' // '註銷申請書查詢清冊'
 // 設定 mock 配置
 Mock.setup({
   timeout: '200-600', // 模擬網路延遲
