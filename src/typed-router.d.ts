@@ -56,13 +56,13 @@ declare module 'vue-router/auto-routes' {
     '/queryClientConnect': RouteRecordInfo<'/queryClientConnect', '/queryClientConnect', Record<never, never>, Record<never, never>>,
     '/queryCompare': RouteRecordInfo<'/queryCompare', '/queryCompare', Record<never, never>, Record<never, never>>,
     '/queryDomesticLcFee': RouteRecordInfo<'/queryDomesticLcFee', '/queryDomesticLcFee', Record<never, never>, Record<never, never>>,
-    '/queryDraftList': RouteRecordInfo<'/queryDraftList', '/queryDraftList', Record<never, never>, Record<never, never>>,
+    '/queryDraft': RouteRecordInfo<'/queryDraft', '/queryDraft', Record<never, never>, Record<never, never>>,
     '/queryFpcCtsv': RouteRecordInfo<'/queryFpcCtsv', '/queryFpcCtsv', Record<never, never>, Record<never, never>>,
     '/queryFpcLcRpt': RouteRecordInfo<'/queryFpcLcRpt', '/queryFpcLcRpt', Record<never, never>, Record<never, never>>,
     '/queryInterestRate': RouteRecordInfo<'/queryInterestRate', '/queryInterestRate', Record<never, never>, Record<never, never>>,
+    '/queryLc': RouteRecordInfo<'/queryLc', '/queryLc', Record<never, never>, Record<never, never>>,
     '/queryLcApp': RouteRecordInfo<'/queryLcApp', '/queryLcApp', Record<never, never>, Record<never, never>>,
     '/queryLcFeeDetail': RouteRecordInfo<'/queryLcFeeDetail', '/queryLcFeeDetail', Record<never, never>, Record<never, never>>,
-    '/queryLcList': RouteRecordInfo<'/queryLcList', '/queryLcList', Record<never, never>, Record<never, never>>,
     '/queryMarDraft': RouteRecordInfo<'/queryMarDraft', '/queryMarDraft', Record<never, never>, Record<never, never>>,
     '/queryMarLc': RouteRecordInfo<'/queryMarLc', '/queryMarLc', Record<never, never>, Record<never, never>>,
     '/queryNegotiationFee': RouteRecordInfo<'/queryNegotiationFee', '/queryNegotiationFee', Record<never, never>, Record<never, never>>,
@@ -247,8 +247,8 @@ declare module 'vue-router/auto-routes' {
       routes: '/queryDomesticLcFee'
       views: never
     }
-    'src/pages/queryDraftList.vue': {
-      routes: '/queryDraftList'
+    'src/pages/queryDraft.vue': {
+      routes: '/queryDraft'
       views: never
     }
     'src/pages/queryFpcCtsv.vue': {
@@ -263,16 +263,16 @@ declare module 'vue-router/auto-routes' {
       routes: '/queryInterestRate'
       views: never
     }
+    'src/pages/queryLc.vue': {
+      routes: '/queryLc'
+      views: never
+    }
     'src/pages/queryLcApp.vue': {
       routes: '/queryLcApp'
       views: never
     }
     'src/pages/queryLcFeeDetail.vue': {
       routes: '/queryLcFeeDetail'
-      views: never
-    }
-    'src/pages/queryLcList.vue': {
-      routes: '/queryLcList'
       views: never
     }
     'src/pages/queryMarDraft.vue': {

@@ -31,6 +31,7 @@
     <span class="mx-2 text-body-2 text-right">
       <span class="text-red-darken-3">總筆數：</span>
       {{ props.totalItems }}
+
       <span v-if="props.isShowTotalPages">
         <span class="text-red-darken-3">/ 總頁數：</span>
         {{ props.totalPages }}
@@ -40,6 +41,16 @@
         <span class="text-red-darken-3">/ 本頁總金額：</span>
         NT$ {{ thousandsFormatting(props.totalPageAmount ?? 0) }}
         <br />
+      </span>
+
+      <span v-if="props.isShowCurrentPageTotalAmount">
+        <span class="text-red-darken-3">/ 可用餘額大於零總筆數：</span>
+        {{ props.totalPagePositiveBalanceItems ?? 0 }}
+      </span>
+
+      <span v-if="props.isShowCurrentPageTotalAmount">
+        <span class="text-red-darken-3">/ 可用餘額大於零總金額：</span>
+        NT$ {{ thousandsFormatting(props.totalPagePositiveBalanceAmount ?? 0) }}
       </span>
 
       <span v-if="props.isShowTotalAmount">
@@ -63,6 +74,8 @@
     isShowTotalAmount?: boolean
     isShowCurrentPageTotalAmount?: boolean
     totalPageAmount?: number
+    totalPagePositiveBalanceItems?: number
+    totalPagePositiveBalanceAmount?: number
     itemsPerPageOptions?: number[]
   }>(), {
     itemsPerPageOptions: () => [10, 20, 50, 100],
