@@ -43,12 +43,12 @@
         <br />
       </span>
 
-      <span v-if="props.isShowCurrentPageTotalAmount">
+      <span v-if="props.isShowTotalPagePositiveBalanceAmount">
         <span class="text-red-darken-3">/ 可用餘額大於零總筆數：</span>
         {{ props.totalPagePositiveBalanceItems ?? 0 }}
       </span>
 
-      <span v-if="props.isShowCurrentPageTotalAmount">
+      <span v-if="props.isShowTotalPagePositiveBalanceAmount">
         <span class="text-red-darken-3">/ 可用餘額大於零總金額：</span>
         NT$ {{ thousandsFormatting(props.totalPagePositiveBalanceAmount ?? 0) }}
       </span>
@@ -73,12 +73,17 @@
     isShowTotalPages?: boolean
     isShowTotalAmount?: boolean
     isShowCurrentPageTotalAmount?: boolean
+    isShowTotalPagePositiveBalanceItems?: boolean
+    isShowTotalPagePositiveBalanceAmount?: boolean
     totalPageAmount?: number
     totalPagePositiveBalanceItems?: number
     totalPagePositiveBalanceAmount?: number
     itemsPerPageOptions?: number[]
   }>(), {
     itemsPerPageOptions: () => [10, 20, 50, 100],
+    isShowTotalPagePositiveBalanceItems: false,
+    isShowTotalPagePositiveBalanceAmount: false,
+    isShowTotalAmount: false,
   })
 
   defineEmits<{

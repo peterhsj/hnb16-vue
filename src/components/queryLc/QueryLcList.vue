@@ -49,6 +49,8 @@
       v-model:page="pageOptions.page"
       :is-show-current-page-total-amount="isShowCurrentPageTotalAmount"
       :is-show-total-amount="isShowTotalAmount"
+      :is-show-total-page-positive-balance-amount="isShowTotalPagePositiveBalanceAmount"
+      :is-show-total-page-positive-balance-items="isShowTotalPagePositiveBalanceItems"
       :is-show-total-pages="isShowTotalPages"
       :total-amount="totalAmount"
       :total-items="tableItems.length"
@@ -130,9 +132,6 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
-  const isShowCurrentPageTotalAmount = ref<boolean>(true)
-  const isShowTotalPages = ref<boolean>(false)
-  const isShowTotalAmount = ref<boolean>(true)
   // const processStatus = ref<{ action: string, status: number }>({
   //   action: '',
   //   status: 0,
@@ -189,6 +188,11 @@
   const totalPageAmount = ref<number>(0) // 本頁總金額
   const totalPagePositiveBalanceItems = ref<number>(0) // 本頁可用餘額大於零總筆數
   const totalPagePositiveBalanceAmount = ref<number>(0) // 本頁可用餘額大於零總金額
+  const isShowCurrentPageTotalAmount = ref<boolean>(true)
+  const isShowTotalPages = ref<boolean>(false)
+  const isShowTotalAmount = ref<boolean>(true)
+  const isShowTotalPagePositiveBalanceItems = ref<boolean>(true)
+  const isShowTotalPagePositiveBalanceAmount = ref<boolean>(true)
 
   const totalPages = computed(() =>
     Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),

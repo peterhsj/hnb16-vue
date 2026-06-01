@@ -103,7 +103,6 @@
 
                 <v-divider class="my-1" />
 
-
                 <v-row class="ma-0">
                   <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
                     <v-radio
@@ -263,14 +262,14 @@
           押匯申請清冊
         </h2>
 
-        <queryLcList :form-data="propsFormData" @on-edit="handleEdit" />
+        <QueryDraftList :form-data="propsFormData" @on-edit="handleEdit" />
       </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { LcData, QueryFormPayload } from '@/types/queryLc'
+  import type { LcData, QueryFormPayload } from '@/types/queryDraft'
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
@@ -279,7 +278,7 @@
     ISSUING_BANK_ITEMS,
     LC_STATUS_ITEMS,
     LC_TYPE_ITEMS,
-  } from '@/types/queryLc'
+  } from '@/types/queryDraft'
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
@@ -352,7 +351,7 @@
     searchFormRef.value?.reset()
   }
 
-  function submitEditForm (): void {
+  function _submitEditForm (): void {
     // 送出編輯表單後的處理邏輯（例如刷新列表、顯示成功訊息等）
     console.log('編輯表單已送出，執行相關處理')
     // 這裡可以根據實際需求來決定是否要關閉編輯表單或是刷新列表等
