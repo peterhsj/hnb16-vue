@@ -133,7 +133,34 @@
                         />
                       </v-col>
 
-                      <v-col class="d-flex align-start ga-4" cols="12" lg="5" md="6">
+                      <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                        <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">狀態</div>
+
+                        <v-select
+                          v-model="searchForm.lcStatus"
+                          bg-color="white"
+                          chips
+                          closable-chips
+                          color="teal-darken-2"
+                          density="compact"
+                          :disabled="searchForm.queryMode !== 'criteria'"
+                          hide-details
+                          item-title="title"
+                          item-value="value"
+                          :items="[...LC_STATUS_ITEMS]"
+                          multiple
+                          placeholder="請選擇"
+                          variant="outlined"
+                        >
+                          <template #item="{ props }">
+                            <v-list-item v-bind="props">
+                              <template #prepend />
+                            </v-list-item>
+                          </template>
+                        </v-select>
+                      </v-col>
+
+                      <v-col class="d-flex align-start ga-4" cols="12" lg="4" md="6">
                         <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label pt-2">開立日期</div>
 
                         <v-date-input
@@ -170,27 +197,6 @@
                   </v-col>
                 </v-row>
               </v-radio-group>
-
-              <!-- v-checkbox 必須移出 v-radio-group，否則勾選時 v-checkbox 會透過 inject 干擾 queryMode -->
-              <v-row align="center" class="ma-0 ps-9">
-                <v-col class="d-flex align-center ga-4" cols="12" lg="6" md="8">
-                  <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">狀態</div>
-
-                  <div class="d-flex flex-wrap ga-1">
-                    <v-checkbox
-                      v-for="item in LC_STATUS_ITEMS"
-                      :key="item.value"
-                      v-model="searchForm.lcStatus"
-                      color="teal-darken-2"
-                      density="compact"
-                      :disabled="searchForm.queryMode !== 'criteria'"
-                      hide-details
-                      :label="item.title"
-                      :value="item.value"
-                    />
-                  </div>
-                </v-col>
-              </v-row>
             </div>
 
             <v-row>
@@ -221,7 +227,7 @@
           修改通知書清冊
         </h2>
 
-        <QueryLcAppList :form-data="propsFormData" @on-edit="handleEdit" />
+        <QueryAmendNoticeList :form-data="propsFormData" @on-edit="handleEdit" />
       </div>
     </v-container>
   </div>

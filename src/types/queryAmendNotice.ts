@@ -85,23 +85,14 @@ export const ISSUING_BANK_ITEMS: readonly IssuingBankItem[] = [
 // ── 清冊資料 ──────────────────────────────────────────────────────────────────
 interface ListItem {
   seqNo: number           // 編號
-  appNo: string         // 開狀申請書號碼
+  amendNoticeNo: string   // 修改通知書號碼
   lcNo: string            // 信用狀號碼
   lcType: LcTypeOption    // 信用狀別
+  issueDate: string       // 開立日期
   applicant: string       // 申請人
-  issuingBank: string     // 通知銀行
-  applicationDate: string // 申請日期
-  issueDate: string       // 開狀日期
-  totalAmount: number     // 金額
   beneficiary: string     // 受益人
+  issuingBank: string     // 通知銀行
   status: string          // 狀態
-  pendingApprover: string // 待審核人員
-  lcFeeReceipt: boolean // 開狀手續費收據
-  depositReceipt: boolean // 保證金收款證明
-  cashPaySlip: boolean // 現金繳費單
-  acceptanceFeeReceipt: boolean // 承兌手續費收據
-  transferVoucher: boolean // 轉帳支出傳票
-  eBankFeeReceipt: boolean // 電子帳簿開狀手續費收據
 }
 
 export type { ListItem }
