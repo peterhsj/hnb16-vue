@@ -220,7 +220,7 @@
           信用狀清冊
         </h2>
 
-        <queryLcList :form-data="propsFormData" @on-edit="handleEdit" />
+        <QueryLcList :form-data="propsFormData" @on-edit="handleEdit" />
       </div>
     </v-container>
   </div>
