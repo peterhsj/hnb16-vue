@@ -300,6 +300,8 @@ body,
     th {
       background-color: #13989e;
       // border: 1px solid #90bcbe;
+      border-left: 1px solid #90bcbe;
+      border-bottom: 1px solid #90bcbe !important;
       color: #FFFFFF;
 
       // &:hover, &:focus {

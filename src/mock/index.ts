@@ -32,6 +32,7 @@ import './queryDraft' // '押匯查詢清冊'
 import './queryAmendNotice' // '修改通知書查詢清冊'
 import './queryAmendApp' // '修改申請書查詢清冊'
 import './queryCancelApp' // '註銷申請書查詢清冊'
+import './queryMarLc' // '查詢主管核准開狀紀錄清冊'
 
 // 設定 mock 配置
 Mock.setup({
