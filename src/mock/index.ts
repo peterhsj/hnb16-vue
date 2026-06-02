@@ -37,6 +37,7 @@ import './queryMarDraft' // '查詢主管核准押匯紀錄清冊'
 import './queryOutstandLc' // '查詢未結案信用狀額度與保證金清冊'
 import './queryInterestRate' // '查詢利率約定改貸清冊'
 import './queryAccount' // '查詢會計帳務分錄'
+import './promptDraft' // '押匯提示'
 
 // 設定 mock 配置
 Mock.setup({
