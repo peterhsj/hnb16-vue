@@ -100,7 +100,7 @@
 
           <div>
             <v-btn
-              color="orange-darken-2"
+              class="hnb__btn--orange"
               prepend-icon="mdi-printer"
               size="small"
               variant="flat"
