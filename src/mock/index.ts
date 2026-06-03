@@ -42,6 +42,8 @@ import './rePromptDraft' // '押匯重新提示'
 import './chargeLc' // '補收開狀手續費'
 import './setGroup' // '設定客戶群組'
 import './setCustomer' // '設定客戶資料'
+import './setCustomerBranch' // '設定客戶所屬分行'
+import './setBeneficiary' // '設定受益人資料'
 
 // 設定 mock 配置
 Mock.setup({

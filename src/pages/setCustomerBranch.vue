@@ -17,13 +17,14 @@
           </h2>
         </div>
 
-        <SetCustomerList />
+        <SetCustomerBranchList />
       </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
+  import SetCustomerBranchList from '@/components/setCustomerBranch/SetCustomerBranchList.vue'
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '客戶管理作業' },
