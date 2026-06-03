@@ -67,21 +67,25 @@
   const props = withDefaults(defineProps<{
     page: number
     itemsPerPage: number
-    totalPages: number
+    // 總筆數
     totalItems: number
-    totalAmount: number
+    // 總頁數
     isShowTotalPages?: boolean
+    totalPages: number
+    // 總金額
     isShowTotalAmount?: boolean
+    totalAmount?: number
+    // 本頁總金額
     isShowCurrentPageTotalAmount?: boolean
-    isShowTotalPagePositiveBalanceItems?: boolean
-    isShowTotalPagePositiveBalanceAmount?: boolean
     totalPageAmount?: number
+    // 可用餘額大於零總筆數
+    isShowTotalPagePositiveBalanceAmount?: boolean
     totalPagePositiveBalanceItems?: number
+    // 可用餘額大於零總金額
     totalPagePositiveBalanceAmount?: number
     itemsPerPageOptions?: number[]
   }>(), {
     itemsPerPageOptions: () => [10, 20, 50, 100],
-    isShowTotalPagePositiveBalanceItems: false,
     isShowTotalPagePositiveBalanceAmount: false,
     isShowTotalAmount: false,
   })

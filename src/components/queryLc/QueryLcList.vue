@@ -50,7 +50,6 @@
       :is-show-current-page-total-amount="isShowCurrentPageTotalAmount"
       :is-show-total-amount="isShowTotalAmount"
       :is-show-total-page-positive-balance-amount="isShowTotalPagePositiveBalanceAmount"
-      :is-show-total-page-positive-balance-items="isShowTotalPagePositiveBalanceItems"
       :is-show-total-pages="isShowTotalPages"
       :total-amount="totalAmount"
       :total-items="tableItems.length"
