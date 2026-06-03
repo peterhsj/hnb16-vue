@@ -9,11 +9,16 @@
         </v-breadcrumbs>
       </div>
 
-      <h1 class="hnb16__title">補收開狀手續費</h1>
+      <!-- 補收開狀手續費 -->
+      <div class="mt-4 mx-4">
+        <div class="d-flex align-center justify-space-between">
+          <h2 class="hnb16__title">
+            補收開狀手續費 ( 押匯時開狀行作業 )
+          </h2>
+        </div>
 
-      <v-card class="pa-6 mt-4" flat>
-        <p class="text-blue-grey-darken-2">此功能頁面開發中...</p>
-      </v-card>
+        <ChargeLcList />
+      </div>
     </v-container>
   </div>
 </template>

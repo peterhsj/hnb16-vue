@@ -9,11 +9,50 @@
         </v-breadcrumbs>
       </div>
 
-      <h1 class="hnb16__title">網銀押匯提示</h1>
+      <!-- 網銀押匯提示 -->
+      <div class="mt-4 mx-4">
+        <div class="d-flex align-center justify-space-between">
+          <h2 class="hnb16__title">
+            網銀押匯提示
+          </h2>
 
-      <v-card class="pa-6 mt-4" flat>
-        <p class="text-blue-grey-darken-2">此功能頁面開發中...</p>
-      </v-card>
+          <div>
+            <v-btn
+              class="hnb__btn--default mx-1"
+              prepend-icon="mdi-download"
+              size="small"
+              variant="flat"
+              @click="handleDownload"
+            >
+              下載電子檔
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1"
+              prepend-icon="mdi-printer"
+              size="small"
+              variant="flat"
+              @click="handlePrint"
+            >
+              列印
+            </v-btn>
+
+            <span> | </span>
+
+            <v-btn
+              class="hnb__btn--default mx-1"
+              prepend-icon="mdi-download"
+              size="small"
+              variant="flat"
+              @click="nextBeneficiary"
+            >
+              下一個受益人
+            </v-btn>
+          </div>
+        </div>
+
+        <PromptDraftList />
+      </div>
     </v-container>
   </div>
 </template>
@@ -24,4 +63,16 @@
     { title: '電子押匯提示作業' },
     { title: '網銀押匯提示', disabled: true },
   ]
+
+  function handlePrint (): void {
+    window.print()
+  }
+
+  function handleDownload (): void {
+    console.log('下載電子檔')
+  }
+
+  function nextBeneficiary (): void {
+    console.log('下一個受益人')
+  }
 </script>

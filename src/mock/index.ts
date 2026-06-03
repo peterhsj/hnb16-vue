@@ -39,6 +39,8 @@ import './queryInterestRate' // '查詢利率約定改貸清冊'
 import './queryAccount' // '查詢會計帳務分錄'
 import './promptDraft' // '押匯提示'
 import './rePromptDraft' // '押匯重新提示'
+import './chargeLc' // '補收開狀手續費'
+import './setGroup' // '設定客戶群組'
 
 // 設定 mock 配置
 Mock.setup({
