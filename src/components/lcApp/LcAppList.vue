@@ -71,27 +71,37 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
+
+    <!-- 預覽開狀申請書 Dialogs（依受益人類別顯示） -->
+    <LcAppDialog
+      v-if="searchForm?.beneficiaryType"
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      :bene-type="searchForm.beneficiaryType"
+      @on-close="appDialogClose"
+    />
+
     <!-- App For Cds Dialog -->
-    <AppForCdsDialog
+    <!-- <AppForCdsDialog
       v-if="searchForm.beneficiaryType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- App For Fpc Dialog -->
-    <AppForFpcDialog
+    <!-- <AppForFpcDialog
       v-if="searchForm.beneficiaryType === 'fpc'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- App For Other Dialog -->
-    <AppForOtherDialog
+    <!-- <AppForOtherDialog
       v-if="searchForm.beneficiaryType === 'other'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"

@@ -1255,7 +1255,15 @@
     </v-card>
 
     <!-- 預覽開狀申請書 Dialogs（依受益人類別顯示） -->
-    <AppForCdsDialog
+    <LcAppDialog
+      v-if="formData.beneType"
+      v-model:app-dialog="appDialog"
+      :app-no="appNo"
+      :bene-type="formData.beneType"
+      @on-close="appDialogClose"
+    />
+
+    <!-- <AppForCdsDialog
       v-if="formData.beneType === 'cds'"
       v-model:app-dialog="appDialog"
       :app-no="appNo"
@@ -1274,7 +1282,7 @@
       v-model:app-dialog="appDialog"
       :app-no="appNo"
       @on-close="appDialogClose"
-    />
+    /> -->
 
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
