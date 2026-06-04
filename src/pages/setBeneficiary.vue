@@ -18,34 +18,20 @@
               <v-radio-group
                 v-model="searchForm.queryMode"
                 hide-details="auto"
+                inline
               >
                 <v-row class="ma-0">
-                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
+                  <v-col v-for="option in QUERY_MODE_OPTIONS" :key="option.value" class="px-2" cols="auto">
                     <v-radio
                       color="teal-darken-2"
                       density="compact"
                       hide-details
-                      value="fpc"
-                    />
-                  </v-col>
-
-                  <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
-                    <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">台塑 e 化集團</div>
-                  </v-col>
-                </v-row>
-
-                <v-row class="ma-0">
-                  <v-col class="px-0 pt-4 d-flex align-start" cols="auto">
-                    <v-radio
-                      color="teal-darken-2"
-                      density="compact"
-                      hide-details
-                      value="cds"
-                    />
-                  </v-col>
-
-                  <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
-                    <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">CDS 客戶受益人</div>
+                      :value="option.value"
+                    >
+                      <template #label>
+                        <span class="px-2">{{ option.title }}</span>
+                      </template>
+                    </v-radio>
                   </v-col>
                 </v-row>
               </v-radio-group>
@@ -97,6 +83,17 @@
     { title: '客戶管理作業' },
     { title: '受益人資料', disabled: true },
   ]
+
+  interface QueryModeItem {
+    value: string
+    title: string
+  }
+
+  const QUERY_MODE_OPTIONS: QueryModeItem[] = [
+    { value: 'fpc', title: '台塑 e 化集團' },
+    { value: 'cds', title: 'CDS 客戶受益人' },
+  ]
+
   const currentView = ref('search')
   const isEdit = ref(false)
   const isShowList = ref(false)
