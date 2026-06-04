@@ -52,6 +52,7 @@
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialogWidth="dialogWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -79,6 +80,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const dialogWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const totalAmount = ref<number>(0)
@@ -155,21 +157,33 @@
 
   function handleApprove (senNo: string): void {
     console.log('核准，信用狀號碼:', senNo)
+    dialogWidth.value = '400px'
     messageTitle.value = '作業訊息'
     message.value = `您確定將核准所選取的資料嗎？`
     processStatus.value = 'approve'
-    messageStatus.value = 'success'
+    messageStatus.value = 'alert'
+    dialogWidth.value = '400px'
     isConfirmBtn.value = true
     messageDialog.value = true
   }
 
-  function confirmApprove (): void {
+  async function confirmApprove (): Promise<void> {
     console.log('確認核准，執行相關邏輯')
     // 在此處執行核准的 API 呼叫或其他邏輯
+    await fetchDataList() // 刷新列表資料
+    nextTick(() => {
+      dialogWidth.value = '300px'
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+    })
   }
 
   function handleReject (senNo: string): void {
     console.log('拒絕，信用狀號碼:', senNo)
+    dialogWidth.value = '400px'
     messageTitle.value = '作業訊息'
     message.value = `您確定將拒絕所選取的資料嗎？`
     processStatus.value = 'reject'
@@ -178,9 +192,18 @@
     messageDialog.value = true
   }
 
-  function confirmReject (): void {
+  async function confirmReject (): Promise<void> {
     console.log('確認拒絕，執行相關邏輯')
     // 在此處執行拒絕的 API 呼叫或其他邏輯
+    await fetchDataList() // 刷新列表資料
+    nextTick(() => {
+      dialogWidth.value = '300px'
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+    })
   }
 
   onMounted(() => {
