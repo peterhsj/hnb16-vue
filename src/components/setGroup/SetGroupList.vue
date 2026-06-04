@@ -35,6 +35,7 @@
             variant="flat"
             @click="handleUpdate(item.senNo)"
           >
+            <v-icon class="me-1" icon="mdi-content-save" size="16" />
             儲存
           </v-btn>
         </template>
@@ -47,13 +48,13 @@
       :is-show-total-pages="isShowTotalPages"
       :total-amount="totalAmount"
       :total-items="tableItems.length"
-      :total-page-amount="totalPageAmount"
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="dialogWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -84,6 +85,7 @@
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const totalAmount = ref<number>(0)
+  const dialogWidth = ref<string>('')
   // const processStatus = ref<{ action: string, status: number }>({
   //   action: '',
   //   status: 0,
@@ -160,6 +162,12 @@
 
   function handleUpdate (senNo: string): void {
     console.log('更新，信用狀號碼:', senNo)
+    dialogWidth.value = '300px'
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
   }
 
   onMounted(() => {

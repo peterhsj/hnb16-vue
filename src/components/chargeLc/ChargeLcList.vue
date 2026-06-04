@@ -79,9 +79,18 @@
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
-    <!-- Prompt Dialog -->
+
+    <!-- 補收費用 Dialog -->
+    <EditChargeLcDialog
+      v-model:is-edit-dialog-open="isEditDialogOpen"
+      :lc-no="selectedLcNo"
+      @on-close="editDialogClose"
+      @save-customer-data="saveCustomerData"
+    />
+
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -132,6 +141,10 @@
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
+
+  // Edit Dialog
+  const isEditDialogOpen = ref(false)
+  const selectedLcNo = ref<string>('')
   // Draft Dialog
   const draftDialog = ref(false)
   const draftNo = ref<string>('')
@@ -150,15 +163,13 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const isShowCurrentPageTotalAmount = ref<boolean>(true)
   const isShowTotalAmount = ref<boolean>(true)
   const totalAmount = ref<number>(0)
-  // const processStatus = ref<{ action: string, status: number }>({
-  //   action: '',
-  //   status: 0,
-  // })
+  const processStatus = ref<string>('')
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true, width: 80 },
@@ -238,10 +249,51 @@
 
   function handleCharge (lcNo: string): void {
     console.log('補收費用，信用狀號碼:', lcNo)
+    selectedLcNo.value = lcNo
+    isEditDialogOpen.value = true
   }
 
   function handleNotCharge (lcNo: string): void {
     console.log('不收費用，信用狀號碼:', lcNo)
+    messageWidth.value = '400px'
+    messageTitle.value = '作業訊息'
+    message.value = `確定不再補收此次之開狀手續費？`
+    messageStatus.value = 'alert'
+    processStatus.value = 'notCharge'
+    isConfirmBtn.value = true
+    messageDialog.value = true
+  }
+
+  function confirmNotCharge (): void {
+    console.log('確認不收費用，執行相關邏輯')
+    // 在此處執行不收費用的 API 呼叫或其他邏輯
+    fetchLcAppList()
+    nextTick(() => {
+      messageWidth.value = '300px'
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+    })
+  }
+
+  function saveCustomerData (): void {
+    // 在這裡處理保存客戶資料的邏輯
+    // 例如，可以發送 API 請求將資料保存到後端
+    console.log('保存客戶資料')
+    isEditDialogOpen.value = false
+    messageWidth.value = '400px'
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成！`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+  }
+
+  function editDialogClose (): void {
+    isEditDialogOpen.value = false
+    selectedLcNo.value = ''
   }
 
   onMounted(fetchLcAppList)
@@ -294,6 +346,9 @@
 
   // 確認 message
   function messageConfirm (): void {
+    if (processStatus.value === 'notCharge') {
+      confirmNotCharge()
+    }
     messageDialog.value = false
   }
 </script>

@@ -25,6 +25,7 @@
             variant="flat"
             @click="handleApprove(item.senNo)"
           >
+            <v-icon class="me-1" icon="mdi-check" size="18" />
             核准
           </v-btn>
 
@@ -34,6 +35,7 @@
             variant="flat"
             @click="handleReject(item.senNo)"
           >
+            <v-icon class="me-1" icon="mdi-close" size="18" />
             拒絕
           </v-btn>
         </template>
@@ -52,7 +54,7 @@
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
-      :dialogWidth="dialogWidth"
+      :dialog-width="dialogWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"

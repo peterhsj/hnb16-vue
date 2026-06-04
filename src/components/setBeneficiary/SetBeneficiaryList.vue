@@ -23,7 +23,8 @@
             :color="item.reviewStatus === true ? 'green' : item.reviewStatus === false ? 'red' : 'grey'"
             size="small"
           >
-            {{ item.reviewStatus ? '啟用' : '停用' }}
+            <v-icon class="me-1" :icon="item.reviewStatus ? 'mdi-check' : 'mdi-stop'" size="18" />
+            <span>{{ item.reviewStatus ? '啟用' : '停用' }}</span>
           </v-chip>
         </template>
 

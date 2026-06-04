@@ -29,27 +29,25 @@ export interface TransactionTypeItem {
   readonly value: TransactionTypeOption
 }
 
-export interface QueryFormPayload {
-  beneficiary: string | null // 受益人
-  buyerTaxId: string | null // 買受人統編
-  lcNo: string | null // 信用狀號碼
-  draftNo: string | null // 匯票號碼
-  appDateStart: string | null // 開狀日期起
-  appDateEnd: string | null // 開狀日期訖
-  issueDateStart: string | null // 押匯日期起
-  issueDateEnd: string | null // 押匯日期訖
+export interface ChargePaymentMethodItem {
+  readonly title: string
+  readonly value: string
 }
 
-export function createInitialQueryForm (): QueryFormPayload {
+export const CHARGE_PAYMENT_METHOD_OPTIONS: readonly ChargePaymentMethodItem[] = [
+  { title: '現金', value: 'cash' },
+  { title: '活存', value: 'currentDeposit' },
+  { title: '支存', value: 'savingsDeposit' },
+  { title: '轉出科目', value: 'transferAccount' },
+] as const
+
+export interface FormPayload {
+  lcNo: string | null // 信用狀號碼
+}
+
+export function createInitialQueryForm (): FormPayload {
   return {
-    beneficiary: null, // 受益人
-    buyerTaxId: null, // 買受人統編
     lcNo: null, // 信用狀號碼
-    draftNo: null, // 匯票號碼
-    appDateStart: null, // 開狀日期起
-    appDateEnd: null, // 開狀日期訖
-    issueDateStart: null, // 押匯日期起
-    issueDateEnd: null, // 押匯日期訖
   }
 }
 

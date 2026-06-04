@@ -28,6 +28,7 @@
             variant="flat"
             @click="handleUpdate(item.senNo)"
           >
+            <v-icon class="me-1" icon="mdi-pencil" size="16" />
             編輯
           </v-btn>
         </template>
@@ -62,6 +63,8 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDatacList } from '@/api/setCustomer'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+
+  const emits = defineEmits(['update'])
 
   const { handleApiError } = useApiErrorHandler()
 
@@ -151,7 +154,7 @@
   }
 
   function handleUpdate (senNo: string): void {
-    console.log('更新，信用狀號碼:', senNo)
+    emits('update', senNo)
   }
 
   onMounted(() => {
