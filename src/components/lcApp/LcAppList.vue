@@ -80,28 +80,6 @@
       :bene-type="searchForm.beneficiaryType"
       @on-close="appDialogClose"
     />
-
-    <!-- App For Cds Dialog -->
-    <!-- <AppForCdsDialog
-      v-if="searchForm.beneficiaryType === 'cds'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    /> -->
-    <!-- App For Fpc Dialog -->
-    <!-- <AppForFpcDialog
-      v-if="searchForm.beneficiaryType === 'fpc'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    /> -->
-    <!-- App For Other Dialog -->
-    <!-- <AppForOtherDialog
-      v-if="searchForm.beneficiaryType === 'other'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    /> -->
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"

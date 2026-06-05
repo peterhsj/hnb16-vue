@@ -1263,27 +1263,6 @@
       @on-close="appDialogClose"
     />
 
-    <!-- <AppForCdsDialog
-      v-if="formData.beneType === 'cds'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    />
-
-    <AppForFpcDialog
-      v-if="formData.beneType === 'fpc'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    />
-
-    <AppForOtherDialog
-      v-if="formData.beneType === 'other'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    /> -->
-
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
