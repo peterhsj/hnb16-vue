@@ -338,21 +338,24 @@ body,
 
     // 垂直表格
     &--vertical {
+      border-top: 2px solid #90bcbe;
+      border-right: 2px solid #90bcbe;
 
       th {
         background-color: #e7f7f8;
         color: #333333;
       }
 
-      th:not(:first-child),
-      td:not(:first-child),
-      &--left-border {
-        // border-left: 1px solid #90bcbe;
-        border-bottom: 1px solid #90bcbe !important;
-      }
+      // th:not(:first-child),
+      // td:not(:first-child),
+      // &--left-border {
+      //   // border-left: 1px solid #90bcbe !important;
+      //   border-bottom: 1px solid #90bcbe !important;
+      // }
 
       th, td {
         padding: 8px 12px !important;
+        border-left: 1px solid #90bcbe !important;
         border-bottom: 1px solid #90bcbe !important;
       }
     }
@@ -445,6 +448,13 @@ body,
     }
   }
 
+  &__line {
+    &--indent {
+      padding-left: 1rem;
+      text-indent: -1.3rem;
+    }
+  }
+
 
   // 按鈕
   &__btn {
@@ -464,7 +474,7 @@ body,
       color: #ffffff;
       // height: 32px;
       &:hover {
-        background-color: #df0011;
+        background-color: #f19a18;
       }
     }
 

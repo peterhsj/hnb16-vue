@@ -31,24 +31,28 @@
         >
           <template #header.accepted>
             <div class="d-flex flex-column align-center">
+              <span class="mb-1">接受</span>
+
               <v-btn
-                class="hnb__btn--select my-1"
+                class="hnb__btn--select"
                 size="small"
                 @click="acceptAll"
               >
-                全部接受
+                全選
               </v-btn>
             </div>
           </template>
 
           <template #header.rejected>
             <div class="d-flex flex-column align-center">
+              <span class="mb-1">不接受</span>
+
               <v-btn
-                class="hnb__btn--select my-1"
+                class="hnb__btn--select"
                 size="small"
                 @click="rejectAll"
               >
-                全部不接受
+                全選
               </v-btn>
             </div>
           </template>
@@ -59,7 +63,7 @@
                 :checked="item.isAccepted === true"
                 :name="`accept-${item.lcNo}`"
                 type="radio"
-                @change="item.isAccepted = true"
+                @click="handleAcceptClick(item, true)"
               >
             </div>
           </template>
@@ -70,7 +74,7 @@
                 :checked="item.isAccepted === false"
                 :name="`accept-${item.lcNo}`"
                 type="radio"
-                @change="item.isAccepted = false"
+                @click="handleAcceptClick(item, false)"
               >
             </div>
           </template>
@@ -189,9 +193,9 @@
   const processStatus = ref<string>('')
 
   const amendAcceptHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, width: 50 },
-    { title: '接受', key: 'accepted', align: 'center', sortable: false, width: 50 },
-    { title: '不接受', key: 'rejected', align: 'center', sortable: false, width: 50 },
+    { title: '編號', key: 'seqNo', align: 'center', sortable: false, width: 80 },
+    { title: '接受', key: 'accepted', align: 'center', sortable: false, width: 80 },
+    { title: '不接受', key: 'rejected', align: 'center', sortable: false, width: 80 },
     { title: '修改通知書號碼', key: 'amendNoticeNo', align: 'center', sortable: false },
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false },
     { title: '信用狀別', key: 'lcType', align: 'center', sortable: false },
@@ -258,12 +262,20 @@
     }
   }
 
+  // 處理接受/不接受單選點擊
+  function handleAcceptClick (item: AmendAcceptItem, acceptValue: boolean): void {
+    // 如果點擊已選中的選項，則取消選取
+    item.isAccepted = item.isAccepted === acceptValue ? null : acceptValue
+  }
+
+  // 全部接受
   function acceptAll (): void {
     for (const item of listItems.value) {
       item.isAccepted = true
     }
   }
 
+  // 全部不接受
   function rejectAll (): void {
     for (const item of listItems.value) {
       item.isAccepted = false

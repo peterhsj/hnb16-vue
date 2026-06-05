@@ -3,6 +3,7 @@ import type { LcTypeOption } from '@/types/common'
 // ── currentAmendApp (修狀沖正 EC) ─────────────────────────────────────────
 export interface ListItem {
   seqNo: number
+  amendAppNo: string
   amendNoticeNo: string | null
   lcNo: string
   lcType: LcTypeOption
