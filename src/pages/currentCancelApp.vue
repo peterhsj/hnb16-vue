@@ -72,9 +72,29 @@
         />
       </div>
 
+      <!-- 註銷申請 / 切結書 -->
+      <div v-if="isShowApp" class="mt-4 mx-4">
+        <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
+          <v-card-text class="bg-grey-lighten-4 pa-3">
+            <CancelAppInfo :data="form" :is-show-deposit="true" />
+            <!-- ===== 共用底部按鈕列 ===== -->
+            <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
+              <v-btn class="hnb__btn--cancel mx-1" @click="onCancel">
+                取消
+              </v-btn>
+
+              <v-btn class="hnb__btn--default mx-1" @click="handleEcData">
+                當日沖正(EC)交易
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -82,13 +102,39 @@
         @on-close="messageClose"
         @prompt-confirm="messageConfirm"
       />
+      <!-- Lc Dialog -->
+      <LcDialog
+        v-model:lc-dialog="lcDialog"
+        :bene-type="''"
+        :is-show-notice="true"
+        :is-show-version="true"
+        :lc-no="lcNo"
+        @on-close="lcDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+        @open-notice-detail="handleOpenNoticeDetail"
+      />
+      <!-- Lc Detail Dialog (版本詳細) -->
+      <LcDialog
+        v-model:lc-dialog="lcDetailDialog"
+        :bene-type="''"
+        :lc-no="lcDetailNo"
+        @on-close="lcDetailDialogClose"
+      />
+      <!-- 信用狀修改通知書 Notice Dialog -->
+      <NoticeDialog
+        v-model:notice-dialog="noticeDialog"
+        :is-show-lc="true"
+        :notice-no="noticeNo"
+        @on-close="noticeDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+      />
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
   import type { PageOptions } from '@/types/common'
-  import type { ListItem } from '@/types/currentCancelApp'
+  import type { CancelAppData, ListItem } from '@/types/currentCancelApp'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/currentCancelApp'
@@ -97,6 +143,23 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+
+  // 註銷申請切結書
+  const isShowApp = ref(false)
+  const form = ref<CancelAppData>({
+    appNo: '',
+    beneType: '',
+  })
+
+  // Lc Dialog
+  const lcDialog = ref(false)
+  const lcNo = ref<string>('')
+  // Lc Detail Dialog (版本詳細)
+  const lcDetailDialog = ref(false)
+  const lcDetailNo = ref<string>('')
+  // Notice Dialog
+  const noticeDialog = ref(false)
+  const noticeNo = ref<string>('')
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -123,6 +186,7 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
+  const messageWidth = ref<string>('auto')
   const processStatus = ref<string>('')
 
   function onBreadcrumbClick (item: any): void {
@@ -191,15 +255,98 @@
     }
   }
 
-  function handleCancelAppView (amendNoticeNo: string): void {
-    console.log('View Amend Notice:', amendNoticeNo)
+  // 開啟當日沖正(EC)交易註銷申請書
+  function handleCancelAppView (cancelAppNo: string): void {
+    console.log('View Cancel App:', cancelAppNo)
+    isShowList.value = false
+    isShowApp.value = true
+    form.value = {
+      appNo: cancelAppNo,
+      beneType: 'cds', // 假設受益人類型為 cds
+    }
   }
 
-  function handleLcView (lcNo: string): void {
-    console.log('View LC:', lcNo)
+  // 取消註銷申請書檢視
+  function onCancel (): void {
+    isShowApp.value = false
+    form.value = {
+      appNo: '',
+      beneType: '',
+    }
+    isShowList.value = true
   }
 
-  onMounted(fetchTableList)
+  // 處理當日沖正(EC)交易按鈕點擊事件
+  function handleEcData (): void {
+    console.log('當日沖正(EC)交易按鈕被點擊')
+    // 這裡可以加入實際的處理邏輯，例如跳轉到當日沖正(EC)交易頁面或顯示相關資訊等
+    messageDialog.value = true
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要沖正此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
+  }
+
+  // 送出當日沖正(EC)交易的確認邏輯
+  async function confirmEcData (): Promise<void> {
+    console.log('確認沖正當日沖正(EC)交易的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行沖正操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！'
+      messageStatus.value = 'success'
+      messageWidth.value = '400px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
+  // 查看信用狀 Lc Dialog
+  function handleLcView (value: string): void {
+    lcNo.value = value
+    lcDialog.value = true
+  }
+
+  // 離開 Lc Dialog
+  function lcDialogClose (): void {
+    lcDialog.value = false
+    lcNo.value = ''
+  }
+
+  // 開啟版本詳細 Dialog
+  function handleOpenLcDetail (value: string): void {
+    lcDetailNo.value = value
+    lcDetailDialog.value = true
+  }
+
+  // 離開 Lc Detail Dialog
+  function lcDetailDialogClose (): void {
+    lcDetailDialog.value = false
+    lcDetailNo.value = ''
+  }
+
+  // 開啟修改通知書 Detail Dialog
+  function handleOpenNoticeDetail (value: string): void {
+    noticeNo.value = value
+    noticeDialog.value = true
+  }
+
+  // 離開修改通知書 Detail Dialog
+  function noticeDialogClose (): void {
+    noticeDialog.value = false
+    noticeNo.value = ''
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
@@ -208,6 +355,11 @@
 
   // 確認 message
   function messageConfirm (): void {
+    if (processStatus.value === 'ecData') {
+      // 在這裡處理當日沖正(EC)交易的邏輯
+      console.log('確認沖正當日沖正(EC)交易')
+      confirmEcData()
+    }
     messageDialog.value = false
   }
 </script>

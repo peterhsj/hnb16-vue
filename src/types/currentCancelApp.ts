@@ -24,3 +24,8 @@ export interface ListResponse {
   total: number
   amount: number
 }
+// ── Props──────────────────────────────────────────────
+export interface CancelAppData {
+  appNo: string
+  beneType: string
+}

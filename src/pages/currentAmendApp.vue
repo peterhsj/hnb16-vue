@@ -85,7 +85,7 @@
       </div>
 
       <div v-if="isShowApp" class="mt-4 mx-4">
-        <h1 class="hnb16__title">開狀申請書</h1>
+        <h1 class="hnb16__title">信用狀修改申請書</h1>
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
           <AmendLcInfo :ben-type="benType" :data="data" />
@@ -360,6 +360,7 @@
     noticeDialog.value = true
   }
 
+  // 取消沖正操作
   function onClose (): void {
     isShowList.value = true
     isShowApp.value = false

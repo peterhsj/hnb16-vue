@@ -8,73 +8,17 @@
     <!-- 主表單卡片 -->
     <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
       <v-card-text class="bg-grey-lighten-4 pa-3">
-        <v-form ref="lcFormRef" @submit.prevent="onSubmit">
-          <!-- 銀行抬頭 -->
-          <v-container fluid>
-            <v-row align="center" no-gutters>
-              <v-col class="hnb__bankName text-center" cols="12">
-                華南商業銀行
-              </v-col>
+        <CancelAppInfo :data="form" :is-show-deposit="true" />
+        <!-- ===== 共用底部按鈕列 ===== -->
+        <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
+          <v-btn class="hnb__btn--cancel mx-1" @click="confirmCancel">
+            取消
+          </v-btn>
 
-              <v-col class="py-1 text-center" cols="12">
-                <span class="hnb__bankName">
-                  信用狀註銷申請書 / 認證單
-                </span>
-              </v-col>
-
-              <v-col class="py-1 text-center" cols="12">
-                中華民國 114 年 5 月 10 日
-              </v-col>
-            </v-row>
-          </v-container>
-
-          <v-table class="table-sm hnb__table bg-white" density="compact">
-            <tbody>
-              <tr>
-                <td>
-                  <p class="ma-4">茲請　貴行註銷下列信用狀，其未用餘額，受益人已不再利用，嗣後倘因該信用狀之受益人仍有出貨及押匯等情事，以致發生任何糾紛並使 貴行遭受損失時，一經 貴行通知，本公司當即依照前所提及之開發國內不可撤銷信用狀申請書及其他相關約定事項，負責清償，絕不拖延。</p>
-                  <p class="text-end me-4">單位：新台幣元</p>
-                  <!-- ================================================================
-                      表格
-                  ================================================================ -->
-                  <v-table class="table-sm hnb__table bg-white ma-4" color="blue-darken-2" density="compact">
-                    <thead>
-                      <tr>
-                        <th class="text-center">信用狀號碼</th>
-                        <th class="text-center">申請人</th>
-                        <th class="text-center">受益人</th>
-                        <th class="text-end">信用狀金額</th>
-                        <th class="text-end">未押匯金額</th>
-                        <th class="text-center">信用狀到期日</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <tr>
-                        <td class="text-center">008LLCt2</td>
-                        <td class="text-center">林大華</td>
-                        <td class="text-center">網際測試股份有限公司</td>
-                        <td class="text-end">NT$ 500,000</td>
-                        <td class="text-end">NT$ 200,000</td>
-                        <td class="text-center">民國 114 年 05 月 26 日</td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-          <!-- ===== 共用底部按鈕列 ===== -->
-          <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
-            <v-btn class="hnb__btn--cancel mx-1" @click="confirmCancel">
-              取消
-            </v-btn>
-
-            <v-btn class="hnb__btn--default mx-1" type="submit">
-              確定
-            </v-btn>
-          </div>
-        </v-form>
+          <v-btn class="hnb__btn--default mx-1" @click="onSubmit">
+            確定
+          </v-btn>
+        </div>
       </v-card-text>
     </v-card>
 
@@ -98,16 +42,11 @@
 </template>
 
 <script setup lang="ts">
+  import type { CancelAppData } from '@/types/cancelApp'
   import { reactive, ref, watch } from 'vue'
-  import { VForm } from 'vuetify/components'
-  import {
-    createInitialDraftLcForm,
-    type DraftLcData,
-    type DraftLcPayload,
-  } from '@/types/draftApp'
 
   const props = defineProps<{
-    formData: DraftLcData
+    formData: CancelAppData
   }>()
 
   const emit = defineEmits<{
@@ -115,10 +54,11 @@
     'on-cancel': []
   }>()
 
-  const lcFormRef = ref<InstanceType<typeof VForm> | null>(null)
-
   // 共用表單物件
-  const form = reactive<DraftLcPayload>(createInitialDraftLcForm())
+  const form = reactive<CancelAppData>({
+    beneType: '', // 受益人類型
+    appNo: '', // 信用狀號碼
+  })
 
   // ── 共用狀態 ──────────────────────────────────────────────────────────────
   const messageDialog = ref<boolean>(false)
@@ -135,8 +75,7 @@
     () => props.formData,
     newData => {
       if (newData.appNo) {
-        lcFormRef.value?.reset()
-        Object.assign(form, createInitialDraftLcForm())
+        Object.assign(form, { ...newData })
       }
     },
     { immediate: true },
