@@ -102,7 +102,7 @@
         </v-card>
       </div>
 
-      <!-- 授信資料 Dialog -->
+      <!-- 開狀申請書-授信資料 Dialog -->
       <LcAppCreditDialog
         v-model:is-lc-app-credit-dialog-open="isLcAppCreditDialogOpen"
         :amend-notice-no="amendNoticeNoValue"
@@ -177,7 +177,7 @@
   const amendNoticeNoValue = ref<string>('')
 
   // 查看授信歷程資料 Dialog
-  const isShowHistory = ref(true)
+  const isShowHistory = ref(false)
   const isHistoryDialogOpen = ref(false)
   const creditNo = ref<string>('') // 這裡可以根據實際情況設定 creditNo 的值
 
