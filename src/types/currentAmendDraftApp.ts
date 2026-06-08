@@ -22,3 +22,8 @@ export interface ListResponse {
   total: number
   amount: number
 }
+
+export interface AppData {
+  draftNo: string
+  beneType: string
+}

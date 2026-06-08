@@ -74,9 +74,11 @@
 
       <!-- 註銷申請 / 切結書 -->
       <div v-if="isShowApp" class="mt-4 mx-4">
-        <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
+        <h1 class="hnb16__title">當日沖正(EC)交易註銷申請書</h1>
+
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
           <v-card-text class="bg-grey-lighten-4 pa-3">
-            <CancelAppInfo :data="form" :is-show-deposit="true" />
+            <CancelAppInfo :data="form" :is-show-deposit="false" />
             <!-- ===== 共用底部按鈕列 ===== -->
             <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
               <v-btn class="hnb__btn--cancel mx-1" @click="onCancel">
@@ -199,6 +201,7 @@
 
       if (item.title === '註銷信用狀沖正(EC)') {
         isShowList.value = true
+        isShowApp.value = false
       }
     }
   }

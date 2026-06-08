@@ -76,9 +76,30 @@
         />
       </div>
 
+      <div v-if="isShowApp" class="mt-4 mx-4">
+        <h1 class="hnb16__title">押匯沖正(EC)</h1>
+
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+          <v-card-text class="bg-grey-lighten-4 pa-3">
+            <DraftInfo :data="form" :is-show-deposit="true" />
+            <!-- ===== 共用底部按鈕列 ===== -->
+            <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
+              <v-btn class="hnb__btn--cancel mx-1" @click="onCancel">
+                取消
+              </v-btn>
+
+              <v-btn class="hnb__btn--default mx-1" @click="handleEcData">
+                當日沖正(EC)交易
+              </v-btn>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -92,7 +113,7 @@
 
 <script setup lang="ts">
   import type { PageOptions } from '@/types/common'
-  import type { ListItem } from '@/types/currentAmendDraftApp'
+  import type { AppData, ListItem } from '@/types/currentAmendDraftApp'
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/currentAmendDraftApp'
@@ -102,6 +123,13 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+
+  // 申請切結書
+  const isShowApp = ref(false)
+  const form = ref<AppData>({
+    draftNo: '',
+    beneType: '',
+  })
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -128,6 +156,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -142,6 +171,7 @@
 
       if (item.title === '押匯沖正(EC)') {
         isShowList.value = true
+        isShowApp.value = false
       }
     }
   }
@@ -198,8 +228,54 @@
     }
   }
 
+  // 開啟 押匯沖正(EC)
   function handledraftView (draftNo: string): void {
     console.log('View Draft:', draftNo)
+    isShowList.value = false
+    isShowApp.value = true
+    form.value.draftNo = draftNo
+  }
+
+  // 取消註銷申請書檢視
+  function onCancel (): void {
+    isShowApp.value = false
+    form.value = {
+      draftNo: '',
+      beneType: '',
+    }
+    isShowList.value = true
+  }
+
+  // 處理當日沖正(EC)交易按鈕點擊事件
+  function handleEcData (): void {
+    console.log('當日沖正(EC)交易按鈕被點擊')
+    // 這裡可以加入實際的處理邏輯，例如跳轉到當日沖正(EC)交易頁面或顯示相關資訊等
+    messageDialog.value = true
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要沖正此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
+  }
+
+  // 送出當日沖正(EC)交易的確認邏輯
+  async function confirmEcData (): Promise<void> {
+    console.log('確認沖正當日沖正(EC)交易的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行沖正操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！'
+      messageStatus.value = 'success'
+      messageWidth.value = '400px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
   }
 
   function handleLcView (lcNo: string): void {
@@ -215,6 +291,11 @@
 
   // 確認 message
   function messageConfirm (): void {
+    if (processStatus.value === 'ecData') {
+      // 在這裡處理當日沖正(EC)交易的邏輯
+      console.log('確認沖正當日沖正(EC)交易')
+      confirmEcData()
+    }
     messageDialog.value = false
   }
 </script>
