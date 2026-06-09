@@ -28,6 +28,7 @@ const beneficiaries = [
 
 const mockItems: ListItem[] = Array.from({ length: 15 }, (_, i) => ({
   seqNo: i + 1,
+  amendAppNo: i % 4 === 3 ? null : `A${String(2_025_001 + i).padStart(7, '0')}`,
   amendNoticeNo: i % 4 === 3 ? null : `M${String(2_025_001 + i).padStart(7, '0')}`,
   lcNo: `09970004916200${String(1000 + i).padStart(4, '0')}`,
   lcType: (i % 2 === 0 ? 'sight' : 'usance') as LcTypeOption,

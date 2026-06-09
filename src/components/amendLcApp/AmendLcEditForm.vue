@@ -1201,26 +1201,6 @@
       :ben-type="props.formData.beneType"
       @on-close="appDialogClose"
     />
-    <!-- <AmendForCdsDialog
-      v-if="formData.beneType === 'cds'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    />
-
-    <AmendForFpcDialog
-      v-if="formData.beneType === 'fpc'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    />
-
-    <AmendForOtherDialog
-      v-if="formData.beneType === 'other'"
-      v-model:app-dialog="appDialog"
-      :app-no="appNo"
-      @on-close="appDialogClose"
-    /> -->
 
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
@@ -1250,8 +1230,6 @@
     FPC_BENE_ITEMS,
     FPC_DEPT_ITEMS,
     type FpcBeneOption,
-    NOTICE_BANK_ITEMS,
-    PAYING_BANK_ITEMS,
   } from '@/types/lcApplication'
 
   const props = defineProps<{
@@ -1289,16 +1267,6 @@
   const processStatus = ref<string>('')
   const appDialog = ref(false)
   const appNo = ref<string>('')
-
-  const departmentOptions = computed(() => {
-    if (props.formData.beneType === 'cds') {
-      return [...CDS_BENE_ITEMS]
-    }
-    if (props.formData.beneType !== 'cds') {
-      return [...FPC_BENE_ITEMS]
-    }
-    return []
-  })
 
   // ── CDS 固定常數 ──────────────────────────────────────────────────────────
   const issuingBankLabel = '華南商業銀行 高雄分行'

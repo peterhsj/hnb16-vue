@@ -43,9 +43,9 @@
               {{ item.lcType === 'sight' ? '即期' : '遠期' }}
             </template>
 
-            <template #item.amendNoticeNo="{ item }">
-              <a v-if="item.amendNoticeNo" class="hnb__text--link" href="#" @click.prevent="handleAmendNoticeView(item.amendNoticeNo)">
-                {{ item.amendNoticeNo }}
+            <template #item.appNo="{ item }">
+              <a v-if="item.appNo" class="hnb__text--link" href="#" @click.prevent="handleAppView(item.appNo)">
+                {{ item.appNo }}
               </a>
 
               <span v-else>N/A</span>
@@ -89,6 +89,14 @@
         @on-close="messageClose"
         @prompt-confirm="messageConfirm"
       />
+
+      <!-- 預覽開狀申請書 Dialogs（依受益人類別顯示） -->
+      <LcAppDialog
+        v-model:app-dialog="appDialog"
+        :app-no="appNo"
+        :bene-type="beneType"
+        @on-close="appDialogClose"
+      />
     </v-container>
   </div>
 </template>
@@ -105,6 +113,10 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+  // App Dialog
+  const appDialog = ref(false)
+  const appNo = ref<string>('')
+  const beneType = ref<string>('cds')
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -115,7 +127,7 @@
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 60 },
-    { title: '開狀申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
     { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
     { title: '通知銀行', key: 'notifyBank', align: 'center', sortable: false, nowrap: true },
@@ -200,8 +212,16 @@
     }
   }
 
-  function handleAmendNoticeView (amendNoticeNo: string): void {
-    console.log('View Amend Notice:', amendNoticeNo)
+  // 查看開狀申請書 App Dialog
+  function handleAppView (value: string): void {
+    appNo.value = value
+    appDialog.value = true
+  }
+
+  // 離開 App Dialog
+  function appDialogClose (): void {
+    appDialog.value = false
+    appNo.value = ''
   }
 
   function handlerCredit (lcNo: string): void {

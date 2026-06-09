@@ -4,7 +4,7 @@ import type { LcTypeOption } from '@/types/common'
 
 export interface ListItem {
   seqNo: number
-  amendNoticeNo: string | null
+  appNo: string | null
   lcNo: string
   lcType: LcTypeOption
   applicant: string

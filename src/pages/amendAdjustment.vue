@@ -43,17 +43,28 @@
               {{ item.lcType === 'sight' ? '即期' : '遠期' }}
             </template>
 
-            <template #item.amendNoticeNo="{ item }">
-              <a v-if="item.amendNoticeNo" class="hnb__text--link" href="#" @click.prevent="handleAmendNoticeView(item.amendNoticeNo)">
-                {{ item.amendNoticeNo }}
+            <!-- 預覽修改申請書 -->
+            <template #item.amendAppNo="{ item }">
+              <a v-if="item.amendAppNo" class="hnb__text--link" href="#" @click.prevent="handleAmendAppView(item.amendAppNo)">
+                {{ item.amendAppNo }}
               </a>
 
               <span v-else>N/A</span>
             </template>
 
+            <!-- 預覽信用狀 -->
             <template #item.lcNo="{ item }">
               <a v-if="item.lcNo" class="hnb__text--link" href="#" @click.prevent="handleLcView(item.lcNo)">
                 {{ item.lcNo }}
+              </a>
+
+              <span v-else>N/A</span>
+            </template>
+
+            <!-- 預覽信用狀修改通知書 -->
+            <template #item.amendNoticeNo="{ item }">
+              <a v-if="item.amendNoticeNo" class="hnb__text--link" href="#" @click.prevent="handleOpenNoticeDetail(item.amendNoticeNo)">
+                {{ item.amendNoticeNo }}
               </a>
 
               <span v-else>N/A</span>
@@ -87,6 +98,40 @@
         />
       </div>
 
+      <!-- 預覽修改申請書 Dialogs（依受益人類別顯示） -->
+      <AmendLcDialog
+        v-model:app-dialog="appDialog"
+        :app-no="appNo"
+        :ben-type="beneType"
+        @on-close="appDialogClose"
+      />
+      <!-- Lc Dialog -->
+      <LcDialog
+        v-model:lc-dialog="lcDialog"
+        :bene-type="beneType"
+        :is-show-notice="true"
+        :is-show-version="true"
+        :lc-no="lcNo"
+        @on-close="lcDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+        @open-notice-detail="handleOpenNoticeDetail"
+      />
+      <!-- Lc Detail Dialog (版本詳細) -->
+      <LcDialog
+        v-model:lc-dialog="lcDetailDialog"
+        :bene-type="beneType"
+        :lc-no="lcDetailNo"
+        @on-close="lcDetailDialogClose"
+      />
+      <!-- 信用狀修改通知書 Notice Dialog -->
+      <NoticeDialog
+        v-model:notice-dialog="noticeDialog"
+        :is-show-lc="true"
+        :notice-no="noticeNo"
+        @on-close="noticeDialogClose"
+        @open-lc-detail="handleOpenLcDetail"
+      />
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
@@ -113,6 +158,20 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+  const beneType = ref<string>('')
+
+  // 預覽修改申請書 Dialog
+  const appDialog = ref(false)
+  const appNo = ref<string>('')
+  // Lc Dialog
+  const lcDialog = ref(false)
+  const lcNo = ref<string>('')
+  // Lc Detail Dialog (版本詳細)
+  const lcDetailDialog = ref(false)
+  const lcDetailNo = ref<string>('')
+  // Notice Dialog
+  const noticeDialog = ref(false)
+  const noticeNo = ref<string>('')
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -123,7 +182,7 @@
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true, width: 60 },
-    { title: '修改申請書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
+    { title: '修改申請書號碼', key: 'amendAppNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
     { title: '修改通知書號碼', key: 'amendNoticeNo', align: 'center', sortable: false, nowrap: true },
@@ -208,12 +267,53 @@
     }
   }
 
-  function handleAmendNoticeView (amendNoticeNo: string): void {
-    console.log('View Amend Notice:', amendNoticeNo)
+  // 開啟預覽修改申請書 Dialog
+  function handleAmendAppView (amendAppNo: string): void {
+    appDialog.value = true
+    appNo.value = amendAppNo
+    beneType.value = 'other'
   }
 
-  function handleLcView (lcNo: string): void {
-    console.log('View LC:', lcNo)
+  function appDialogClose (): void {
+    appDialog.value = false
+    appNo.value = ''
+    beneType.value = ''
+  }
+
+  // 查看信用狀 Lc Dialog
+  function handleLcView (value: string): void {
+    lcNo.value = value
+    lcDialog.value = true
+  }
+
+  // 離開 Lc Dialog
+  function lcDialogClose (): void {
+    lcDialog.value = false
+    lcNo.value = ''
+  }
+
+  // 開啟版本詳細 Dialog
+  function handleOpenLcDetail (value: string): void {
+    lcDetailNo.value = value
+    lcDetailDialog.value = true
+  }
+
+  // 離開 Lc Detail Dialog
+  function lcDetailDialogClose (): void {
+    lcDetailDialog.value = false
+    lcDetailNo.value = ''
+  }
+
+  // 開啟修改通知書 Detail Dialog
+  function handleOpenNoticeDetail (value: string): void {
+    noticeNo.value = value
+    noticeDialog.value = true
+  }
+
+  // 離開修改通知書 Detail Dialog
+  function noticeDialogClose (): void {
+    noticeDialog.value = false
+    noticeNo.value = ''
   }
 
   function handlerCredit (lcNo: string): void {
