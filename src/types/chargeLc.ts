@@ -43,6 +43,9 @@ export const CHARGE_PAYMENT_METHOD_OPTIONS: readonly ChargePaymentMethodItem[] =
 
 export interface FormPayload {
   lcNo: string | null // 信用狀號碼
+  additionalChargeAmount?: number | null
+  additionalChargePaymentMethod?: string
+  isStampTaxDeducted?: boolean
 }
 
 export function createInitialQueryForm (): FormPayload {

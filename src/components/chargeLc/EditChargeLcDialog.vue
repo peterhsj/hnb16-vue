@@ -150,60 +150,6 @@
               </tr>
             </tbody>
           </v-table>
-
-
-          <!-- <v-row class="align-center">
-            <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-              <div class="font-weight-medium text-no-wrap hnb__form-label">公司名稱</div>
-              <span>網際股份有限公司</span>
-            </v-col>
-
-            <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-              <div class="font-weight-medium text-no-wrap hnb__form-label">檢附本票</div>
-
-              <v-checkbox
-                v-model="form.hasPromissoryNote"
-                color="cyan-darken-3"
-                density="compact"
-                hide-details
-              >
-                <template #label>
-                  <span class="text-body-2">統一發票</span>
-                </template>
-              </v-checkbox>
-            </v-col>
-
-            <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-              <div class="font-weight-medium text-no-wrap hnb__form-label">本票帳號</div>
-
-              <v-text-field
-                v-model="form.accountNo"
-                color="teal-darken-2"
-                density="compact"
-                hide-details
-                variant="outlined"
-              />
-            </v-col>
-
-            <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-              <div class="font-weight-medium text-no-wrap hnb__form-label">本票印鑑</div>
-
-              <v-file-input
-                v-model="form.stampFile"
-                accept="image/*"
-                clearable
-                color="teal-darken-2"
-                density="compact"
-                hide-details="auto"
-                hint="檔案大小不能超過 15 KB"
-                persistent-hint
-                prepend-icon="mdi-file-image"
-                :rules="[v => !v || v.size < 15360 || '檔案大小不能超過 15 KB']"
-                show-size
-                variant="outlined"
-              />
-            </v-col>
-          </v-row> -->
         </v-card-text>
 
         <v-card-actions>
@@ -269,6 +215,9 @@
 
   const form = ref<FormPayload>({
     lcNo: '',
+    additionalChargeAmount: null,
+    additionalChargePaymentMethod: '',
+    isStampTaxDeducted: false,
   })
 
   function onClose (): void {
