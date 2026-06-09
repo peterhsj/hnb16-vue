@@ -5,7 +5,7 @@ const APPLICANT_NAMES = ['網優股份有限公司', '台灣製造股份有限�
 const APPLICANT_TAX_IDS = ['12345678', '23456789', '34567890', '45678901', '56789012', '67890123', '78901234', '89012345']
 
 const rawItems = Mock.mock({
-  'list|20': [{
+  'list|15': [{
     'seqNo|+1': 1,
     'lcNoIdx|860-879': 860,
     'applicantIdx|0-7': 0,

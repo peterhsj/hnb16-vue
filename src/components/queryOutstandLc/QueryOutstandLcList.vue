@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+    <v-card class="border-sm pa-4 mb-5 bg-grey-lighten-4" variant="outlined">
       <p class="mb-2">
         <span class="font-weight-bold">申請人名稱：</span> 網優股份有限公司
       </p>
@@ -42,6 +42,24 @@
 
         <template #item.unreturnedDeposit="{ item }">
           ${{ thousandsFormatting(item.unreturnedDeposit.toLocaleString()) }}
+        </template>
+
+        <template #body.append>
+          <tr class="font-weight-bold bg-blue-lighten-5">
+            <td class="text-center" colspan="3">合計</td>
+
+            <td class="text-end">
+              ${{ thousandsFormatting(tableItems.reduce((sum, item) => sum + item.lcAmount, 0).toLocaleString()) }}
+            </td>
+
+            <td class="text-end">
+              ${{ thousandsFormatting(tableItems.reduce((sum, item) => sum + item.lcBalance, 0).toLocaleString()) }}
+            </td>
+
+            <td class="text-end">
+              ${{ thousandsFormatting(tableItems.reduce((sum, item) => sum + item.unreturnedDeposit, 0).toLocaleString()) }}
+            </td>
+          </tr>
         </template>
       </v-data-table>
     </v-card>
@@ -140,7 +158,7 @@
     { title: '有效日期', key: 'expiryDate', align: 'center', sortable: false, nowrap: true },
     { title: '開狀金額', key: 'lcAmount', align: 'end', sortable: false, nowrap: true },
     { title: '信用狀餘額', key: 'lcBalance', align: 'end', sortable: false, nowrap: true },
-    { title: '未退還保證金', key: 'unreturnedDeposit', align: 'center', sortable: false, nowrap: true },
+    { title: '未退還保證金', key: 'unreturnedDeposit', align: 'end', sortable: false, nowrap: true },
   ]
 
   interface Props {

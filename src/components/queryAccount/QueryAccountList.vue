@@ -42,11 +42,11 @@
             <tr class="font-weight-bold bg-blue-lighten-5">
               <td class="text-right text-red-darken-3" colspan="3">明細合計：</td>
 
-              <td class="text-right text-red-darken-3">
+              <td class="text-right text-red-darken-3 w-20">
                 {{ thousandsFormatting(group.reduce((sum, row) => sum + (row.debit ?? 0), 0).toLocaleString()) }}
               </td>
 
-              <td class="text-right text-red-darken-3">
+              <td class="text-right text-red-darken-3 w-20">
                 {{ thousandsFormatting(group.reduce((sum, row) => sum + (row.credit ?? 0), 0).toLocaleString()) }}
               </td>
             </tr>
@@ -54,6 +54,26 @@
 
         </v-data-table>
       </template>
+
+      <v-table
+        class="table-sm hnb__table bg-white mt-1"
+        density="compact"
+      >
+        <tbody>
+          <tr class="font-weight-bold bg-blue-lighten-5">
+            <td class="text-right text-red-darken-3" colspan="3">分行小計：</td>
+
+            <td class="text-right text-red-darken-3 w-20">
+              {{ thousandsFormatting(tableItems.reduce((sum, group) => sum + group.reduce((groupSum, row) => groupSum + (row.debit ?? 0), 0), 0).toLocaleString()) }}
+            </td>
+
+            <td class="text-right text-red-darken-3 w-20">
+              {{ thousandsFormatting(tableItems.reduce((sum, group) => sum + group.reduce((groupSum, row) => groupSum + (row.credit ?? 0), 0), 0).toLocaleString()) }}
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+
     </v-card>
 
     <!-- <TablePagination
