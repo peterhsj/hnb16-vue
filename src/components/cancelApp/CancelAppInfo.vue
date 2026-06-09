@@ -32,8 +32,8 @@
               <thead>
                 <tr>
                   <th class="text-center">信用狀號碼</th>
-                  <th class="text-center">申請人</th>
-                  <th class="text-center">受益人</th>
+                  <th>申請人</th>
+                  <th>受益人</th>
                   <th class="text-end">信用狀金額</th>
                   <th class="text-end">未押匯金額</th>
                   <th class="text-center">信用狀到期日</th>
@@ -43,8 +43,8 @@
               <tbody>
                 <tr>
                   <td class="text-center">008LLCt2</td>
-                  <td class="text-center">林大華</td>
-                  <td class="text-center">網際測試股份有限公司</td>
+                  <td>林大華</td>
+                  <td>網際測試股份有限公司</td>
                   <td class="text-end">NT$ 500,000</td>
                   <td class="text-end">NT$ 200,000</td>
                   <td class="text-center">民國 114 年 05 月 26 日</td>
