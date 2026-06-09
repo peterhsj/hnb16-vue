@@ -67,6 +67,13 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
+
+    <!-- 利率約定書 Dialog -->
+    <RateAgreementDialog
+      v-model:rate-agreement-dialog="rateAgreementDialog"
+      :lc-no="lcNo"
+      @on-close="rateAgreementDialogClose"
+    />
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
@@ -110,6 +117,10 @@
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
+
+  // 利率約定書 Dialog
+  const rateAgreementDialog = ref(false)
+
   // Cancel App Dialog
   const cancelAppDialog = ref(false)
   const cancelAppNo = ref<string>('')
@@ -272,6 +283,13 @@
   // 查看利率約定書
   function handleInterestRateAgreementView (value: string): void {
     console.log('查看利率約定書:', value)
+    rateAgreementDialog.value = true
+    lcNo.value = value
+  }
+
+  function rateAgreementDialogClose (): void {
+    rateAgreementDialog.value = false
+    lcNo.value = ''
   }
 
   // 查看信用狀 Lc Dialog
