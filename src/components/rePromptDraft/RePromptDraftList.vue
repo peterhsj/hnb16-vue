@@ -2,6 +2,7 @@
   <div>
     <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
       <v-data-table
+        v-model="lcAppSelected"
         class="table-sm hnb__table bg-white"
         color="blue-darken-2"
         density="compact"
@@ -12,55 +13,29 @@
         :items-per-page="pageOptions.itemsPerPage"
         :loading="isLoading"
         :page="pageOptions.page"
+        show-select
         sort-asc-icon="mdi-sort-ascending"
         sort-desc-icon="mdi-sort-descending"
         sort-icon="mdi-swap-vertical"
         striped="odd"
       >
-        <template #header.accepted>
-          <div class="d-flex flex-column align-center">
-            <v-btn
-              class="hnb__btn--select my-1"
-              size="small"
-              @click="acceptAll"
-            >
-              全選
-            </v-btn>
-          </div>
+        <template #header.data-table-select="{ allSelected, selectAll, someSelected }">
+          <v-checkbox-btn
+            color="primary"
+            :indeterminate="someSelected && !allSelected"
+            :model-value="allSelected"
+            @update:model-value="selectAll(!allSelected)"
+          />
         </template>
 
-        <template #header.rejected>
-          <div class="d-flex flex-column align-center">
-            <v-btn
-              class="hnb__btn--select my-1"
-              size="small"
-              @click="rejectAll"
-            >
-              取消全選
-            </v-btn>
-          </div>
-        </template>
-
-        <template #item.accepted="{ item }">
-          <div class="d-flex justify-center">
-            <input
-              :checked="item.isAccepted === true"
-              :name="`accept-${item.lcNo}`"
-              type="radio"
-              @change="item.isAccepted = true"
-            >
-          </div>
-        </template>
-
-        <template #item.rejected="{ item }">
-          <div class="d-flex justify-center">
-            <input
-              :checked="item.isAccepted === false"
-              :name="`accept-${item.lcNo}`"
-              type="radio"
-              @change="item.isAccepted = false"
-            >
-          </div>
+        <template #item.data-table-select="{ internalItem, isSelected, toggleSelect }">
+          <v-checkbox-btn
+            class="justify-center"
+            color="cyan-darken-3"
+            density="compact"
+            :model-value="isSelected(internalItem)"
+            @update:model-value="toggleSelect(internalItem)"
+          />
         </template>
 
         <template #item.draftNo="{ item }">
@@ -91,9 +66,29 @@
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
+
+    <v-divider class="my-4" />
+
+    <div class="d-flex justify-center">
+      <v-btn
+        class="hnb__btn--cancel mx-1"
+        @click="resetSelection"
+      >
+        重設
+      </v-btn>
+
+      <v-btn
+        class="hnb__btn--default mx-1"
+        :disabled="lcAppSelected.length === 0"
+        @click="reNotice"
+      >
+        重新提示
+      </v-btn>
+    </div>
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -117,6 +112,7 @@
   const { handleApiError } = useApiErrorHandler()
 
   const tableItems = ref<ListItem[]>([])
+  const lcAppSelected = ref<ListItem[]>([])
   const isLoading = ref(false)
 
   // Prompt Message Dialog
@@ -124,6 +120,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const isShowCurrentPageTotalAmount = ref<boolean>(true)
@@ -134,8 +131,8 @@
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true },
-    { title: '接受', key: 'accepted', align: 'center', sortable: false, width: 50 },
-    { title: '拒絕', key: 'rejected', align: 'center', sortable: false, width: 50 },
+    // { title: '接受', key: 'accepted', align: 'center', sortable: false, width: 50 },
+    // { title: '拒絕', key: 'rejected', align: 'center', sortable: false, width: 50 },
     { title: '匯票號碼', key: 'draftNo', align: 'center', sortable: false, nowrap: true },
     { title: '申請人名稱', key: 'applicantName', align: 'start', sortable: false, nowrap: true },
     { title: '申請人統編', key: 'buyerTaxId', align: 'center', sortable: false, nowrap: true },
@@ -255,16 +252,20 @@
     draftNo.value = value
   }
 
-  function acceptAll (): void {
-    for (const item of tableItems.value) {
-      item.isAccepted = true
-    }
+  // 重設選取
+  function resetSelection (): void {
+    lcAppSelected.value = []
   }
 
-  function rejectAll (): void {
-    for (const item of tableItems.value) {
-      item.isAccepted = false
-    }
+  // 重新提示
+  function reNotice (): void {
+    messageTitle.value = '作業訊息'
+    message.value = '作業已完成！'
+    messageStatus.value = 'success'
+    messageWidth.value = '400px'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+    // processStatus.value.action = 'reNotice'
   }
 
   // 離開 message
