@@ -98,6 +98,7 @@
         v-model:is-show-dialog="cancelAppDialog"
         :cancel-app-no="cancelAppNo"
         :is-show-deposit="isShowDeposit"
+        :is-show-detail="isShowDetail"
         @on-close="cancelAppDialogClose"
       />
       <!-- Lc Dialog -->
@@ -145,6 +146,7 @@
   const cancelAppDialog = ref(false)
   const cancelAppNo = ref<string>('')
   const isShowDeposit = ref<boolean>(false)
+  const isShowDetail = ref<boolean>(false)
 
   // Lc Dialog
   const lcDialog = ref(false)

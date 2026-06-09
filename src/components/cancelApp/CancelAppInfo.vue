@@ -72,7 +72,7 @@
       </tbody>
     </v-table>
 
-    <div v-if="props.isShowDeposit" class="my-6">
+    <div v-if="props.isShowDeposit" class="d-flex mt-6">
       <!-- 保證金卡片 -->
       <v-row justify="center">
         <v-col cols="12" md="5" sm="12">
@@ -123,10 +123,17 @@
   import type { CancelAppData } from '@/types/cancelApp'
   import { reactive, watch } from 'vue'
 
-  const props = defineProps<{
-    data: CancelAppData
-    isShowDeposit: boolean
-  }>()
+  interface Props {
+    data?: CancelAppData
+    isShowDeposit?: boolean
+  }
+  const props = withDefaults(defineProps<Props>(), {
+    data: () => ({
+      appNo: '',
+      beneType: 'cds',
+    }),
+    isShowDeposit: false,
+  })
 
   // 共用表單物件
   const infoData = reactive<CancelAppData>({

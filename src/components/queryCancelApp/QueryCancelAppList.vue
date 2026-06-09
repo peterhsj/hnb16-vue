@@ -78,6 +78,23 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
+    <!-- Cancel App Dialog -->
+    <CancelAppDialog
+      v-model:is-show-dialog="cancelAppDialog"
+      :cancel-app-no="cancelAppNo"
+      :is-show-deposit="isShowDeposit"
+      :is-show-detail="isShowDetail"
+      @on-close="cancelAppDialogClose"
+      @on-show-history-view="handleHistoryView"
+      @open-lc-detail="handleOpenLcDetail"
+    />
+    <!-- 查看授信歷程資料 Dialog -->
+    <LcAppHistoryViewDialog
+      v-model:is-history-dialog-open="isHistoryDialogOpen"
+      :credit-no="creditNo"
+      :is-show-history="isShowHistory"
+      @on-close="historyDialogClose"
+    />
     <!-- Lc Dialog -->
     <LcDialog
       v-model:lc-dialog="lcDialog"
@@ -104,6 +121,12 @@
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
     />
+    <!-- 轉帳收入傳票 Dialog -->
+    <IncomeTransferVoucherDialog
+      v-model:is-income-transfer-voucher-dialog="isIncomeTransferVoucherDialog"
+      :lc-no="lcNo"
+      @on-close="isIncomeTransferVoucherDialog = false"
+    />
   </div>
 </template>
 
@@ -114,8 +137,6 @@
   import { getDatacList } from '@/api/queryCancelApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
 
-  const emits = defineEmits(['on-edit'])
-
   const { handleApiError } = useApiErrorHandler()
 
   const tableItems = ref<ListItem[]>([])
@@ -123,6 +144,13 @@
   // Cancel App Dialog
   const cancelAppDialog = ref(false)
   const cancelAppNo = ref<string>('')
+  const isShowDeposit = ref<boolean>(true)
+  const isShowDetail = ref<boolean>(true)
+
+  // 查看授信歷程資料 Dialog
+  const isShowHistory = ref(false)
+  const isHistoryDialogOpen = ref(false)
+  const creditNo = ref<string>('') // 這裡可以根據實際情況設定 creditNo 的值
   // Lc Dialog
   const lcDialog = ref(false)
   const lcNo = ref<string>('')
@@ -132,6 +160,8 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+  // 轉帳收入傳票 Dialog
+  const isIncomeTransferVoucherDialog = ref(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -272,6 +302,27 @@
     cancelAppNo.value = value
     cancelAppDialog.value = true
   }
+
+  function cancelAppDialogClose (): void {
+    cancelAppDialog.value = false
+    cancelAppNo.value = ''
+    isShowDeposit.value = false
+  }
+
+  // 處理查看歷程資料事件
+  function handleHistoryView (value: string): void {
+    console.log('查看歷程資料', value)
+    // 這裡可以加入實際的處理邏輯，例如根據傳入的值顯示歷程資料等
+    isHistoryDialogOpen.value = true
+    creditNo.value = value
+  }
+
+  // 查看歷程資料 Dialog 關閉事件
+  function historyDialogClose (): void {
+    isHistoryDialogOpen.value = false
+    creditNo.value = ''
+  }
+
   // 查看轉帳支出傳票
   function handleTransferVoucherView (value: string): void {
     console.log('查看轉帳支出傳票:', value)
@@ -280,6 +331,8 @@
   // 查看轉帳收入傳票
   function handleIncomeTransferVoucherView (value: string): void {
     console.log('查看轉帳收入傳票:', value)
+    isIncomeTransferVoucherDialog.value = true
+    lcNo.value = value
   }
 
   // 查看信用狀 Lc Dialog
@@ -318,7 +371,9 @@
     noticeNo.value = ''
   }
 
-  onMounted(fetchLcAppList)
+  onMounted(() => {
+    fetchLcAppList()
+  })
 
   // 離開 message
   function messageClose (): void {

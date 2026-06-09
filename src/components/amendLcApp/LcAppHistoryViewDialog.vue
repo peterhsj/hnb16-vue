@@ -53,8 +53,6 @@
             <v-btn
               class="hnb__btn--default mx-1"
               prepend-icon="mdi-download"
-              size="small"
-              variant="flat"
               @click="handleDownload"
             >
               下載電子檔
@@ -63,8 +61,6 @@
             <v-btn
               class="hnb__btn--orange mx-1"
               prepend-icon="mdi-printer"
-              size="small"
-              variant="flat"
               @click="handlePrint"
             >
               列印
