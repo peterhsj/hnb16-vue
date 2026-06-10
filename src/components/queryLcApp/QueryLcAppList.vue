@@ -173,6 +173,36 @@
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
     />
+    <!-- 開狀手續費收據 Dialog -->
+    <LcFeeReceiptDialog
+      v-model:is-lc-fee-receipt-dialog="isLcFeeReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isLcFeeReceiptDialog = false"
+    />
+    <!-- 保證金收款證明 Dialog -->
+    <DepositReceiptDialog
+      v-model:is-deposit-receipt-dialog="isDepositReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isDepositReceiptDialog = false"
+    />
+    <!-- 現金繳費單 Dialog -->
+    <CashPaySlipDialog
+      v-model:is-cash-pay-slip-dialog="isCashPaySlipDialog"
+      :lc-no="lcNo"
+      @on-close="isCashPaySlipDialog = false"
+    />
+    <!-- 承兌手續費收據 Dialog -->
+    <AcceptanceFeeReceiptDialog
+      v-model:is-acceptance-fee-receipt-dialog="isAcceptanceFeeReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isAcceptanceFeeReceiptDialog = false"
+    />
+    <!-- 轉帳支出傳票 Dialog -->
+    <TransferVoucherDialog
+      v-model:is-transfer-voucher-dialog="isTransferVoucherDialog"
+      :lc-no="lcNo"
+      @on-close="isTransferVoucherDialog = false"
+    />
   </div>
 </template>
 
@@ -202,6 +232,16 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+  // 開狀手續費收據 Dialog
+  const isLcFeeReceiptDialog = ref(false)
+  // 保證金收款證明 Dialog
+  const isDepositReceiptDialog = ref(false)
+  // 現金繳費單 Dialog
+  const isCashPaySlipDialog = ref(false)
+  // 承兌手續費收據 Dialog
+  const isAcceptanceFeeReceiptDialog = ref(false)
+  // 轉帳支出傳票 Dialog
+  const isTransferVoucherDialog = ref(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -357,26 +397,36 @@
   // 查看開狀手續費收據
   function handleLcFeeReceiptView (value: string): void {
     console.log('查看開狀手續費收據:', value)
+    lcNo.value = value
+    isLcFeeReceiptDialog.value = true
   }
 
   // 查看保證金收款證明
   function handleDepositReceiptView (value: string): void {
     console.log('查看保證金收款證明:', value)
+    lcNo.value = value
+    isDepositReceiptDialog.value = true
   }
 
   // 查看現金繳費單
   function handleCashPaySlipView (value: string): void {
     console.log('查看現金繳費單:', value)
+    lcNo.value = value
+    isCashPaySlipDialog.value = true
   }
 
   // 查看承兌手續費收據
   function handleAcceptanceFeeReceiptView (value: string): void {
     console.log('查看承兌手續費收據:', value)
+    lcNo.value = value
+    isAcceptanceFeeReceiptDialog.value = true
   }
 
   // 查看轉帳支出傳票
   function handleTransferVoucherView (value: string): void {
     console.log('查看轉帳支出傳票:', value)
+    lcNo.value = value
+    isTransferVoucherDialog.value = true
   }
 
   // 查看電子帳簿開狀手續費收據

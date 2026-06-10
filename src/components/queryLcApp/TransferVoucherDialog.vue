@@ -8,7 +8,7 @@
       class="hnb__dialog"
     >
       <v-card-title class="d-flex px-4 font-weight-bold text-red-darken-3">
-        <span>轉帳收入傳票</span>
+        <span>轉帳支出傳票</span>
         <v-spacer />
 
         <v-btn
@@ -25,7 +25,7 @@
             <v-container>
               <v-row class="mt-3" no-gutters>
                 <v-col class="hnb__bankName font-weight-bold" cols="7">
-                  華南商業銀行轉帳收入傳票
+                  華南商業銀行轉帳支出傳票
                 </v-col>
 
                 <v-col class="text-end" cols="5">
@@ -37,7 +37,7 @@
                 <v-col class="text-end" cols="12">
                   <span class="me-5">中華民國 114 年 05 月 25 日</span>
                   <span class="me-5">科目： 0000</span>
-                  <span class="hnb__bankName text-subtitle-1 font-weight-bold">貸方 轉</span>
+                  <span class="hnb__bankName text-subtitle-1 font-weight-bold">借方 轉</span>
                 </v-col>
               </v-row>
 
@@ -128,17 +128,17 @@
   const formRef = ref<InstanceType<typeof VForm>>()
 
   interface Props {
-    isIncomeTransferVoucherDialog?: boolean
+    isTransferVoucherDialog?: boolean
     lcNo?: string
   }
   const props = withDefaults(defineProps<Props>(), {
-    isIncomeTransferVoucherDialog: false,
+    isTransferVoucherDialog: false,
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isIncomeTransferVoucherDialog)
+  const show = ref<boolean>(props.isTransferVoucherDialog)
   watch(
-    () => props.isIncomeTransferVoucherDialog,
+    () => props.isTransferVoucherDialog,
     newVal => {
       show.value = newVal
     },
@@ -146,14 +146,14 @@
   watch(
     () => show.value,
     newVal => {
-      emit('update:isIncomeTransferVoucherDialog', newVal)
+      emit('update:isTransferVoucherDialog', newVal)
     },
   )
 
   const rateType = ref<string>('01')
 
   const emit = defineEmits<{
-    'update:isIncomeTransferVoucherDialog': [boolean]
+    'update:isTransferVoucherDialog': [boolean]
     'on-close': []
   }>()
 
