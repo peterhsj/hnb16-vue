@@ -63,6 +63,87 @@
         />
       </div>
 
+      <div v-if="isShowApp" class="mt-4 mx-4">
+        <h1 class="hnb16__title">審核開狀申請書</h1>
+
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+          <LcAppInfo :bene-type="beneType" :data="data" />
+
+          <div class="mt-4 text-center">
+            <v-btn
+              class="ma-1 hnb__btn--default"
+              prepend-icon="mdi-cloud-download"
+              @click="downloadFile"
+            >
+              下載電子檔
+            </v-btn>
+
+            <v-btn
+              class="ma-1 hnb__btn--orange"
+              prepend-icon="mdi-printer"
+              @click="printDoc"
+            >
+              列印
+            </v-btn>
+          </div>
+
+          <!-- 審核表單 -->
+          <v-row class="my-4" justify="center">
+            <v-col cols="12" md="4" sm="6">
+              <v-card class="border-sm bg-white pa-4" elevated="2">
+                <v-row>
+                  <v-col class="border-e-sm" cols="12" md="8">
+                    <div>
+
+                      AA
+                    </div>
+
+                    <v-divider class="my-2" />
+
+                    <div class=" text-center">
+                      <v-btn
+                        class="ma-1 hnb__btn--default"
+                        @click="checkBeneId"
+                      >
+                        檢核受益人統編名
+                      </v-btn>
+                    </div>
+                  </v-col>
+
+                  <v-col class="text-center" cols="12" md="4">
+                    <v-btn
+                      class="hnb__btn--orange mx-1"
+                      variant="flat"
+                      @click="handleCreditData(data.value.appNo)"
+                    >
+                      授信資料
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <div class="mt-4 text-center">
+            <v-btn
+              class="hnb__btn--cancel my-2 mx-1"
+              variant="flat"
+              @click="onCloseApp"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1"
+              variant="flat"
+              @click="handleReviewData"
+            >
+              確定
+            </v-btn>
+          </div>
+        </v-card>
+      </div>
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
@@ -124,6 +205,14 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+
+  const isShowApp = ref(false)
+  const beneType = ref<string>('cds')
+  const data = ref<any>({
+    appNo: 'LC20240225001',
+    lcAmount: 1_000_000,
+    fee: 500,
+  })
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
@@ -207,6 +296,19 @@
 
   function handleLcAppNoView (lcAppNo: string): void {
     console.log('View LC App No:', lcAppNo)
+    isShowList.value = false
+    isShowApp.value = true
+  }
+
+  // 模擬受益人統編名檢核
+  function checkBeneId (): void {
+    console.log('檢核受益人統編名')
+    // 這裡可以加入實際的檢核邏輯，例如呼叫 API 進行檢核，然後根據結果顯示提示訊息等
+    messageTitle.value = '檢核結果'
+    message.value = '受益人統編名檢核成功！'
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
   }
 
   // 查看信用狀 Lc Dialog
@@ -251,7 +353,36 @@
     noticeDialog.value = true
   }
 
-  onMounted(fetchTableList)
+  // 確定審核
+  function handleReviewData (): void {
+    console.log('確定審核')
+  }
+
+  // 關閉審核開狀申請書
+  function onCloseApp (): void {
+    isShowList.value = true
+    isShowApp.value = false
+  }
+
+  // 處理授信資料按鈕點擊事件
+  function handleCreditData (appNo: string): void {
+    console.log('授信資料按鈕被點擊')
+    // amendNoticeNoValue.value = appNo
+    // isLcAppCreditDialogOpen.value = true
+  }
+
+  function downloadFile () {
+    // 下載電子檔邏輯
+    console.log('下載電子檔')
+  }
+
+  function printDoc () {
+    window.print()
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
