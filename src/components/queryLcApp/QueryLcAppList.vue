@@ -204,6 +204,12 @@
       @on-close="isTransferVoucherDialog = false"
     />
   </div>
+  <!-- 開狀申請書預覽 -->
+  <LcAppReviewDialog
+    v-model:is-lc-app-review-dialog="isLcAppReviewDialog"
+    :app-no="appNo"
+    @on-close="isLcAppReviewDialog = false"
+  />
 </template>
 
 <script setup lang="ts">
@@ -242,6 +248,8 @@
   const isAcceptanceFeeReceiptDialog = ref(false)
   // 轉帳支出傳票 Dialog
   const isTransferVoucherDialog = ref(false)
+  // 開狀申請書預覽 Dialog
+  const isLcAppReviewDialog = ref(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -391,6 +399,7 @@
 
   // 查看開狀申請書 LC app Dialog
   function handleLcAppView (value: string): void {
+    isLcAppReviewDialog.value = true
     appNo.value = value
   }
 
