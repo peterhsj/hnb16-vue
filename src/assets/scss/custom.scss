@@ -386,6 +386,45 @@ body,
       padding: 8px 12px !important;
     }
   }
+  
+  &__card {
+    &--bordered {
+      padding: 6px;
+      border: 1px solid #90bcbe;
+    }
+  }
+
+  &__cell {
+    &--border {
+      border: 1px solid #90bcbe !important;
+    }
+    
+    &--ru {
+      border-right: 1px solid #90bcbe;
+      border-bottom: 1px solid #90bcbe !important;
+    }
+    
+    &--lu {
+      border-left: 1px solid #90bcbe;
+      border-bottom: 1px solid #90bcbe !important;
+    }
+
+    &--tb {
+      border-top: 1px solid #90bcbe;
+    }
+
+    &--rb {
+      border-right: 1px solid #90bcbe;
+    }
+
+    &--ub {
+      border-bottom: 1px solid #90bcbe !important;
+    }
+
+    &--lb {
+      border-left: 1px solid #90bcbe;
+    }
+  }
 
   // stamp-card
   &__stamp-card {

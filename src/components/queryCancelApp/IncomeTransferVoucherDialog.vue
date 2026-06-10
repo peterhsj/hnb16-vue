@@ -21,145 +21,89 @@
 
       <v-form ref="formRef">
         <v-card-text class="bg-grey-lighten-4">
-          <v-table
-            class="hnb__table hnb__table--vertical w-100"
-            density="compact"
-            striped="odd"
-          >
-            <tbody>
-              <tr>
-                <td>
-                  <div class="hnb__line--indent">
-                    1. 國內信用狀利率約定書，其中依本信用狀所墊付之本次押匯金額 1,000,000 元， 本公司申請借款 新台幣 壹仟萬元整，並同意按下列定價之指標其中之一，按月計付利息。
-                  </div>
-                </td>
-              </tr>
+          <v-card class="hnb__card--bordered" flat rounded="0">
+            <v-container>
+              <v-row class="mt-3" no-gutters>
+                <v-col class="hnb__bankName font-weight-bold" cols="7">
+                  華南商業銀行轉帳收入傳票
+                </v-col>
 
-              <tr>
-                <td>
-                  2.改貸之利率約定：
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    按貴行之基準利率加碼年率 - % 計息，嗣後貴行基準利率每 3 個月 調整時隨同調整，加碼幅度不變。
-                  </div>
+                <v-col class="text-end" cols="5">
+                  <span>傳票</span>
+                  <span class="border-b px-1 mx-2">000001</span>
+                  <span>號</span>
+                </v-col>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    固定利率，按年率 - % 計息。
-                  </div>
+                <v-col class="text-end" cols="12">
+                  <span class="me-5">中華民國 114 年 05 月 25 日</span>
+                  <span class="me-5">科目： 0000</span>
+                  <span class="hnb__bankName text-subtitle-1 font-weight-bold">貸方 轉</span>
+                </v-col>
+              </v-row>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    按貴行之 初級市場利率 100 天期 均價利率 加碼 - % 計息，嗣後以貸放日後每滿 3 個月 之相對日為利率變動調整日，自調整日起隨同調整，加減碼幅度不變。
-                  </div>
+              <v-table
+                class="hnb__cell my-2 w-100"
+                density="compact"
+              >
+                <tbody>
+                  <tr>
+                    <td class="hnb__cell--ub w-70">
+                      子細目代號(帳號)：00000-00000
+                    </td>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '04' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    其他：無
-                  </div>
-                </td>
-              </tr>
+                    <td class="hnb__cell--border text-center w-30">
+                      金額
+                    </td>
+                  </tr>
 
-              <tr>
-                <td>
-                  3.信用狀主要內容：
-                  <v-table class="mt-2 hnb__table hnb__table--vertical w-100" density="compact">
-                    <tbody>
-                      <tr>
-                        <th class="hnb__tbhd2 text-end w-30">
-                          開狀行
-                        </th>
+                  <tr>
+                    <td class="hnb__cell--lb hnb__cell--ub">
+                      子細目名稱(戶名)：過渡科目(510301)
+                    </td>
 
-                        <td>
-                          華南銀行南門分行
-                        </td>
-                      </tr>
+                    <td class="hnb__cell--lb hnb__cell--ub hnb__cell--rb text-end">
+                      TWD 1,000.00
+                    </td>
+                  </tr>
 
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          開狀日期
-                        </th>
+                  <tr>
+                    <td class="hnb__cell--lu">
+                      摘要：國內信用狀號碼：09970004616000861
+                    </td>
 
-                        <td>
-                          民國 114 年 07 月 01 日
-                        </td>
-                      </tr>
+                    <td class="hnb__cell--lb hnb__cell--ub hnb__cell--rb text-center">
+                      戳記
+                    </td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </v-container>
+            <!-- <v-row class="my-2 mx-1" density="compact">
+              <v-col class="" cols="7">
+                子細目代號(帳號)：00000-00000
+              </v-col>
 
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          開狀申請人
-                        </th>
+              <v-col class="hnb__cell--lb text-center" cols="5">
+                金額
+              </v-col>
 
-                        <td>
-                          鼎力金屬工業股份有限公司
-                        </td>
-                      </tr>
+              <v-col class="hnb__cell--border" cols="7">
+                子細目名稱(戶名)：過渡科目(510301)
+              </v-col>
 
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          信用狀受益人
-                        </th>
+              <v-col class="hnb__cell--ru text-end" cols="5">
+                TWD 1,000.00
+              </v-col>
 
-                        <td>
-                          乙股份有限公司
-                        </td>
-                      </tr>
+              <v-col class="hnb__cell--lu hnb__cell--rb" cols="7">
+                摘要：國內信用狀號碼：09970004616000861
+              </v-col>
 
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          信用狀號碼
-                        </th>
-
-                        <td>
-                          132654
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          信用狀金額
-                        </th>
-
-                        <td>
-                          新台幣 壹仟萬元整
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          本次押匯日期
-                        </th>
-
-                        <td>
-                          民國 114 年 07 月 01 日
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          本次押匯金額
-                        </th>
-
-                        <td>
-                          新台幣 壹仟萬元整
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <th class="hnb__tbhd2 text-end">
-                          利率改貸確認日期
-                        </th>
-
-                        <td>
-                          N/A
-                        </td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
+              <v-col class="hnb__cell--ru text-center" cols="5">
+                戳記
+              </v-col>
+            </v-row> -->
+          </v-card>
           <!-- 下載 / 列印 / 版本選擇 -->
           <v-container class="" fluid>
             <v-row>
