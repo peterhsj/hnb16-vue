@@ -89,18 +89,39 @@
 
           <!-- 審核表單 -->
           <v-row class="my-4" justify="center">
-            <v-col cols="12" md="4" sm="6">
+            <v-col cols="12" md="6" sm="12">
               <v-card class="border-sm bg-white pa-4" elevated="2">
                 <v-row>
                   <v-col class="border-e-sm" cols="12" md="8">
-                    <div>
+                    <div class="d-flex align-center ga-2 mb-2">
+                      <span class="text-nowrap text-end" style="width: 120px">放款戶號：</span>
 
-                      AA
+                      <v-text-field
+                        color="teal-darken-2"
+                        density="compact"
+                        hide-details="auto"
+                        :model-value="reviewForm.loanAccountNo ?? ''"
+                        readonly
+                        variant="outlined"
+                      />
+                    </div>
+
+                    <div class="d-flex align-center ga-2 mb-2">
+                      <span class="text-nowrap text-end" style="width: 120px">開狀放款核號：</span>
+
+                      <v-text-field
+                        color="teal-darken-2"
+                        density="compact"
+                        hide-details="auto"
+                        :model-value="reviewForm.lcLoanApprovalNo ?? ''"
+                        readonly
+                        variant="outlined"
+                      />
                     </div>
 
                     <v-divider class="my-2" />
 
-                    <div class=" text-center">
+                    <div class="text-center">
                       <v-btn
                         class="ma-1 hnb__btn--default"
                         @click="checkBeneId"
@@ -110,19 +131,69 @@
                     </div>
                   </v-col>
 
-                  <v-col class="text-center" cols="12" md="4">
+                  <v-col class="d-flex flex-column justify-center align-center ga-2" cols="12" md="4">
                     <v-btn
                       class="hnb__btn--orange mx-1"
                       variant="flat"
-                      @click="handleCreditData(data.value.appNo)"
+                      @click="handleCreditData(data.appNo)"
                     >
                       授信資料
                     </v-btn>
+
+                    <v-checkbox
+                      v-model="reviewForm.isReintroduce"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details
+                    >
+                      <template #label>
+                        <span class="text-body-2">重新引進</span>
+                      </template>
+                    </v-checkbox>
                   </v-col>
                 </v-row>
               </v-card>
             </v-col>
           </v-row>
+
+          <div class="mt-4 text-center mx-auto">
+            <div class="d-inline-flex align-center justify-center">
+              <v-radio-group
+                v-model="reviewForm.reviewStatus"
+                color="cyan-darken-3"
+                density="compact"
+                hide-details="auto"
+                inline
+              >
+                <v-radio value="approve">
+                  <template #label>
+                    <span class="text-body-2">核准</span>
+                  </template>
+                </v-radio>
+
+                <v-radio class="ms-4" value="reject">
+                  <template #label>
+                    <span class="text-body-2">拒絕 / 拒絕原因：</span>
+
+                    <v-select
+                      v-model="reviewForm.rejectReason"
+                      clearable
+                      color="teal-darken-2"
+                      density="compact"
+                      :disabled="reviewForm.reviewStatus !== 'reject'"
+                      hide-details="auto"
+                      item-title="title"
+                      item-value="value"
+                      :items="[...REJECT_REASON_ITEMS]"
+                      placeholder="請選擇"
+                      variant="outlined"
+                      width="200px"
+                    />
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </div>
+          </div>
 
           <div class="mt-4 text-center">
             <v-btn
@@ -147,6 +218,7 @@
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -181,6 +253,12 @@
         @open-lc-detail="handleOpenLcDetail"
       />
     </v-container>
+
+    <!-- 授信資料編輯 -->
+    <LcAppCreditEditDialog
+      v-model:is-lc-app-credit-edit-dialog="isLcAppCreditEditDialog"
+      :app-no="appNo"
+    />
   </div>
 </template>
 
@@ -206,6 +284,10 @@
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
 
+  // 授信資料編輯 Dialog
+  const isLcAppCreditEditDialog = ref(false)
+  const appNo = ref<string>('')
+
   const isShowApp = ref(false)
   const beneType = ref<string>('cds')
   const data = ref<any>({
@@ -213,6 +295,28 @@
     lcAmount: 1_000_000,
     fee: 500,
   })
+
+  interface ReviewForm {
+    loanAccountNo?: string
+    lcLoanApprovalNo?: string
+    isReintroduce?: boolean
+    reviewStatus?: string
+    rejectReason?: string | null
+  }
+  const reviewForm = ref<ReviewForm>({
+    loanAccountNo: '1750161000861',
+    lcLoanApprovalNo: '9900410000',
+    isReintroduce: false,
+    reviewStatus: '',
+    rejectReason: null,
+  })
+
+  const REJECT_REASON_ITEMS = [
+    { title: '拒絕原因 1', value: 'r1' },
+    { title: '拒絕原因 2', value: 'r2' },
+    { title: '拒絕原因 3', value: 'r3' },
+    { title: '拒絕原因 4', value: 'r4' },
+  ]
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
@@ -239,6 +343,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const _processStatus = ref<string>('')
 
@@ -304,10 +409,11 @@
   function checkBeneId (): void {
     console.log('檢核受益人統編名')
     // 這裡可以加入實際的檢核邏輯，例如呼叫 API 進行檢核，然後根據結果顯示提示訊息等
-    messageTitle.value = '檢核結果'
+    messageTitle.value = '訊息通知'
     message.value = '受益人統編名檢核成功！'
     messageStatus.value = 'success'
     isConfirmBtn.value = false
+    messageWidth.value = '400px'
     messageDialog.value = true
   }
 
@@ -347,15 +453,26 @@
     noticeNo.value = ''
   }
 
-  // 查看修改通知書 Detail Dialog
-  function handleAmendNoticeView (value: string): void {
-    noticeNo.value = value
-    noticeDialog.value = true
-  }
-
   // 確定審核
   function handleReviewData (): void {
-    console.log('確定審核')
+    try {
+      messageTitle.value = '訊息通知'
+      message.value = `<span class="font-weight-bold">開狀申請書號碼：</span>
+        <span class="text-blue-grey-darken-4">ENID0990000089</span><br>
+        <span class="font-weight-bold">審核動作：</span>
+        <span class="text-blue-grey-darken-4">退回經辦：王建明退回測試</span><br>
+        <span class="font-weight-bold">審核結果：</span>
+        <span class="text-blue-grey-darken-4">審核未完成</span>`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageWidth.value = '600px'
+      messageDialog.value = true
+
+      isShowList.value = true
+      isShowApp.value = false
+    } catch (error) {
+      console.error('審核失敗:', error)
+    }
   }
 
   // 關閉審核開狀申請書
@@ -365,10 +482,10 @@
   }
 
   // 處理授信資料按鈕點擊事件
-  function handleCreditData (appNo: string): void {
-    console.log('授信資料按鈕被點擊')
-    // amendNoticeNoValue.value = appNo
-    // isLcAppCreditDialogOpen.value = true
+  function handleCreditData (appNoValue: string): void {
+    console.log('授信資料按鈕被點擊', appNoValue)
+    appNo.value = appNoValue
+    isLcAppCreditEditDialog.value = true
   }
 
   function downloadFile () {
