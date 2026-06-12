@@ -820,42 +820,130 @@
                   <td colspan="3">
                     <div class="d-flex">
                       <div class="w-50">
-                        <span class="font-weight-bold">風險類別一：</span> B1 應收信用狀款-存款或存單
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-25 text-end">風險類別一：</div>
+
+                          <v-select
+                            v-model="formData.riskCategoryOne"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details="auto"
+                            item-title="title"
+                            item-value="value"
+                            :items="[...RISK_CATEGORY_OPTIONS]"
+                            variant="outlined"
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-25 text-end">風險類別二：</div>
+
+                          <v-select
+                            v-model="formData.riskCategoryTwo"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details="auto"
+                            item-title="title"
+                            item-value="value"
+                            :items="[...RISK_CATEGORY_OPTIONS]"
+                            variant="outlined"
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-25 text-end">風險類別三：</div>
+
+                          <v-select
+                            v-model="formData.riskCategoryThree"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details="auto"
+                            item-title="title"
+                            item-value="value"
+                            :items="[...RISK_CATEGORY_OPTIONS]"
+                            variant="outlined"
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-25 text-end">風險類別四：</div>
+
+                          <v-select
+                            v-model="formData.riskCategoryFour"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details="auto"
+                            item-title="title"
+                            item-value="value"
+                            :items="[...RISK_CATEGORY_OPTIONS]"
+                            variant="outlined"
+                          />
+                        </div>
+
                       </div>
 
-                      <div>
-                        <span class="font-weight-bold">風險類別一百分比 %：</span> 100
-                      </div>
-                    </div>
-
-                    <div class="d-flex">
                       <div class="w-50">
-                        <span class="font-weight-bold">風險類別二 %：</span> --
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-40 text-end">風險類別一百分比 %：</div>
+
+                          <v-text-field
+                            v-model="formData.riskCategoryOnePercentage"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details
+                            variant="outlined"
+                            @click.stop
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-40 text-end">風險類別二百分比 %：</div>
+
+                          <v-text-field
+                            v-model="formData.riskCategoryTwoPercentage"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details
+                            variant="outlined"
+                            @click.stop
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-40 text-end">風險類別三百分比 %：</div>
+
+                          <v-text-field
+                            v-model="formData.riskCategoryThreePercentage"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details
+                            variant="outlined"
+                            @click.stop
+                          />
+                        </div>
+
+                        <div class="d-flex align-center">
+                          <div class="font-weight-bold w-40 text-end">風險類別四百分比 %：</div>
+
+                          <v-text-field
+                            v-model="formData.riskCategoryFourPercentage"
+                            class="my-1"
+                            color="teal-darken-2"
+                            density="compact"
+                            hide-details
+                            variant="outlined"
+                            @click.stop
+                          />
+                        </div>
                       </div>
 
-                      <div>
-                        <span class="font-weight-bold">風險類別二百分比 %：</span> --
-                      </div>
-                    </div>
-
-                    <div class="d-flex">
-                      <div class="w-50">
-                        <span class="font-weight-bold">風險類別三 %：</span> --
-                      </div>
-
-                      <div>
-                        <span class="font-weight-bold">風險類別三百分比 %：</span> --
-                      </div>
-                    </div>
-
-                    <div class="d-flex">
-                      <div class="w-50">
-                        <span class="font-weight-bold">風險類別四 %：</span> --
-                      </div>
-
-                      <div>
-                        <span class="font-weight-bold">風險類別四百分比 %：</span> --
-                      </div>
                     </div>
                   </td>
                 </tr>
@@ -866,10 +954,16 @@
                   </th>
 
                   <td colspan="3">
-                    <div class="hnb__line--indent">
-                      <v-icon :icon="formData.cleanChecked ? 'mdi mdi-square' : 'mdi mdi-square-outline'" size="small" />
-                      已確實於 AML 系統辦理線上姓名檢核並填製「新臺幣國內信用狀業務防制洗錢及打擊資恐作業檢核表」。
-                    </div>
+                    <v-checkbox
+                      v-model="formData.cleanChecked"
+                      color="cyan-darken-3"
+                      density="compact"
+                      hide-details
+                    >
+                      <template #label>
+                        <span class="text-body-2">已確實於 AML 系統辦理線上姓名檢核並填製「新臺幣國內信用狀業務防制洗錢及打擊資恐作業檢核表」。</span>
+                      </template>
+                    </v-checkbox>
                   </td>
                 </tr>
               </tbody>
@@ -909,9 +1003,9 @@
 
           <v-btn
             class="hnb__btn--default mx-1 my-2"
-            @click="onSend"
+            @click="onSave"
           >
-            確定
+            儲存
           </v-btn>
 
           <v-spacer />
@@ -947,6 +1041,12 @@
     { title: '擔保條件 1', value: '01' },
     { title: '擔保條件 2', value: '02' },
   ]
+  const RISK_CATEGORY_OPTIONS = [
+    { title: 'B1 應收信用狀款-存款或存單', value: '01' },
+    { title: 'B2 應收信用狀款-其他', value: '02' },
+    { title: 'C1 其他應收款-存款或存單', value: '03' },
+    { title: 'C2 其他應收款-其他', value: '04' },
+  ]
 
   interface Props {
     isLcAppCreditEditDialog?: boolean
@@ -974,6 +1074,7 @@
   const emits = defineEmits<{
     'update:isLcAppCreditEditDialog': [boolean]
     'on-close': []
+    'on-save': []
   }>()
 
   const formData = ref({
@@ -988,6 +1089,44 @@
     isAuth: true, // 是否有授權扣帳
     cleanChecked: true, // 是否已確實洗錢防制檢核
     otherReason: null, // 其他定價指標原因
+    loanAccount: '', // 放款戶號
+    openLoanApprovalNo: '', // 開狀放款核號
+    acceptanceLoanApprovalNo: '', // 承兌放款核號
+    loanManagerId: '', // 貸放經理人ID
+    reviewManagerIdA: '', // 徵審主管 ID-A
+    reviewManagerIdB: '', // 徵審主管 ID-B
+    openingFee: '', // 開狀手續費
+    isStampTaxDeducted: false, // 開狀手續費是否扣印花稅
+    acceptanceFee: '', // 承兌手續費
+    isAcceptanceFeeStampTaxDeducted: false, // 承兌手續費是否扣印花稅
+    depositMarginRate: '', // 存入保證金比率
+    guaranteeDeposit: '', // 保證金
+    batchNumber: '', // 批次案號
+    noticeNo: '', // 信保通知單編號
+    cashAmount: '', // 現金金額
+    checkAccount1: '', // 支票存款帳號 1
+    checkNumber1: '', // 支票號碼 1
+    checkAmount1: '', // 金額 1
+    checkAccount2: '', // 支票存款帳號 2
+    checkNumber2: '', // 支票號碼 2
+    checkAmount2: '', // 金額 2
+    savingsAccount: '', // 活期存款帳號
+    amount1: '', // 第 1 張取款條金額
+    amount2: '', // 第 2 張取款條金額
+    transferAccount: '', // 轉出會計科目
+    transferSerialNumber: '', // 轉出銷帳序號
+    transferAmount: '', // 轉出科目金額
+    transferSummary: '', // 轉出科目摘要
+    guaranteeCondition: null, // 擔保條件
+    guaranteeConditionRemark: '', // 擔保條件備註說明
+    riskCategoryOne: null, // 風險類別一
+    riskCategoryTwo: null, // 風險類別二
+    riskCategoryThree: null, // 風險類別三
+    riskCategoryFour: null, // 風險類別四
+    riskCategoryOnePercentage: '', // 風險類別一百分比
+    riskCategoryTwoPercentage: '', // 風險類別二百分比
+    riskCategoryThreePercentage: '', // 風險類別三百分比
+    riskCategoryFourPercentage: '', // 風險類別四百分比
   })
 
   function onClose (): void {
@@ -995,8 +1134,11 @@
     emits('on-close')
   }
 
-  function onSend (): void {
-    console.log('確定送出')
+  function onSave (): void {
+    console.log('儲存')
+    // TODO: 儲存邏輯
+
+    emits('on-save')
     show.value = false
   }
 

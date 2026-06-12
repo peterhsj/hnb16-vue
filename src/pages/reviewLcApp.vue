@@ -258,6 +258,8 @@
     <LcAppCreditEditDialog
       v-model:is-lc-app-credit-edit-dialog="isLcAppCreditEditDialog"
       :app-no="appNo"
+      @on-close="isLcAppCreditEditDialog = false"
+      @on-save="saveCreditData"
     />
   </div>
 </template>
@@ -486,6 +488,18 @@
     console.log('授信資料按鈕被點擊', appNoValue)
     appNo.value = appNoValue
     isLcAppCreditEditDialog.value = true
+  }
+
+  // 儲存授信資料
+  function saveCreditData (): void {
+    console.log('儲存授信資料，App No:', appNo.value)
+    // 這裡可以加入實際的儲存邏輯，例如呼叫 API 儲存資料，然後根據結果顯示提示訊息等
+    messageTitle.value = '訊息通知'
+    message.value = '授信資料已成功儲存！'
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageWidth.value = '400px'
+    messageDialog.value = true
   }
 
   function downloadFile () {

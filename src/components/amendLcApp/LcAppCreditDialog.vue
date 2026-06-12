@@ -2,7 +2,7 @@
   <v-dialog
     v-model="show"
     persistent
-    width="1000"
+    width="1100"
   >
     <v-card
       class="hnb__dialog"
@@ -24,7 +24,7 @@
           <v-table class="hnb__table hnb__table--vertical w-100" density="compact">
             <tbody>
               <tr>
-                <th class="hnb__tbhd2 text-end w-25" rowspan="4">
+                <th class="hnb__tbhd2 text-end w-25">
                   定價指標
                 </th>
 
@@ -33,29 +33,23 @@
                     <v-icon :icon="data.pricingBenchmark === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
                     按貴行之基準利率加碼年率 0.0100000 % 計息 ( 目前合計為年率 4.0300000 % ) 計息，嗣後貴行基準利率每 1 個月調整時隨同調整，加碼幅度不變。
                   </div>
-                </td>
-              </tr>
 
-              <tr>
-                <td colspan="3">
+                  <v-divider class="my-2" />
+
                   <div class="hnb__line--indent">
                     <v-icon :icon="data.pricingBenchmark === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
                     固定利率，按年率 - % 計息。
                   </div>
-                </td>
-              </tr>
 
-              <tr>
-                <td colspan="3">
+                  <v-divider class="my-2" />
+
                   <div class="hnb__line--indent">
                     <v-icon :icon="data.pricingBenchmark === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
                     按貴行之貨幣市場 -- 天期均價利率 - 碼 - % ( 目前合計為年率 - % ) 計息，嗣後以貸放日後每滿 - 個月之相對日為利率變動調整日，自調整日起隨同調整，加減碼幅度不變。
                   </div>
-                </td>
-              </tr>
 
-              <tr>
-                <td colspan="3">
+                  <v-divider class="my-2" />
+
                   <div class="hnb__line--indent">
                     <v-icon :icon="data.pricingBenchmark === '04' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
                     其他：
