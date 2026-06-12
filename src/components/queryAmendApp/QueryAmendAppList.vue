@@ -194,6 +194,12 @@
       :lc-no="lcNo"
       @on-close="isTransferVoucherDialog = false"
     />
+    <!-- 修改申請書預覽 -->
+    <AmendLcAppReviewDialog
+      v-model:is-amend-lc-app-review-dialog="isAmendLcAppReviewDialog"
+      :amend-app-no="amendAppNo"
+      @on-close="isAmendLcAppReviewDialog = false"
+    />
   </div>
 </template>
 
@@ -203,7 +209,6 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDatacList } from '@/api/queryAmendApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { thousandsFormatting } from '@/utils/format'
 
   const emits = defineEmits(['on-edit'])
 
@@ -212,7 +217,7 @@
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
   // Amend App Dialog
-  const amendAppDialog = ref(false)
+  const isAmendLcAppReviewDialog = ref(false)
   const amendAppNo = ref<string>('')
   // Lc Dialog
   const lcDialog = ref(false)
@@ -375,6 +380,7 @@
   // 查看修改申請書 Amend app Dialog
   function handleAmendAppView (value: string): void {
     amendAppNo.value = value
+    isAmendLcAppReviewDialog.value = true
   }
 
   // 查看修改通知書 Amend Notice Dialog

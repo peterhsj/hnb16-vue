@@ -261,6 +261,13 @@
       @on-close="isLcAppCreditEditDialog = false"
       @on-save="saveCreditData"
     />
+
+    <!-- 審核核准 Dialog -->
+    <ReviewLcSuccessDialog
+      v-model:is-review-lc-approve="isReviewLcApprove"
+      :lc-app-no="lcAppNo"
+      @on-close="closeReviewLcApproveDialog"
+    />
   </div>
 </template>
 
@@ -289,6 +296,9 @@
   // 授信資料編輯 Dialog
   const isLcAppCreditEditDialog = ref(false)
   const appNo = ref<string>('')
+  // 審核核准 Dialog
+  const isReviewLcApprove = ref(false)
+  const lcAppNo = ref<string>('')
 
   const isShowApp = ref(false)
   const beneType = ref<string>('cds')
@@ -457,7 +467,10 @@
 
   // 確定審核
   function handleReviewData (): void {
-    try {
+    console.log('審核結果：', reviewForm.value.reviewStatus)
+    if (reviewForm.value.reviewStatus === 'approve') {
+      isReviewLcApprove.value = true
+    } else {
       messageTitle.value = '訊息通知'
       message.value = `<span class="font-weight-bold">開狀申請書號碼：</span>
         <span class="text-blue-grey-darken-4">ENID0990000089</span><br>
@@ -472,9 +485,14 @@
 
       isShowList.value = true
       isShowApp.value = false
-    } catch (error) {
-      console.error('審核失敗:', error)
     }
+  }
+
+  // 關閉審核核准 Dialog
+  function closeReviewLcApproveDialog (): void {
+    isReviewLcApprove.value = false
+    isShowList.value = true
+    isShowApp.value = false
   }
 
   // 關閉審核開狀申請書

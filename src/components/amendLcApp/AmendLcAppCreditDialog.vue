@@ -2,7 +2,7 @@
   <v-dialog
     v-model="show"
     persistent
-    width="1000"
+    width="1100"
   >
     <v-card
       class="hnb__dialog"

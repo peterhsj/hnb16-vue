@@ -124,8 +124,8 @@
   import { reactive, watch } from 'vue'
 
   interface Props {
-    data?: CancelAppData
     isShowDeposit?: boolean
+    data?: CancelAppData
   }
   const props = withDefaults(defineProps<Props>(), {
     data: () => ({
