@@ -82,6 +82,7 @@
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -96,6 +97,15 @@
         :app-no="appNo"
         :bene-type="beneType"
         @on-close="appDialogClose"
+      />
+
+      <!-- 授信資料編輯 -->
+      <LcAppCreditEditDialog
+        v-model:is-lc-app-credit-edit-dialog="isLcAppCreditEditDialog"
+        :app-no="appNo"
+        :is-show-preview="true"
+        @on-close="isLcAppCreditEditDialog = false"
+        @on-save="saveCreditData"
       />
     </v-container>
   </div>
@@ -117,6 +127,9 @@
   const appDialog = ref(false)
   const appNo = ref<string>('')
   const beneType = ref<string>('cds')
+
+  // 授信資料編輯 Dialog
+  const isLcAppCreditEditDialog = ref(false)
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -143,6 +156,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -226,9 +240,25 @@
 
   function handlerCredit (lcNo: string): void {
     console.log('Edit item:', lcNo)
+    appNo.value = lcNo
+    isLcAppCreditEditDialog.value = true
   }
 
-  onMounted(fetchDataList)
+  // 儲存授信資料
+  function saveCreditData (): void {
+    console.log('儲存授信資料，App No:', appNo.value)
+    // 這裡可以加入實際的儲存邏輯，例如呼叫 API 儲存資料，然後根據結果顯示提示訊息等
+    messageTitle.value = '訊息通知'
+    message.value = '作業已完成！待主管審核中'
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageWidth.value = '400px'
+    messageDialog.value = true
+  }
+
+  onMounted(() => {
+    fetchDataList()
+  })
 
   // 離開 message
   function messageClose (): void {
