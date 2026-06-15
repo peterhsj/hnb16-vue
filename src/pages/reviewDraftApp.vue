@@ -30,6 +30,12 @@
         <ReviewDraftAppList :form-data="searchForm" @on-draft-review="draftReview" />
       </div>
 
+      <div v-if="isShowApp" class="mt-4 mx-4">
+        <h1 class="hnb16__title">審核匯票資料</h1>
+
+        <ReviewDraft @on-cancel="handleCancel" @on-submit="handleSubmit" />
+      </div>
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
@@ -49,7 +55,7 @@
 
   const isShowBeneList = ref(true)
   const isShowList = ref(false)
-
+  const isShowApp = ref(false)
   const breadcrumbs = [
     { title: '首頁', to: '/' },
     { title: '編審作業' },
@@ -78,6 +84,18 @@
 
   function draftReview (draftNo: string): void {
     console.log('View Draft No:', draftNo)
+    isShowList.value = false
+    isShowApp.value = true
+  }
+
+  function handleCancel (): void {
+    isShowList.value = true
+    isShowApp.value = false
+  }
+
+  function handleSubmit (): void {
+    isShowList.value = true
+    isShowApp.value = false
   }
 
   // 離開 message
@@ -101,6 +119,7 @@
       if (item.title === '押匯申請') {
         isShowBeneList.value = true
         isShowList.value = false
+        isShowApp.value = false
       }
     }
   }
