@@ -4,7 +4,7 @@ import type { LcTypeOption } from '@/types/common'
 
 export interface ListItem {
   seqNo: number
-  cancelAppNo: string | null
+  cancelAppNo: string
   lcNo: string
   lcType: LcTypeOption
   issueDate: string

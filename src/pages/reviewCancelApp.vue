@@ -72,7 +72,7 @@
         <h1 class="hnb16__title">審核信用狀註銷申請/切結書</h1>
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
-          <CancelAppInfo :data="data" />
+          <CancelAppInfo :data="data" :is-show-edit="isShowEdit" />
 
           <div class="mt-4 text-center">
             <v-btn
@@ -170,14 +170,16 @@
                             <div class="d-flex align-center">
                               <div class="text-no-wrap text-end me-2">轉入會計科目：</div>
 
-                              <v-text-field
+                              <v-select
                                 v-model="reviewForm.transferAccount"
-                                class="my-1"
+                                bg-color="white"
                                 color="teal-darken-2"
                                 density="compact"
-                                hide-details
+                                hide-details="auto"
+                                item-title="title"
+                                item-value="value"
+                                :items="[...TRANSFER_ACCOUNT_ITEMS]"
                                 variant="outlined"
-                                @click.stop
                               />
                             </div>
 
@@ -358,11 +360,20 @@
   const isReviewCancelApprove = ref(false)
 
   const isShowApp = ref(false)
+  const isShowEdit = ref(true)
   const data = ref<any>({
     appNo: 'LC20240225001',
+    beneType: 'cds',
     lcAmount: 1_000_000,
     fee: 500,
   })
+
+  const TRANSFER_ACCOUNT_ITEMS = [
+    { title: '13097-099：其他應收款-雜項', value: 'ta1' },
+    { title: '13097-100：其他應收款-雜項', value: 'ta2' },
+    { title: '13097-101：其他應收款-雜項', value: 'ta3' },
+    { title: '13097-102：其他應收款-雜項', value: 'ta4' },
+  ]
 
   interface ReviewForm {
     loanAccountNo: string

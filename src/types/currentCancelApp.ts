@@ -28,4 +28,6 @@ export interface ListResponse {
 export interface CancelAppData {
   appNo: string
   beneType: string
+  lcAmount?: number
+  fee?: number
 }

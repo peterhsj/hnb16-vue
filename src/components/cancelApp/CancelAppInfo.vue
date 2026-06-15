@@ -52,7 +52,15 @@
               </tbody>
             </v-table>
 
-            <div class="text-right my-5 mx-4">
+            <div class="d-flex my-5 mx-4">
+              <div v-if="props.isShowEdit">
+                <p>(一)若註銷「未過期」信用狀，<span class="text-red-darken-3">請務必確認已取得受益人同意書</span>，若未取得逕予註銷，恐遭受益人訴諸法律求償。</p>
+                <p>(二)若<span class="text-red-darken-3">「電子信用狀」</span>內容有誤 ( 受益人為<span class="text-red-darken-3">中鋼</span>集團、<span class="text-red-darken-3">台塑</span>集團、<span class="text-red-darken-3">華新麗華</span>、<span class="text-red-darken-3">奇美</span>集團、<span class="text-red-darken-3">東和鋼鐵</span>等 )，請以修狀方式修正，切勿隨意以先註銷再重新開狀之方式辦理。</p>
+                <p>(三)若註銷「電子信用狀」後，<span class="text-red-darken-3">無法執行當日更正交易</span>。</p>
+              </div>
+
+              <v-spacer />
+
               <div v-if="infoData.beneType === 'cds'" class="d-inline-flex">
                 <span class="px-3 text-center">
                   <v-img src="../../assets/images/cds_01.gif" width="90" />
@@ -125,21 +133,22 @@
 
   interface Props {
     isShowDeposit?: boolean
+    isShowEdit?: boolean
     data?: CancelAppData
   }
   const props = withDefaults(defineProps<Props>(), {
     data: () => ({
       appNo: '',
       beneType: 'cds',
+      lcAmount: 0,
+      fee: 0,
     }),
     isShowDeposit: false,
+    isShowEdit: false,
   })
 
   // 共用表單物件
-  const infoData = reactive<CancelAppData>({
-    beneType: '', // 受益人類型
-    appNo: '', // 信用狀號碼
-  })
+  const infoData = reactive<CancelAppData>(props.data)
 
   // ── 監聽 data 以初始化 / 重設表單 ─────────────────────────────────────
   watch(
