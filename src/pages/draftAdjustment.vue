@@ -68,7 +68,7 @@
                 class="hnb__btn--default mx-1 my-1"
                 size="small"
                 variant="flat"
-                @click="handlerCredit(item.lcNo)"
+                @click="handlerCredit(item.draftNo)"
               >
                 授信資料
               </v-btn>
@@ -85,6 +85,14 @@
           :total-pages="totalPages"
           @update:items-per-page="pageOptions.page = 1"
         />
+      </div>
+
+      <div v-if="isShowApp">
+        <h1 class="hnb16__title">押匯申請-授信資料</h1>
+
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+          <DraftTypeEditForm :is-show-preview="true" />
+        </v-card>
       </div>
 
       <!-- Prompt Dialog -->
@@ -139,6 +147,7 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+  const isShowApp = ref(false)
   // Lc Dialog
   const lcDialog = ref(false)
   const lcNo = ref<string>('')
@@ -251,8 +260,10 @@
     console.log('View Draft:', draftNo)
   }
 
-  function handlerCredit (lcNo: string): void {
-    console.log('Edit item:', lcNo)
+  function handlerCredit (draftNo: string): void {
+    console.log('Edit item:', draftNo)
+    isShowList.value = false
+    isShowApp.value = true
   }
 
   // 查看信用狀 Lc Dialog
