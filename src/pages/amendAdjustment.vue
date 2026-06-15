@@ -79,7 +79,7 @@
                 class="hnb__btn--default mx-1 my-1"
                 size="small"
                 variant="flat"
-                @click="handlerCredit(item.lcNo)"
+                @click="handleCreditData(item.amendAppNo)"
               >
                 授信資料
               </v-btn>
@@ -132,9 +132,19 @@
         @open-lc-detail="handleOpenLcDetail"
       />
 
+      <!-- 授信資料編輯 -->
+      <AmendLcAppCreditEditDialog
+        v-model:is-amend-lc-app-credit-edit-dialog="isAmendLcAppCreditEditDialog"
+        :amend-app-no="amendAppNo"
+        :is-show-preview="true"
+        @on-close="isAmendLcAppCreditEditDialog = false"
+        @on-save="saveCreditData"
+      />
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -173,6 +183,10 @@
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
 
+  // 授信資料編輯 Dialog
+  const isAmendLcAppCreditEditDialog = ref(false)
+  const amendAppNo = ref<string>('')
+
   const breadcrumbs = [
     { title: '首頁', to: '/' },
     { title: '申請作業' },
@@ -198,6 +212,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -316,11 +331,28 @@
     noticeNo.value = ''
   }
 
-  function handlerCredit (lcNo: string): void {
-    console.log('Edit item:', lcNo)
+  // 處理授信資料按鈕點擊事件
+  function handleCreditData (amendAppNoValue: string): void {
+    console.log('授信資料按鈕被點擊', amendAppNoValue)
+    amendAppNo.value = amendAppNoValue
+    isAmendLcAppCreditEditDialog.value = true
   }
 
-  onMounted(fetchTableList)
+  // 儲存授信資料
+  function saveCreditData (): void {
+    console.log('儲存授信資料，Amend App No:', amendAppNo.value)
+    // 這裡可以加入實際的儲存邏輯，例如呼叫 API 儲存資料，然後根據結果顯示提示訊息等
+    messageTitle.value = '訊息通知'
+    message.value = '授信資料已成功儲存！'
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageWidth.value = '400px'
+    messageDialog.value = true
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {

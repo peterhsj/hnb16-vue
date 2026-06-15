@@ -70,7 +70,7 @@
       </v-form>
     </v-card>
 
-    <!-- 開狀申請書-授信資料 Dialog -->
+    <!-- 修改申請書-授信資料 Dialog -->
     <AmendLcAppCreditDialog
       v-model:is-lc-app-credit-dialog-open="isLcAppCreditDialogOpen"
       :amend-notice-no="amendNoticeNoValue"
