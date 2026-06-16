@@ -8,7 +8,10 @@
     <!-- 主表單卡片 -->
     <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
       <v-card-text class="bg-grey-lighten-4 pa-3">
-        <CancelAppInfo :data="form" :is-show-deposit="true" />
+        <CancelAppInfo
+          :data="form"
+          :is-show-deposit="false"
+        />
         <!-- ===== 共用底部按鈕列 ===== -->
         <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
           <v-btn class="hnb__btn--cancel mx-1" @click="confirmCancel">
@@ -45,9 +48,13 @@
   import type { CancelAppData } from '@/types/cancelApp'
   import { reactive, ref, watch } from 'vue'
 
-  const props = defineProps<{
-    formData: CancelAppData
-  }>()
+  interface Props {
+    isCdsExpired?: boolean // 是否為 CDS 過期案件
+    formData?: CancelAppData
+  }
+  const props = withDefaults(defineProps<Props>(), {
+    isCdsExpired: false,
+  })
 
   const emit = defineEmits<{
     'on-submit': []
@@ -71,15 +78,15 @@
   const CancelAppEditDialog = ref<boolean>(false)
 
   // ── 監聽 formData 以初始化 / 重設表單 ─────────────────────────────────────
-  watch(
-    () => props.formData,
-    newData => {
-      if (newData.appNo) {
-        Object.assign(form, { ...newData })
-      }
-    },
-    { immediate: true },
-  )
+  // watch(
+  //   () => props.formData,
+  //   newData => {
+  //     if (newData.appNo) {
+  //       Object.assign(form, { ...newData })
+  //     }
+  //   },
+  //   { immediate: true },
+  // )
 
   // ── 共用函式 ──────────────────────────────────────────────────────────────
   function confirmCancel (): void {
@@ -94,7 +101,11 @@
   function onSubmit (): void {
     console.log('Submit payload:', form)
     try {
-      CancelAppEditDialog.value = true
+      if (props.isCdsExpired) {
+        sendConfirm()
+      } else {
+        CancelAppEditDialog.value = true
+      }
     } catch (error) {
       console.error('Error emitting submit event:', error)
     }

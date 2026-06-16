@@ -166,11 +166,22 @@
         <ExpiredLcList :form-data="propsFormData" @on-edit="handleEdit" />
 
       </div>
+
+      <!-- 填寫註銷申請/切結書 -->
+      <div v-if="isEdit">
+        <CancelAppEditForm
+          :form-data="cancleAppData"
+          :is-cds-expired="true"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
+        />
+      </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
+  import type { CancelAppData } from '@/types/cancelApp'
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
@@ -189,6 +200,7 @@
   const searchForm = reactive<QueryFormPayload>(createInitialQueryForm())
   const propsFormData = ref<QueryFormPayload>({ ...searchForm })
   const lcData = ref<LcData>({ lcNo: '' })
+  const cancleAppData = ref<CancelAppData>({ appNo: '', beneType: '' })
 
   watch(() => searchForm.queryMode, newType => {
     searchFormRef.value?.reset()

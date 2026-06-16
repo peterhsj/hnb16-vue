@@ -443,7 +443,7 @@
               </div>
             </div>
 
-            <v-divider class="my-4" />
+            <v-divider class="my-4" variant="dashed" />
 
             <div class="ma-1">
               <!-- <v-icon :icon="draftData.draftType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> -->
@@ -710,6 +710,12 @@
               </div>
             </div>
 
+            <v-divider
+              class="my-4"
+              color="teal-darken-2"
+              :thickness="2"
+            />
+
             <h6 class="hnb16__title text-h6">費用付款方式：</h6>
 
             <v-radio-group
@@ -902,6 +908,12 @@
               </div>
             </v-radio-group>
 
+            <v-divider
+              class="my-4"
+              color="teal-darken-2"
+              :thickness="2"
+            />
+
             <h6 class="hnb16__title text-h6">押匯手續費優惠：</h6>
 
             <div class="ma-1">
@@ -968,6 +980,11 @@
         <v-spacer />
       </v-col>
     </v-row>
+
+    <DraftCreditDialog
+      v-model:is-show-credit-dialog="isShowCreditDialog"
+      @on-close="isShowCreditDialog = false"
+    />
   </div>
 </template>
 
@@ -980,6 +997,7 @@
   }>()
 
   const show = ref(true)
+  const isShowCreditDialog = ref(false)
 
   // const infoData = reactive<AppData>({
   //   draftNo: '',
@@ -1058,7 +1076,7 @@
   }
 
   function previewApp (): void {
-    alert('預覽')
+    isShowCreditDialog.value = true
   }
 
   // watch(
@@ -1083,6 +1101,4 @@
     emits('on-save')
     show.value = false
   }
-
-
 </script>

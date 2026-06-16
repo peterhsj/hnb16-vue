@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-table class="table-sm hnb__table-v bg-white" density="compact">
+    <v-table v-if="isShowTable" class="table-sm hnb__table-v bg-white" density="compact">
       <tbody>
         <tr>
           <th class="text-end text-no-wrap" scope="row" style="width: 150px;">
@@ -60,282 +60,296 @@
 
     <div v-if="props.isShowDeposit" class="my-6">
       <!-- 押匯方式：卡片 -->
-      <v-row justify="center">
-        <v-col cols="12" md="6" sm="12">
-          <v-card class="mx-auto border-sm bg-white" elevation="2" variant="outlined">
-            <v-card-text class="px-7">
-              <h6 class="hnb16__title text-h6">押匯方式：</h6>
+      <!-- <v-row justify="center">
+        <v-col cols="12" md="6"> -->
+      <v-card class="mx-auto border-sm bg-white" elevation="2" style="max-width: 800px;" variant="outlined">
+        <v-card-text class="px-7">
+          <h6 class="hnb16__title text-h6">押匯方式：</h6>
 
-              <div class="my-2">
-                <v-icon :icon="draftData.draftType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                押匯
-              </div>
+          <div class="my-2">
+            <v-icon :icon="draftData.draftType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            押匯
+          </div>
 
-              <div class="my-2 ms-5">
-                <div class="font-weight-bold">撥款方式：</div>
+          <div class="my-2 ms-5">
+            <div class="font-weight-bold">撥款方式：</div>
 
-                <div class="my-2">
-                  <v-icon :icon="draftData.billType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                  本行-轉入帳號：---
-                </div>
+            <div class="my-2">
+              <v-icon :icon="draftData.billType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+              本行-轉入帳號：---
+            </div>
 
-                <div class="my-2">
-                  <v-icon :icon="draftData.billType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                  跨行-付款內容詳受益人匯出匯款申請書
-                </div>
+            <div class="my-2">
+              <v-icon :icon="draftData.billType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+              跨行-付款內容詳受益人匯出匯款申請書
+            </div>
 
-                <div class="my-2 d-flex">
-                  <v-icon :icon="draftData.billType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            <div class="my-2 d-flex">
+              <v-icon :icon="draftData.billType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
 
-                  <div class="ms-1 d-flex ">
-                    <span class="font-weight-bold">轉入科目：</span>
+              <div class="ms-1 d-flex ">
+                <span class="font-weight-bold">轉入科目：</span>
 
-                    <div>
-                      <span>轉入會計科目：13097-099：其他應收款-雜項</span>
+                <div>
+                  <span>轉入會計科目：13097-099：其他應收款-雜項</span>
 
-                      <div class="my-2">
-                        轉入銷帳序號：---
-                      </div>
+                  <div class="my-2">
+                    轉入銷帳序號：---
+                  </div>
 
-                      <div class="my-2">
-                        轉入科目金額：---
-                      </div>
+                  <div class="my-2">
+                    轉入科目金額：---
+                  </div>
 
-                      <div class="my-2">
-                        轉入科目摘要：---
-                      </div>
-                    </div>
-
+                  <div class="my-2">
+                    轉入科目摘要：---
                   </div>
                 </div>
 
+              </div>
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">押匯手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">押匯放款核號：</span>1141161000
+
+              <span>
+                <v-btn class="hnb__btn--default ms-5" size="small" variant="flat" @click="handleCheckData">
+                  檢查押匯核號
+                </v-btn>
+              </span>
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">貸放經理人 ID：</span>G101057626
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">徵審主管 ID-A： </span>G101057626
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">徵審主管 ID-B： </span>---
+            </div>
+
+            <div class="my-2 d-flex">
+              <span class="font-weight-bold text-no-wrap">風險條件：</span>
+
+              <v-row no-gutters>
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別一：</span>
+                  <span>B1 應收信用狀款-存款或存單</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別一百分比 %：</span>
+                  <span>100</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別二：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別二百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別三：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別三百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別四：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別四百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+
+          <v-divider class="my-4" variant="dashed" />
+
+          <div class="hnb__line--indent ma-1">
+            <v-icon :icon="draftData.draftType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            承兌
+          </div>
+
+          <div class="my-2 ms-5">
+            <div class="my-2">
+              <span class="font-weight-bold">承兌手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">承兌放款核號：</span>1141161000
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">貸放經理人 ID：</span>G101057626
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">徵審主管 ID-A： </span>G101057626
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">徵審主管 ID-B： </span>---
+            </div>
+
+            <div class="my-2">
+              <span class="font-weight-bold">押匯手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
+            </div>
+
+            <div class="my-2 d-flex">
+              <span class="font-weight-bold text-no-wrap">風險條件：</span>
+
+              <v-row no-gutters>
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別一：</span>
+                  <span>B1 應收信用狀款-存款或存單</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別一百分比 %：</span>
+                  <span>100</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別二：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別二百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別三：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別三百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別四：</span>
+                  <span>---</span>
+                </v-col>
+
+                <v-col class="d-flex" cols="12" md="6">
+                  <span class="text-no-wrap">風險類別四百分比 %：</span>
+                  <span>---</span>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+
+          <v-divider
+            class="my-4"
+            color="teal-darken-2"
+            :thickness="2"
+          />
+
+          <h6 class="hnb16__title text-h6">費用付款方式：</h6>
+
+          <div class="hnb__line--indent ma-1">
+            <v-icon :icon="draftData.paymentType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            現金
+          </div>
+
+          <div class="my-2">
+            <v-icon :icon="draftData.paymentType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            <span>支存帳號：--</span>
+            <span class="ms-6">支票號碼：--</span>
+          </div>
+
+          <div class="my-2">
+            <v-icon :icon="draftData.paymentType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            活存帳號：--
+          </div>
+
+          <div class="my-2">
+            <v-icon :icon="draftData.paymentType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            內扣
+          </div>
+
+          <div class="my-2 d-flex">
+            <v-icon :icon="draftData.paymentType === '05' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+
+            <div class="ms-1 d-flex ">
+              <span class="font-weight-bold">轉出科目：</span>
+
+              <div>
+                <span>轉出會計科目：---</span>
+
                 <div class="my-2">
-                  <span class="font-weight-bold">押匯手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
+                  轉出銷帳序號：---
                 </div>
 
                 <div class="my-2">
-                  <span class="font-weight-bold">押匯放款核號：</span>1141161000
-
-                  <span>
-                    <v-btn class="hnb__btn--default ms-5" size="small" variant="flat" @click="handleCheckData">
-                      檢查押匯核號
-                    </v-btn>
-                  </span>
+                  轉出科目金額：---
                 </div>
 
                 <div class="my-2">
-                  <span class="font-weight-bold">貸放經理人 ID：</span>G101057626
-                </div>
-
-                <div class="my-2">
-                  <span class="font-weight-bold">徵審主管 ID-A： </span>G101057626
-                </div>
-
-                <div class="my-2">
-                  <span class="font-weight-bold">徵審主管 ID-B： </span>---
-                </div>
-
-                <div class="my-2 d-flex">
-                  <span class="font-weight-bold text-no-wrap">風險條件：</span>
-
-                  <div class="ms-1 d-flex flex-wrap w-100">
-                    <div class="w-50">
-                      <span>風險類別一：</span>
-                      B1 應收信用狀款-存款或存單
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別一百分比 %：</span>
-                      100
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別二：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別二百分比 %：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別三：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別三百分比 %：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別四：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別四百分比 %：</span>
-                      ---
-                    </div>
-                  </div>
+                  轉出科目摘要：---
                 </div>
               </div>
 
-              <v-divider class="my-4" />
+            </div>
+          </div>
 
-              <div class="hnb__line--indent ma-1">
-                <v-icon :icon="draftData.draftType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                承兌
-              </div>
+          <v-divider
+            class="my-4"
+            color="teal-darken-2"
+            :thickness="2"
+          />
 
-              <div class="my-2 ms-5">
-                <div class="my-2">
-                  <span class="font-weight-bold">承兌手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
-                </div>
+          <h6 class="hnb16__title text-h6">押匯手續費優惠：</h6>
 
-                <div class="my-2">
-                  <span class="font-weight-bold">承兌放款核號：</span>1141161000
-                </div>
+          <div class="hnb__line--indent ma-1">
+            <v-icon :icon="draftData.feeDiscount ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+            押匯手續費優惠
+          </div>
 
-                <div class="my-2">
-                  <span class="font-weight-bold">貸放經理人 ID：</span>G101057626
-                </div>
-
-                <div class="my-2">
-                  <span class="font-weight-bold">徵審主管 ID-A： </span>G101057626
-                </div>
-
-                <div class="my-2">
-                  <span class="font-weight-bold">徵審主管 ID-B： </span>---
-                </div>
-
-                <div class="my-2">
-                  <span class="font-weight-bold">押匯手續費：</span>300.0<span class="ms-6 font-weight-bold">是否扣印花稅：</span> 是
-                </div>
-
-                <div class="my-2 d-flex">
-                  <span class="font-weight-bold text-no-wrap">風險條件：</span>
-
-                  <div class="ms-1 d-flex flex-wrap w-100">
-                    <div class="w-50">
-                      <span>風險類別一：</span>
-                      B1 應收信用狀款-存款或存單
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別一百分比 %：</span>
-                      100
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別二：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別二百分比 %：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別三：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別三百分比 %：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別四：</span>
-                      ---
-                    </div>
-
-                    <div class="w-50">
-                      <span>風險類別四百分比 %：</span>
-                      ---
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <h6 class="hnb16__title text-h6">費用付款方式：</h6>
-
-              <div class="hnb__line--indent ma-1">
-                <v-icon :icon="draftData.paymentType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                現金
-              </div>
-
-              <div class="my-2">
-                <v-icon :icon="draftData.paymentType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                <span>支存帳號：--</span>
-                <span class="ms-6">支票號碼：--</span>
-              </div>
-
-              <div class="my-2">
-                <v-icon :icon="draftData.paymentType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                活存帳號：--
-              </div>
-
-              <div class="my-2">
-                <v-icon :icon="draftData.paymentType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                內扣
-              </div>
-
-              <div class="my-2 d-flex">
-                <v-icon :icon="draftData.paymentType === '05' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-
-                <div class="ms-1 d-flex ">
-                  <span class="font-weight-bold">轉出科目：</span>
-
-                  <div>
-                    <span>轉出會計科目：---</span>
-
-                    <div class="my-2">
-                      轉出銷帳序號：---
-                    </div>
-
-                    <div class="my-2">
-                      轉出科目金額：---
-                    </div>
-
-                    <div class="my-2">
-                      轉出科目摘要：---
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              <h6 class="hnb16__title text-h6">押匯手續費優惠：</h6>
-
-              <div class="hnb__line--indent ma-1">
-                <v-icon :icon="draftData.feeDiscount ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                押匯手續費優惠
-              </div>
-
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+        </v-card-text>
+      </v-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { AppData } from '@/types/currentAmendDraftApp'
   import { reactive, watch } from 'vue'
 
-  const props = defineProps<{
-    data: AppData
+  interface Props {
+    data: any
     isShowDeposit?: boolean
-  }>()
+    isShowTable?: boolean
+  }
 
-  const infoData = reactive<AppData>({
+  const props = withDefaults(defineProps<Props>(), {
+    isShowDeposit: false,
+    isShowTable: false,
+  })
+
+  const infoData = reactive({
     draftNo: '',
-    beneType: '',
   })
 
   const draftData = ref({

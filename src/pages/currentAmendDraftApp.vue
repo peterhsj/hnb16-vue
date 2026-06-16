@@ -81,7 +81,11 @@
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
           <v-card-text class="bg-grey-lighten-4 pa-3">
-            <DraftInfo :data="form" :is-show-deposit="true" />
+            <DraftInfo
+              :data="form"
+              :is-show-deposit="true"
+              :is-show-table="true"
+            />
             <!-- ===== 共用底部按鈕列 ===== -->
             <div class="d-flex flex-wrap justify-center align-center ga-2 mt-6">
               <v-btn class="hnb__btn--cancel mx-1" @click="onCancel">
