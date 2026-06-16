@@ -97,7 +97,7 @@
           <!-- 審核表單 -->
           <v-row class="my-4" justify="center">
             <v-col cols="12" md="8" sm="12">
-              <v-card class="border-sm bg-white pa-5" elevated="2">
+              <v-card class="border-sm bg-white px-6 py-5" elevated="2">
                 <h6 class="hnb16__title text-h6">押匯方式：</h6>
 
                 <div class="my-2">
@@ -537,7 +537,7 @@
                   </div>
                 </div>
 
-                <v-divider class="my-4" />
+                <v-divider class="my-4" variant="dashed" />
 
                 <div class="ma-1">
                   <!-- <v-icon :icon="draftData.draftType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /> -->
@@ -804,6 +804,12 @@
                   </div>
                 </div>
 
+                <v-divider
+                  class="my-4"
+                  color="teal-darken-2"
+                  :thickness="2"
+                />
+
                 <h6 class="hnb16__title text-h6">費用付款方式：</h6>
 
                 <v-radio-group
@@ -995,6 +1001,12 @@
                     </div>
                   </div>
                 </v-radio-group>
+
+                <v-divider
+                  class="my-4"
+                  color="teal-darken-2"
+                  :thickness="2"
+                />
 
                 <h6 class="hnb16__title text-h6">押匯手續費優惠：</h6>
 
