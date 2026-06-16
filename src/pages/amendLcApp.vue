@@ -326,7 +326,9 @@
     })
   }
 
-  onMounted(fetchAmendAcceptList)
+  onMounted(() => {
+    fetchAmendAcceptList()
+  })
 
   // 離開 message
   function messageClose (): void {

@@ -68,7 +68,7 @@
                 class="hnb__btn--default mx-1 my-1"
                 size="small"
                 variant="flat"
-                @click="handlerAmend(item.lcNo)"
+                @click="handleEcData(item.lcNo)"
               >
                 當日更正
               </v-btn>
@@ -90,6 +90,7 @@
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -174,6 +175,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -283,11 +285,40 @@
     noticeNo.value = ''
   }
 
-  function handlerAmend (lcNo: string): void {
-    console.log('Edit item:', lcNo)
+  // 處理當日沖正(EC)交易按鈕點擊事件
+  function handleEcData (lcNo: string): void {
+    console.log('當日沖正(EC)交易按鈕被點擊')
+    // 這裡可以加入實際的處理邏輯，例如跳轉到當日沖正(EC)交易頁面或顯示相關資訊等
+    messageDialog.value = true
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要沖正此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
   }
 
-  onMounted(fetchTableList)
+  // 送出當日沖正(EC)交易的確認邏輯
+  async function confirmEcData (): Promise<void> {
+    console.log('確認沖正當日沖正(EC)交易的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行沖正操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！'
+      messageStatus.value = 'success'
+      messageWidth.value = '400px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+    })
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
@@ -296,6 +327,11 @@
 
   // 確認 message
   function messageConfirm (): void {
+    if (processStatus.value === 'ecData') {
+      // 在這裡處理當日沖正(EC)交易的邏輯
+      console.log('確認沖正當日沖正(EC)交易')
+      confirmEcData()
+    }
     messageDialog.value = false
   }
 </script>
