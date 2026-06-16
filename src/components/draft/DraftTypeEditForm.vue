@@ -981,6 +981,18 @@
       </v-col>
     </v-row>
 
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
+
     <DraftCreditDialog
       v-model:is-show-credit-dialog="isShowCreditDialog"
       @on-close="isShowCreditDialog = false"
@@ -1008,6 +1020,15 @@
     'on-close': []
     'on-save': []
   }>()
+
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
+  const isConfirmBtn = ref<boolean>(true)
+  const processStatus = ref<string>('')
 
   const TRANSFER_ACCOUNT_ITEMS = [
     { title: '13097-099：其他應收款-雜項', value: 'ta1' },
@@ -1096,9 +1117,26 @@
 
   function onSave (): void {
     console.log('儲存')
-    // TODO: 儲存邏輯
+    messageDialog.value = true
+    messageTitle.value = '作業訊息'
+    message.value = '作業已完成！待主管審核中'
+    messageStatus.value = 'success'
+    messageWidth.value = '400px'
+    isConfirmBtn.value = false
+    processStatus.value = 'success'
+  }
 
-    emits('on-save')
-    show.value = false
+  // 離開 message
+  function messageClose (): void {
+    if (processStatus.value === 'success') {
+      emits('on-close')
+      show.value = false
+    }
+    messageDialog.value = false
+  }
+
+  // 確認 message
+  function messageConfirm (): void {
+    messageDialog.value = false
   }
 </script>

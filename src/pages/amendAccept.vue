@@ -128,6 +128,7 @@
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -190,6 +191,7 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
+  const messageWidth = ref<string>('auto')
   const processStatus = ref<string>('')
 
   const amendAcceptHeaders: DataTableHeader[] = [
@@ -298,6 +300,7 @@
     信用狀號碼：09970017151000888<br>
     信用狀號碼：09970017151000889`
     messageStatus.value = 'alert'
+    messageWidth.value = '500px'
     isConfirmBtn.value = true
     messageDialog.value = true
     processStatus.value = 'save'

@@ -51,6 +51,7 @@
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -83,6 +84,7 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
+  const messageWidth = ref<string>('auto')
   const isShowTotalPages = ref<boolean>(false)
   const isShowTotalAmount = ref<boolean>(true)
   // const processStatus = ref<{ action: string, status: number }>({
@@ -208,6 +210,7 @@
     messageTitle.value = '作業訊息'
     message.value = '作業已完成！'
     messageStatus.value = 'success'
+    messageWidth.value = '400px'
     isConfirmBtn.value = false
     fetchLcAppList() // 假設保存後需要刷新列表
   }

@@ -83,7 +83,7 @@
     messageStatus: '',
     isCancelBtn: true,
     isConfirmBtn: false,
-    dialogWidth: 'auto',
+    dialogWidth: '400px',
   })
 
   const show = ref<boolean>(props.messageDialog)

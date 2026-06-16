@@ -1,7 +1,7 @@
 // ── currentAmendDraftApp (押匯沖正 EC) ────────────────────────────────────
 export interface ListItem {
   seqNo: number
-  draftNo: string | null
+  draftNo: string
   applicant: string
   applicantTaxId: string
   lcNo: string

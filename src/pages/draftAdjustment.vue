@@ -91,7 +91,7 @@
         <h1 class="hnb16__title">押匯申請-授信資料</h1>
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
-          <DraftTypeEditForm :is-show-preview="true" />
+          <DraftTypeEditForm :is-show-preview="true" @on-close="closeApp" />
         </v-card>
       </div>
 
@@ -302,7 +302,14 @@
     noticeNo.value = ''
   }
 
-  onMounted(fetchTableList)
+  function closeApp (): void {
+    isShowApp.value = false
+    isShowList.value = true
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
