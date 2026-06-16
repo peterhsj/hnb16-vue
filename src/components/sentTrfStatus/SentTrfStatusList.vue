@@ -41,6 +41,13 @@
       :total-pages="totalPages"
       @update:items-per-page="pageOptions.page = 1"
     />
+    <!-- 匯票資料 -->
+    <SentTrfStatusDialog
+      v-model:is-sent-trf-status-dialog="isSentTrfStatusDialog"
+      @on-close="isSentTrfStatusDialog = false"
+      @on-save="handlerSave"
+    />
+
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
@@ -67,6 +74,8 @@
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
+
+  const isSentTrfStatusDialog = ref<boolean>(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -187,7 +196,20 @@
 
   // 編輯項目
   function editItem (draftNo: string): void {
-    emits('on-edit', { draftNo })
+    // emits('on-edit', { draftNo })
+    isSentTrfStatusDialog.value = true
+    console.log('Edit item:', draftNo)
+  }
+
+  function handlerSave (fee: number): void {
+    console.log('Save event received with fee:', fee)
+    // 在這裡可以處理保存後的邏輯，例如刷新列表或顯示成功訊息
+    messageDialog.value = true
+    messageTitle.value = '作業訊息'
+    message.value = '作業已完成！'
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    fetchLcAppList() // 假設保存後需要刷新列表
   }
 
   onMounted(fetchLcAppList)

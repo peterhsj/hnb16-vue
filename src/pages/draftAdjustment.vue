@@ -87,7 +87,7 @@
         />
       </div>
 
-      <div v-if="isShowApp">
+      <div v-if="isShowApp" class="mt-4 mx-4">
         <h1 class="hnb16__title">押匯申請-授信資料</h1>
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">

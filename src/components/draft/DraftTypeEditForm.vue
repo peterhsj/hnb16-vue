@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-row class="flex-column justify-center">
-      <v-col class="mx-auto" cols="12" md="8" sm="12">
-        <v-card class="border-sm bg-white" variant="outlined">
+      <v-col cols="12">
+        <v-card class="mx-auto border-sm bg-white" style="max-width: 1000px;" variant="outlined">
           <v-card-text class="px-7">
             <h6 class="hnb16__title text-h6">押匯方式：</h6>
 

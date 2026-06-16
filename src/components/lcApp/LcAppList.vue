@@ -326,7 +326,9 @@
     noticeNo.value = ''
   }
 
-  onMounted(fetchLcAppList)
+  onMounted(() => {
+    fetchLcAppList()
+  })
 
   // 離開 message
   function messageClose (): void {
