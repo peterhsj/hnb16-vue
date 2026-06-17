@@ -19,13 +19,31 @@
         />
       </v-card-title>
 
-      <LcAppCreditEditForm
-        :app-no="props.appNo"
-        :is-show-preview="props.isShowPreview"
-        @on-close="handleClose"
-        @on-save="handleSave"
-      />
+      <v-card-text class="bg-grey-lighten-4 ma-4" style="max-height: 70vh; overflow-y: auto;">
+        <LcAppCreditEditForm
+          :app-no="props.appNo"
+        />
+      </v-card-text>
 
+      <v-card-actions>
+        <v-spacer />
+
+        <v-btn
+          class="hnb__btn--cancel mx-1 my-2"
+          @click="onClose"
+        >
+          取消
+        </v-btn>
+
+        <v-btn
+          class="hnb__btn--default mx-1 my-2"
+          @click="onSave"
+        >
+          確定
+        </v-btn>
+
+        <v-spacer />
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -62,14 +80,6 @@
     'on-close': []
     'on-save': []
   }>()
-
-  function handleClose (): void {
-    onClose()
-  }
-
-  function handleSave (): void {
-    onSave()
-  }
 
   function onClose (): void {
     show.value = false

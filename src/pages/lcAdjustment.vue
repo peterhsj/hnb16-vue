@@ -79,6 +79,45 @@
         />
       </div>
 
+      <div v-if="isShowApp" class="mt-4 mx-4">
+        <h1 class="hnb16__title">開狀申請書-授信資料</h1>
+
+        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+          <v-card-text class="bg-grey-lighten-4">
+            <LcAppCreditEditForm
+              :app-no="appNo"
+            />
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              class="hnb__btn--cancel mx-1 my-2"
+              @click="handleAppClose"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1 my-2"
+              @click="isLcAppCreditDialogOpen = true"
+            >
+              預覽
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1 my-2"
+              @click="saveCreditData"
+            >
+              確定
+            </v-btn>
+
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+      </div>
+
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
@@ -100,12 +139,29 @@
       />
 
       <!-- 授信資料編輯 -->
-      <LcAppCreditEditDialog
+      <!-- <LcAppCreditEditDialog
         v-model:is-lc-app-credit-edit-dialog="isLcAppCreditEditDialog"
         :app-no="appNo"
         :is-show-preview="true"
         @on-close="isLcAppCreditEditDialog = false"
         @on-save="saveCreditData"
+      /> -->
+
+      <!-- 開狀申請書-授信資料 Dialog -->
+      <LcAppCreditDialog
+        v-model:is-lc-app-credit-dialog-open="isLcAppCreditDialogOpen"
+        :amend-notice-no="amendNoticeNoValue"
+        :is-show-history="isShowHistory"
+        @on-close="lcAppCreditDialogClose"
+        @on-show-history-view="handleHistoryView"
+      />
+
+      <!-- 查看授信歷程資料 Dialog -->
+      <LcAppHistoryViewDialog
+        v-model:is-history-dialog-open="isHistoryDialogOpen"
+        :credit-no="creditNo"
+        :is-show-history="isShowHistory"
+        @on-close="historyDialogClose"
       />
     </v-container>
   </div>
@@ -123,10 +179,22 @@
   const { handleApiError } = useApiErrorHandler()
   const isLoading = ref(false)
   const isShowList = ref(true)
+
+  // 開狀申請書-授信資料
+  const isShowApp = ref(false)
   // App Dialog
   const appDialog = ref(false)
   const appNo = ref<string>('')
   const beneType = ref<string>('cds')
+
+  // 授信資料 Dialog
+  const isLcAppCreditDialogOpen = ref(false)
+  const amendNoticeNoValue = ref<string>('')
+
+  // 查看授信歷程資料 Dialog
+  const isShowHistory = ref(true)
+  const isHistoryDialogOpen = ref(false)
+  const creditNo = ref<string>('')
 
   // 授信資料編輯 Dialog
   const isLcAppCreditEditDialog = ref(false)
@@ -241,7 +309,9 @@
   function handlerCredit (lcNo: string): void {
     console.log('Edit item:', lcNo)
     appNo.value = lcNo
-    isLcAppCreditEditDialog.value = true
+    // isLcAppCreditEditDialog.value = true
+    isShowList.value = false
+    isShowApp.value = true
   }
 
   // 儲存授信資料
@@ -254,6 +324,34 @@
     isConfirmBtn.value = false
     messageWidth.value = '400px'
     messageDialog.value = true
+
+    isShowList.value = true
+    isShowApp.value = false
+  }
+
+  // 離開授信資料編輯
+  function handleAppClose (): void {
+    isShowApp.value = false
+    isShowList.value = true
+    appNo.value = ''
+  }
+
+  function lcAppCreditDialogClose (): void {
+    isLcAppCreditDialogOpen.value = false
+  }
+
+  // 處理查看歷程資料事件
+  function handleHistoryView (value: string): void {
+    console.log('查看歷程資料', value)
+    // 這裡可以加入實際的處理邏輯，例如根據傳入的值顯示歷程資料等
+    isHistoryDialogOpen.value = true
+    creditNo.value = value
+  }
+
+  // 查看歷程資料 Dialog 關閉事件
+  function historyDialogClose (): void {
+    isHistoryDialogOpen.value = false
+    creditNo.value = ''
   }
 
   onMounted(() => {
