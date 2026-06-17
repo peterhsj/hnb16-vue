@@ -473,7 +473,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   interface Props {
     isLcAppCreditDialogOpen?: boolean
@@ -486,19 +486,12 @@
     isShowHistory: false,
   })
 
-  const show = ref<boolean>(props.isLcAppCreditDialogOpen)
-  watch(
-    () => props.isLcAppCreditDialogOpen,
-    newVal => {
-      show.value = newVal
+  const show = computed({
+    get: () => props.isLcAppCreditDialogOpen,
+    set: (value: boolean) => {
+      emits('update:isLcAppCreditDialogOpen', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isLcAppCreditDialogOpen', newVal)
-    },
-  )
+  })
 
   const emits = defineEmits<{
     'update:isLcAppCreditDialogOpen': [boolean]

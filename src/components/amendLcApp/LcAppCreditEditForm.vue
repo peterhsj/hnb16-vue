@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;"> -->
     <v-form ref="formRef">
       <div>
         <v-table class="hnb__table hnb__table--vertical w-100" density="compact">
@@ -971,38 +970,9 @@
         </div> -->
       </div>
     </v-form>
-    <!-- </v-card-text>
 
-    <v-card-actions>
-      <v-spacer />
-
-      <v-btn
-        class="hnb__btn--cancel mx-1 my-2"
-        @click="onClose"
-      >
-        取消
-      </v-btn>
-
-      <v-btn
-        v-if="props.isShowPreview"
-        class="hnb__btn--orange mx-1 my-2"
-        @click="isLcAppCreditDialogOpen = true"
-      >
-        預覽
-      </v-btn>
-
-      <v-btn
-        class="hnb__btn--default mx-1 my-2"
-        @click="onSave"
-      >
-        確定
-      </v-btn>
-
-      <v-spacer />
-    </v-card-actions> -->
-
-    <!-- 開狀申請書-授信資料 Dialog -->
-    <LcAppCreditDialog
+    <!-- 修改申請書-授信資料 Dialog -->
+    <AmendLcAppCreditDialog
       v-model:is-lc-app-credit-dialog-open="isLcAppCreditDialogOpen"
       :amend-notice-no="amendNoticeNoValue"
       :is-show-history="isShowHistory"

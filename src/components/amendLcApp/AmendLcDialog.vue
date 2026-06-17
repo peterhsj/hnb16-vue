@@ -52,29 +52,22 @@
     benType: '',
   })
 
-  const show = ref<boolean>(props.appDialog)
-  watch(
-    () => props.appDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:appDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:appDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.appDialog,
+    set: (value: boolean) => {
+      emits('update:appDialog', value)
+    },
+  })
 
   const data = ref({})
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

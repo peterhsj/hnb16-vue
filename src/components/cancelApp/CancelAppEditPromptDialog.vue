@@ -64,7 +64,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   interface Props {
     messageDialog?: boolean
     messageTitle?: string
@@ -84,34 +84,28 @@
     dialogWidth: 'auto',
   })
 
-  const show = ref<boolean>(props.messageDialog)
-  const lcNo = ref<string>('')
-  watch(
-    () => props.messageDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:messageDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:messageDialog': [boolean]
     'send-confirm': []
     'on-close': []
   }>()
 
+  const show = computed({
+    get: () => props.messageDialog,
+    set: (value: boolean) => {
+      emits('update:messageDialog', value)
+    },
+  })
+
+  const lcNo = ref<string>('')
+
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   function confirm (): void {
-    emit('send-confirm')
+    emits('send-confirm')
     show.value = false
   }
 </script>

@@ -178,7 +178,7 @@
 </template>
 <script setup lang="ts">
   import type { FormPayload } from '@/types/chargeLc'
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import { CHARGE_PAYMENT_METHOD_OPTIONS } from '@/types/chargeLc'
 
@@ -193,25 +193,18 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isEditDialogOpen)
-  watch(
-    () => props.isEditDialogOpen,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isEditDialogOpen', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:isEditDialogOpen': [boolean]
     'save-customer-data': []
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.isEditDialogOpen,
+    set: (value: boolean) => {
+      emits('update:isEditDialogOpen', value)
+    },
+  })
 
   const form = ref<FormPayload>({
     lcNo: '',
@@ -222,11 +215,11 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   function promptConfirm (): void {
-    emit('save-customer-data')
+    emits('save-customer-data')
     // show.value = false
   }
 

@@ -125,26 +125,19 @@
     }),
   })
 
-  const show = ref<boolean>(props.isShowDialog)
-  watch(
-    () => props.isShowDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isShowDialog', newVal)
-    },
-  )
-
   const emits = defineEmits<{
     'update:isShowDialog': [boolean]
     'on-close': []
     'open-lc-detail': [string]
     'on-show-history-view': [string]
   }>()
+
+  const show = computed({
+    get: () => props.isShowDialog,
+    set: (value: boolean) => {
+      emits('update:isShowDialog', value)
+    },
+  })
 
   const credieHistoryList = [
     {

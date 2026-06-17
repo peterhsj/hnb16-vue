@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
   import type { DataTableHeader } from 'vuetify'
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   const formRef = ref<InstanceType<typeof VForm>>()
 
@@ -75,19 +75,17 @@
     lcAppNo: '',
   })
 
-  const show = ref<boolean>(props.isReviewLcApprove)
-  watch(
-    () => props.isReviewLcApprove,
-    newVal => {
-      show.value = newVal
+  const emits = defineEmits<{
+    'update:isReviewLcApprove': [boolean]
+    'on-close': []
+  }>()
+
+  const show = computed({
+    get: () => props.isReviewLcApprove,
+    set: (value: boolean) => {
+      emits('update:isReviewLcApprove', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isReviewLcApprove', newVal)
-    },
-  )
+  })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '開狀申請書號碼', key: 'lcAppNo', align: 'center', sortable: false, nowrap: true },
@@ -96,14 +94,8 @@
     { title: '審核動作', key: 'reviewAction', align: 'center', sortable: false, nowrap: true },
     { title: '執行結果', key: 'executionResult', align: 'center', sortable: false, nowrap: true },
   ]
-
-  const emit = defineEmits<{
-    'update:isReviewLcApprove': [boolean]
-    'on-close': []
-  }>()
-
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

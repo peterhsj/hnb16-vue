@@ -486,7 +486,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   interface Props {
     lcDialog?: boolean
     lcNo?: string
@@ -502,26 +502,19 @@
     isShowVersion: false,
   })
 
-  const show = ref<boolean>(props.lcDialog)
-  watch(
-    () => props.lcDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:lcDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:lcDialog': [boolean]
     'on-close': []
     'open-lc-detail': [lcNo: string]
     'open-notice-detail': [noticeNo: string]
   }>()
+
+  const show = computed({
+    get: () => props.lcDialog,
+    set: (value: boolean) => {
+      emits('update:lcDialog', value)
+    },
+  })
 
   const amendmentNos = ref([
     'LC123400215_V01',
@@ -557,16 +550,16 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   // 查看信用狀
   function handleLcView (value: string): void {
-    emit('open-lc-detail', value)
+    emits('open-lc-detail', value)
   }
 
   // 查看修改通知書
   function handleNoticeView (value: string): void {
-    emit('open-notice-detail', value)
+    emits('open-notice-detail', value)
   }
 </script>

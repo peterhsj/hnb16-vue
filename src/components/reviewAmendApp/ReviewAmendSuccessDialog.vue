@@ -57,7 +57,7 @@
 </template>
 <script setup lang="ts">
   import type { DataTableHeader } from 'vuetify'
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   const formRef = ref<InstanceType<typeof VForm>>()
 
@@ -75,19 +75,17 @@
     amendAppNo: '',
   })
 
-  const show = ref<boolean>(props.isReviewAmendApprove)
-  watch(
-    () => props.isReviewAmendApprove,
-    newVal => {
-      show.value = newVal
+  const emits = defineEmits<{
+    'update:isReviewAmendApprove': [boolean]
+    'on-close': []
+  }>()
+
+  const show = computed({
+    get: () => props.isReviewAmendApprove,
+    set: (value: boolean) => {
+      emits('update:isReviewAmendApprove', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isReviewAmendApprove', newVal)
-    },
-  )
+  })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '修改申請書號碼', key: 'amendAppNo', align: 'center', sortable: false, nowrap: true },
@@ -97,13 +95,8 @@
     { title: '執行結果', key: 'executionResult', align: 'center', sortable: false, nowrap: true },
   ]
 
-  const emit = defineEmits<{
-    'update:isReviewAmendApprove': [boolean]
-    'on-close': []
-  }>()
-
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

@@ -209,7 +209,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
 
   const formRef = ref<InstanceType<typeof VForm>>()
@@ -223,26 +223,19 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.rateAgreementDialog)
-  watch(
-    () => props.rateAgreementDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:rateAgreementDialog', newVal)
-    },
-  )
-
-  const rateType = ref<string>('01')
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:rateAgreementDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.rateAgreementDialog,
+    set: (value: boolean) => {
+      emits('update:rateAgreementDialog', value)
+    },
+  })
+
+  const rateType = ref<string>('01')
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -255,6 +248,6 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

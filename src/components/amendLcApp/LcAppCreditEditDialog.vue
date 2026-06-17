@@ -48,7 +48,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   interface Props {
     isLcAppCreditEditDialog?: boolean
@@ -61,19 +61,12 @@
     appNo: '',
   })
 
-  const show = ref<boolean>(props.isLcAppCreditEditDialog)
-  watch(
-    () => props.isLcAppCreditEditDialog,
-    newVal => {
-      show.value = newVal
+  const show = computed({
+    get: () => props.isLcAppCreditEditDialog,
+    set: (value: boolean) => {
+      emits('update:isLcAppCreditEditDialog', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isLcAppCreditEditDialog', newVal)
-    },
-  )
+  })
 
   const emits = defineEmits<{
     'update:isLcAppCreditEditDialog': [boolean]

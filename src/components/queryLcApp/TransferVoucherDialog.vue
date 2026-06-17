@@ -122,7 +122,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
 
   const formRef = ref<InstanceType<typeof VForm>>()
@@ -136,26 +136,17 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isTransferVoucherDialog)
-  watch(
-    () => props.isTransferVoucherDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isTransferVoucherDialog', newVal)
-    },
-  )
-
-  const rateType = ref<string>('01')
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:isTransferVoucherDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.isTransferVoucherDialog,
+    set: (value: boolean) => {
+      emits('update:isTransferVoucherDialog', value)
+    },
+  })
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -168,6 +159,6 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

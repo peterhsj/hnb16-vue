@@ -150,7 +150,7 @@
 </template>
 <script setup lang="ts">
   import type { DataTableHeader } from 'vuetify'
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -170,30 +170,23 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isLcFeeReceiptDialog)
-  watch(
-    () => props.isLcFeeReceiptDialog,
-    newVal => {
-      show.value = newVal
+  const emits = defineEmits<{
+    'update:isLcFeeReceiptDialog': [boolean]
+    'on-close': []
+  }>()
+
+  const show = computed({
+    get: () => props.isLcFeeReceiptDialog,
+    set: (value: boolean) => {
+      emits('update:isLcFeeReceiptDialog', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isLcFeeReceiptDialog', newVal)
-    },
-  )
+  })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀金額', key: 'lcAmount', align: 'end', sortable: false, nowrap: true },
     { title: '手續費', key: 'fee', align: 'end', sortable: false, width: 200, nowrap: true },
   ]
-
-  const emit = defineEmits<{
-    'update:isLcFeeReceiptDialog': [boolean]
-    'on-close': []
-  }>()
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -206,6 +199,6 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

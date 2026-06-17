@@ -90,7 +90,7 @@
 <script setup lang="ts">
   import { format } from 'date-fns'
   import { storeToRefs } from 'pinia'
-  import { ref, watch } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { VForm } from 'vuetify/components'
   import { api } from '@/api/axios'
@@ -116,7 +116,18 @@
     editDialog: false,
   })
 
-  const show = ref<boolean>(props.editDialog)
+  const emits = defineEmits<{
+    'update:editDialog': [boolean]
+    'on-close': []
+    'on-save': []
+  }>()
+
+  const show = computed({
+    get: () => props.editDialog,
+    set: (value: boolean) => {
+      emits('update:editDialog', value)
+    },
+  })
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -134,7 +145,6 @@
   watch(
     () => props.editDialog,
     newVal => {
-      show.value = newVal
       // 對話框打開時，更新表單值
       if (newVal) {
         editForm.value = { ...props.payload } as EditItem
@@ -142,19 +152,8 @@
         editFormRef.value?.resetValidation()
       }
     },
+    { deep: true },
   )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:editDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
-    'update:editDialog': [boolean]
-    'on-close': []
-    'on-save': []
-  }>()
 
   const loading = ref<boolean>(false)
   const editFormRef = ref<InstanceType<typeof VForm>>()
@@ -197,8 +196,8 @@
         console.log('API 回應:', { apiData, apiMessage })
         // 更新表格數據
         if (status === 200) {
-          emit('on-save')
-          emit('on-close')
+          emits('on-save')
+          emits('on-close')
           show.value = false
         }
       } else {
@@ -220,7 +219,7 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   // 確認 message

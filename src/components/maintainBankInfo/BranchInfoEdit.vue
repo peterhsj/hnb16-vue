@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
   import { api } from '@/api/axios'
 
@@ -124,24 +124,18 @@
     data: Object as () => DataItem,
   })
 
-  const show = ref<boolean>(props.editDialog)
-  watch(
-    () => props.editDialog,
-    newValue => {
-      show.value = newValue
-      console.log('editDialog 變化:', newValue)
-    })
-  watch(
-    () => show.value,
-    newValue => {
-      emits('update:editDialog', newValue)
-    })
-
   const emits = defineEmits<{
     'update:editDialog': [boolean]
     'on-close': []
     'on-save': []
   }>()
+
+  const show = computed({
+    get: () => props.editDialog,
+    set: (value: boolean) => {
+      emits('update:editDialog', value)
+    },
+  })
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)

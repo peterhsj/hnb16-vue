@@ -300,7 +300,7 @@
 </template>
 <script setup lang="ts">
   import type { DataTableHeader } from 'vuetify'
-  import { onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -325,30 +325,23 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isCashPaySlipDialog)
-  watch(
-    () => props.isCashPaySlipDialog,
-    newVal => {
-      show.value = newVal
+  const emits = defineEmits<{
+    'update:isCashPaySlipDialog': [boolean]
+    'on-close': []
+  }>()
+
+  const show = computed({
+    get: () => props.isCashPaySlipDialog,
+    set: (value: boolean) => {
+      emits('update:isCashPaySlipDialog', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isCashPaySlipDialog', newVal)
-    },
-  )
+  })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀金額', key: 'lcAmount', align: 'end', sortable: false, nowrap: true },
     { title: '手續費', key: 'fee', align: 'end', sortable: false, width: 200, nowrap: true },
   ]
-
-  const emit = defineEmits<{
-    'update:isCashPaySlipDialog': [boolean]
-    'on-close': []
-  }>()
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -361,7 +354,7 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   onMounted(() => {

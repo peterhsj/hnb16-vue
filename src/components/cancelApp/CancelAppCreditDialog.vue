@@ -107,7 +107,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
   interface Props {
     isShowCancelDialog?: boolean
     cancelAppNo?: string
@@ -117,26 +117,19 @@
     cancelAppNo: '',
   })
 
-  const show = ref<boolean>(props.isShowCancelDialog)
-  watch(
-    () => props.isShowCancelDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isShowCancelDialog', newVal)
-    },
-  )
-
   const emits = defineEmits<{
     'update:isShowCancelDialog': [boolean]
     'on-close': []
     'open-lc-detail': [string]
     'on-show-history-view': [string]
   }>()
+
+  const show = computed({
+    get: () => props.isShowCancelDialog,
+    set: (value: boolean) => {
+      emits('update:isShowCancelDialog', value)
+    },
+  })
 
   const data = {
     pricingBenchmark: '01',

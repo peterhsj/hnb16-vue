@@ -89,7 +89,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
 
   const formRef = ref<InstanceType<typeof VForm>>()
@@ -120,24 +120,17 @@
     amendAppNo: '',
   })
 
-  const show = ref<boolean>(props.isAmendLcAppReviewDialog)
-  watch(
-    () => props.isAmendLcAppReviewDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:isAmendLcAppReviewDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:isAmendLcAppReviewDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.isAmendLcAppReviewDialog,
+    set: (value: boolean) => {
+      emits('update:isAmendLcAppReviewDialog', value)
+    },
+  })
 
   function downloadFile () {
     // 下載電子檔邏輯
@@ -176,6 +169,6 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

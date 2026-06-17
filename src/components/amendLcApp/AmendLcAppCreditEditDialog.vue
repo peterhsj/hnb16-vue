@@ -19,57 +19,59 @@
         />
       </v-card-title>
 
-      <AmendLcAppCreditEditForm
-        :app-no="props.amendAppNo"
-        :is-show-preview="props.isShowPreview"
-        @on-close="handleClose"
-        @on-save="handleSave"
-      />
+      <v-card-text class="bg-grey-lighten-4 ma-4" style="max-height: 70vh; overflow-y: auto;">
+        <AmendLcAppCreditEditForm
+          :amend-app-no="props.amendAppNo"
+        />
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer />
+
+        <v-btn
+          class="hnb__btn--cancel mx-1 my-2"
+          @click="onClose"
+        >
+          取消
+        </v-btn>
+
+        <v-btn
+          class="hnb__btn--default mx-1 my-2"
+          @click="onSave"
+        >
+          確定
+        </v-btn>
+
+        <v-spacer />
+      </v-card-actions>
 
     </v-card>
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   interface Props {
     isAmendLcAppCreditEditDialog?: boolean
     amendAppNo?: string
-    isShowPreview?: boolean
   }
   const props = withDefaults(defineProps<Props>(), {
     isAmendLcAppCreditEditDialog: false,
     amendAppNo: '',
-    isShowPreview: false,
   })
 
-  const show = ref<boolean>(props.isAmendLcAppCreditEditDialog)
-  watch(
-    () => props.isAmendLcAppCreditEditDialog,
-    newVal => {
-      show.value = newVal
+  const show = computed({
+    get: () => props.isAmendLcAppCreditEditDialog,
+    set: (value: boolean) => {
+      emits('update:isAmendLcAppCreditEditDialog', value)
     },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isAmendLcAppCreditEditDialog', newVal)
-    },
-  )
+  })
 
   const emits = defineEmits<{
     'update:isAmendLcAppCreditEditDialog': [boolean]
     'on-close': []
     'on-save': []
   }>()
-
-  function handleClose (): void {
-    onClose()
-  }
-
-  function handleSave (): void {
-    onSave()
-  }
 
   function onClose (): void {
     show.value = false

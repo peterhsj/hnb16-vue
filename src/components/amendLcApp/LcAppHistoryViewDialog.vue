@@ -97,25 +97,18 @@
     creditNo: '',
   })
 
-  const show = ref<boolean>(props.isHistoryDialogOpen)
-  watch(
-    () => props.isHistoryDialogOpen,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isHistoryDialogOpen', newVal)
-    },
-  )
-
   const emits = defineEmits<{
     'update:isHistoryDialogOpen': [boolean]
     'on-close': []
     'on-show-history-view': [string]
   }>()
+
+  const show = computed({
+    get: () => props.isHistoryDialogOpen,
+    set: (value: boolean) => {
+      emits('update:isHistoryDialogOpen', value)
+    },
+  })
 
   function onClose (): void {
     show.value = false

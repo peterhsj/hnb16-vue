@@ -42,7 +42,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
   interface Props {
     appDialog?: boolean
     appNo?: string
@@ -54,24 +54,17 @@
     beneType: 'cds',
   })
 
-  const show = ref<boolean>(props.appDialog)
-  watch(
-    () => props.appDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:appDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:appDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.appDialog,
+    set: (value: boolean) => {
+      emits('update:appDialog', value)
+    },
+  })
 
   const data = {
     paymentMain: 'sight', // sight: 即期, fixed: 定日付款
@@ -94,6 +87,6 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 </script>

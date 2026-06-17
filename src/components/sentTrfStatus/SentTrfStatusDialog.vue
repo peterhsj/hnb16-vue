@@ -138,7 +138,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -163,25 +163,18 @@
     lcNo: '',
   })
 
-  const show = ref<boolean>(props.isSentTrfStatusDialog)
-  watch(
-    () => props.isSentTrfStatusDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isSentTrfStatusDialog', newVal)
-    },
-  )
-
   const emits = defineEmits<{
     'update:isSentTrfStatusDialog': [boolean]
     'on-close': []
     'on-save': [number]
   }>()
+
+  const show = computed({
+    get: () => props.isSentTrfStatusDialog,
+    set: (value: boolean) => {
+      emits('update:isSentTrfStatusDialog', value)
+    },
+  })
 
   function onSave () {
     emits('on-save', fee.value)

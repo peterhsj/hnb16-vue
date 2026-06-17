@@ -236,7 +236,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   interface Props {
     noticeDialog?: boolean
     noticeNo?: string
@@ -248,25 +248,18 @@
     isShowLc: false,
   })
 
-  const show = ref<boolean>(props.noticeDialog)
-  watch(
-    () => props.noticeDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emit('update:noticeDialog', newVal)
-    },
-  )
-
-  const emit = defineEmits<{
+  const emits = defineEmits<{
     'update:noticeDialog': [boolean]
     'on-close': []
     'open-lc-detail': [noticeNo: string]
   }>()
+
+  const show = computed({
+    get: () => props.noticeDialog,
+    set: (value: boolean) => {
+      emits('update:noticeDialog', value)
+    },
+  })
 
   const lcNos = ref([
     'CDS123400215_V01',
@@ -284,11 +277,11 @@
 
   function onClose (): void {
     show.value = false
-    emit('on-close')
+    emits('on-close')
   }
 
   // 查看信用狀
   function handleLcView (value: string): void {
-    emit('open-lc-detail', value)
+    emits('open-lc-detail', value)
   }
 </script>

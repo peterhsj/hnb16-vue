@@ -65,7 +65,7 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   interface Props {
     isShowCreditDialog?: boolean
@@ -76,24 +76,17 @@
     creditNo: '',
   })
 
-  const show = ref<boolean>(props.isShowCreditDialog)
-  watch(
-    () => props.isShowCreditDialog,
-    newVal => {
-      show.value = newVal
-    },
-  )
-  watch(
-    () => show.value,
-    newVal => {
-      emits('update:isShowCreditDialog', newVal)
-    },
-  )
-
   const emits = defineEmits<{
     'update:isShowCreditDialog': [boolean]
     'on-close': []
   }>()
+
+  const show = computed({
+    get: () => props.isShowCreditDialog,
+    set: (value: boolean) => {
+      emits('update:isShowCreditDialog', value)
+    },
+  })
 
   function onClose (): void {
     show.value = false
