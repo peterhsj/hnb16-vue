@@ -277,6 +277,12 @@
       :lc-no="lcNo"
       @on-close="isSupplementaryTransferVoucherDialog = false"
     />
+
+    <!-- Draft Dialog -->
+    <DraftDetailDialog
+      v-model:is-draft-detail-dialog="isDraftDetailDialog"
+      @on-close="isDraftDetailDialog = false"
+    />
   </div>
 </template>
 
@@ -313,7 +319,7 @@
   // 補收轉帳支出傳票 Dialog
   const isSupplementaryTransferVoucherDialog = ref(false)
   // Draft Dialog
-  const draftDialog = ref(false)
+  const isDraftDetailDialog = ref(false)
   const draftNo = ref<string>('')
   // Lc Dialog
   const lcDialog = ref(false)
@@ -496,7 +502,7 @@
   // 查看Draft Dialog
   function handleDraftView (value: string): void {
     draftNo.value = value
-    draftDialog.value = true
+    isDraftDetailDialog.value = true
   }
 
   function handleDocumentDeliveryView (value: string): void {
