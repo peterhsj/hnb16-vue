@@ -18,20 +18,26 @@
         striped="odd"
         @update:items-per-page="pageOptions.itemsPerPage = $event"
       >
-        <template #item.lcNo="{ item }">
-          <a v-if="item.lcNo" class="hnb__text--link" href="#" @click.prevent="handleLcView(item.lcNo)">
-            {{ item.lcNo }}
-          </a>
-
-          <span v-else>N/A</span>
-        </template>
-
         <template #item.draftNo="{ item }">
           <a v-if="item.draftNo" class="hnb__text--link" href="#" @click.prevent="handleDraftView(item.draftNo)">
             {{ item.draftNo }}
           </a>
 
           <span v-else>N/A</span>
+        </template>
+
+        <!-- 信用狀比對結果 -->
+        <template #item.lcComparisonResult="{ item }">
+          <a v-if="item.lcComparisonResult" class="hnb__text--link" href="#" @click.prevent="handleLcComparisonView(item.draftNo)">
+            {{ item.lcComparisonResult }}
+          </a>
+        </template>
+
+        <!-- 狀態 -->
+        <template #item.status="{ item }">
+          <a v-if="item.status === '已拒絕'" class="hnb__text--link" href="#" @click.prevent="handleDraftStatusView(item.draftNo)">
+            {{ item.status }}
+          </a>
         </template>
 
         <template #item.availableBalance="{ item }">
@@ -68,7 +74,7 @@
           />
         </template>
 
-        <!-- 現金繳費單 -->
+        <!-- 查看現金繳費單 -->
         <template #item.cashPaySlip="{ item }">
           <v-btn
             v-if="item.cashPaySlip"
@@ -94,7 +100,7 @@
           />
         </template>
 
-        <!-- 承兌手續費收據 -->
+        <!-- 查看承兌手續費收據 -->
         <template #item.acceptanceFeeReceipt="{ item }">
           <v-btn
             v-if="item.acceptanceFeeReceipt"
@@ -107,7 +113,7 @@
           />
         </template>
 
-        <!-- 轉帳支出傳票 -->
+        <!-- 查看轉帳支出傳票 -->
         <template #item.transferVoucher="{ item }">
           <v-btn
             v-if="item.transferVoucher"
@@ -177,6 +183,7 @@
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -210,6 +217,66 @@
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
     />
+    <!-- 信用狀比對結果 Dialog -->
+    <LcComparisonResultDialog
+      v-model:is-lc-comparison-result-dialog="isLcComparisonResultDialog"
+      :lc-no="lcNo"
+      @on-close="isLcComparisonResultDialog = false"
+    />
+    <!-- 單據遞送單 Dialog -->
+    <DocumentDeliveryDialog
+      v-model:is-document-delivery-dialog="isDocumentDeliveryDialog"
+      :lc-no="lcNo"
+      @on-close="isDocumentDeliveryDialog = false"
+    />
+    <!-- 押匯交易憑證 / 轉帳收入傳票 Dialog -->
+    <RemittanceAttachmentDialog
+      v-model:is-remittance-attachment-dialog="isRemittanceAttachmentDialog"
+      :lc-no="lcNo"
+      @on-close="isRemittanceAttachmentDialog = false"
+    />
+    <!-- 現金繳費單 Dialog -->
+    <CashPaySlipDialog
+      v-model:is-cash-pay-slip-dialog="isCashPaySlipDialog"
+      :lc-no="lcNo"
+      @on-close="isCashPaySlipDialog = false"
+    />
+    <!-- 押匯手續費收據 -->
+    <DraftFeeReceiptDialog
+      v-model:is-draft-fee-receipt-dialog="isDraftFeeReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isDraftFeeReceiptDialog = false"
+    />
+    <!-- 承兌手續費收據 Dialog -->
+    <AcceptanceFeeReceiptDialog
+      v-model:is-acceptance-fee-receipt-dialog="isAcceptanceFeeReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isAcceptanceFeeReceiptDialog = false"
+    />
+    <!-- 轉帳支出傳票 Dialog -->
+    <TransferVoucherDialog
+      v-model:is-transfer-voucher-dialog="isTransferVoucherDialog"
+      :lc-no="lcNo"
+      @on-close="isTransferVoucherDialog = false"
+    />
+    <!-- 補收開狀手續費收據 -->
+    <SupplementaryLcFeeReceiptDialog
+      v-model:is-supplementary-lc-fee-receipt-dialog="isSupplementaryLcFeeReceiptDialog"
+      :lc-no="lcNo"
+      @on-close="isSupplementaryLcFeeReceiptDialog = false"
+    />
+    <!-- 補收現金繳費單 -->
+    <SupplementaryCashPaySlipDialog
+      v-model:is-supplementary-cash-pay-slip-dialog="isSupplementaryCashPaySlipDialog"
+      :lc-no="lcNo"
+      @on-close="isSupplementaryCashPaySlipDialog = false"
+    />
+    <!-- 補收轉帳支出傳票 -->
+    <SupplementaryTransferVoucherDialog
+      v-model:is-supplementary-transfer-voucher-dialog="isSupplementaryTransferVoucherDialog"
+      :lc-no="lcNo"
+      @on-close="isSupplementaryTransferVoucherDialog = false"
+    />
   </div>
 </template>
 
@@ -221,12 +288,30 @@
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
 
-  const emits = defineEmits(['on-edit'])
-
   const { handleApiError } = useApiErrorHandler()
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
+  // 信用狀比對結果 Dialog
+  const isLcComparisonResultDialog = ref(false)
+  // 單據遞送單 Dialog
+  const isDocumentDeliveryDialog = ref(false)
+  // 現金繳費單 Dialog
+  const isCashPaySlipDialog = ref(false)
+  // 押匯手續費收據 Dialog
+  const isDraftFeeReceiptDialog = ref(false)
+  // 匯款交易附件 Dialog
+  const isRemittanceAttachmentDialog = ref(false)
+  // 承兌手續費收據 Dialog
+  const isAcceptanceFeeReceiptDialog = ref(false)
+  // 轉帳支出傳票 Dialog
+  const isTransferVoucherDialog = ref(false)
+  // 補收開狀手續費收據 Dialog
+  const isSupplementaryLcFeeReceiptDialog = ref(false)
+  // 補收現金繳費單 Dialog
+  const isSupplementaryCashPaySlipDialog = ref(false)
+  // 補收轉帳支出傳票 Dialog
+  const isSupplementaryTransferVoucherDialog = ref(false)
   // Draft Dialog
   const draftDialog = ref(false)
   const draftNo = ref<string>('')
@@ -245,6 +330,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const isShowCurrentPageTotalAmount = ref<boolean>(true)
   const isShowTotalPages = ref<boolean>(false)
@@ -261,7 +347,7 @@
     { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
     { title: '信用狀餘額', key: 'availableBalance', align: 'end', sortable: false, nowrap: true },
     { title: '有效期限', key: 'validDate', align: 'center', sortable: false, nowrap: true },
-    { title: '信用狀比對結果', key: 'lcComparisonResult', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀比對結果', key: 'lcComparisonResult', align: 'center', sortable: false, nowrap: false, minWidth: '90px' },
     { title: '押匯申請日期', key: 'draftIssueDate', align: 'center', sortable: false, nowrap: true },
     { title: '押匯放行日期', key: 'draftReleaseDate', align: 'center', sortable: false, nowrap: true },
     { title: '押匯金額', key: 'issuingAmount', align: 'end', sortable: false, nowrap: true },
@@ -415,44 +501,76 @@
 
   function handleDocumentDeliveryView (value: string): void {
     console.log('查看單據遞送單:', value)
+    lcNo.value = value
+    isDocumentDeliveryDialog.value = true
   }
 
   function handleRemittanceAttachmentView (value: string): void {
     console.log('查看匯款交易附件:', value)
-  }
-
-  function handleCashPaySlipView (value: string): void {
-    console.log('查看現金繳費單:', value)
+    isRemittanceAttachmentDialog.value = true
+    lcNo.value = value
   }
 
   function handleDraftFeeReceiptView (value: string): void {
     console.log('查看押匯手續費收據:', value)
+    isDraftFeeReceiptDialog.value = true
+    lcNo.value = value
   }
 
+  // 查看現金繳費單
+  function handleCashPaySlipView (value: string): void {
+    console.log('查看現金繳費單:', value)
+    lcNo.value = value
+    isCashPaySlipDialog.value = true
+  }
+
+  // 查看承兌手續費收據
   function handleAcceptanceFeeReceiptView (value: string): void {
     console.log('查看承兌手續費收據:', value)
+    lcNo.value = value
+    isAcceptanceFeeReceiptDialog.value = true
   }
 
+  // 查看轉帳支出傳票
   function handleTransferVoucherView (value: string): void {
     console.log('查看轉帳支出傳票:', value)
+    lcNo.value = value
+    isTransferVoucherDialog.value = true
   }
 
   function handleSupplementaryLcFeeReceiptView (value: string): void {
     console.log('查看補收開狀手續費收據:', value)
+    isSupplementaryLcFeeReceiptDialog.value = true
+    lcNo.value = value
   }
 
   function handleSupplementaryCashPaySlipView (value: string): void {
     console.log('查看補收現金繳費單:', value)
+    isSupplementaryCashPaySlipDialog.value = true
+    lcNo.value = value
   }
 
   function handleSupplementaryTransferVoucherView (value: string): void {
     console.log('查看補收轉帳支出傳票:', value)
+    isSupplementaryTransferVoucherDialog.value = true
+    lcNo.value = value
   }
 
-  // 查看信用狀 Lc Dialog
-  function handleLcView (value: string): void {
+  // 查看信用狀比對結果 Dialog
+  function handleLcComparisonView (value: string): void {
     lcNo.value = value
-    lcDialog.value = true
+    isLcComparisonResultDialog.value = true
+  }
+
+  // 查看Draft狀態 Dialog
+  function handleDraftStatusView (value: string): void {
+    lcNo.value = value
+    messageTitle.value = '作業訊息'
+    message.value = `<p class="font-weight-bold">拒絕原因：</p>
+      <p class="text-blue-grey-darken-4">XXXXXXXXXXX</p>`
+    messageWidth.value = '600px'
+    messageStatus.value = 'alert'
+    messageDialog.value = true
   }
 
   // 離開 Lc Dialog

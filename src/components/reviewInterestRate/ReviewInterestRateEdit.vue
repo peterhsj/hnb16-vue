@@ -490,9 +490,7 @@
     console.log('Submit payload:', formData.value)
     try {
       messageTitle.value = '作業訊息'
-      message.value = `作業已完成！<br />
-您的申請書號碼為<br />
-099700031161000861-A-011`
+      message.value = `作業已完成！`
       messageStatus.value = 'success'
       isConfirmBtn.value = false
       messageDialog.value = true

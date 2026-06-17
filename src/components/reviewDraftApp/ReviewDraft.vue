@@ -1101,6 +1101,7 @@
     <!-- 共用 Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
       :is-confirm-btn="isConfirmBtn"
       :message="message"
       :message-status="messageStatus"
@@ -1112,7 +1113,7 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, ref, watch } from 'vue'
+  import { reactive, ref } from 'vue'
   import { VForm } from 'vuetify/components'
   import {
     createInitialDraftLcForm,
@@ -1221,6 +1222,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -1237,14 +1239,27 @@
   function onSubmit (): void {
     console.log('Submit payload:', form)
     try {
-      messageTitle.value = '作業訊息'
-      message.value = `作業已完成！<br />
-您的申請書號碼為<br />
-099700031161000861-A-011`
-      messageStatus.value = 'success'
-      isConfirmBtn.value = false
-      messageDialog.value = true
-      processStatus.value = 'success'
+      if (reviewForm.value.reviewStatus === 'approve') {
+        messageTitle.value = '作業訊息'
+        message.value = `<p><span class="font-weight-bold">匯票號碼：</span> <span class="text-blue-grey-darken-4">H97000001</span></p>
+          <p><span class="font-weight-bold">審核動作：</span> <span class="text-blue-grey-darken-4">核准</span></p>
+          <p><span class="font-weight-bold">審核結果：</span> <span class="text-blue-grey-darken-4">審核完成</span></p>`
+        messageStatus.value = 'success'
+        messageWidth.value = '600px'
+        isConfirmBtn.value = false
+        messageDialog.value = true
+        processStatus.value = 'success'
+      } else if (reviewForm.value.reviewStatus === 'reject') {
+        messageTitle.value = '作業訊息'
+        message.value = `<p><span class="font-weight-bold">匯票號碼：</span> <span class="text-blue-grey-darken-4">H97000001</span></p>
+          <p><span class="font-weight-bold">審核動作：</span> <span class="text-blue-grey-darken-4">退回經辦：王建明退回測試</span></p>
+          <p><span class="font-weight-bold">審核結果：</span> <span class="text-blue-grey-darken-4">審核未完成</span></p>`
+        messageStatus.value = 'error'
+        messageWidth.value = '600px'
+        isConfirmBtn.value = false
+        messageDialog.value = true
+        processStatus.value = 'reject'
+      }
     } catch (error) {
       console.error('Error emitting submit event:', error)
     }

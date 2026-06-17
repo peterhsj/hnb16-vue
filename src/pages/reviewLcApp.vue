@@ -206,6 +206,7 @@
 
             <v-btn
               class="hnb__btn--default mx-1"
+              :disabled="reviewForm.reviewStatus === ''"
               variant="flat"
               @click="handleReviewData"
             >

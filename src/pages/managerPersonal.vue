@@ -21,8 +21,8 @@
           </span>
         </p>
 
-        <v-card class="border-sm pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
-          <v-form ref="formRef" @submit.prevent="sendForm">
+        <v-card class="border-sm pa-4 pt-2 bg-grey-lighten-4" variant="outlined">
+          <v-form ref="formRef">
             <div class="pt-4">
               <v-row class="align-center">
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
@@ -45,6 +45,7 @@
 
                   <v-text-field
                     v-model="form.userName"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details
@@ -58,6 +59,7 @@
                   <v-text-field
                     v-model="form.password"
                     :append-inner-icon="isShowPass ? 'mdi-eye' : 'mdi-eye-off'"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details
@@ -72,6 +74,7 @@
                   <v-text-field
                     v-model="form.newPassword"
                     :append-inner-icon="isShowNewPass ? 'mdi-eye' : 'mdi-eye-off'"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
@@ -86,6 +89,7 @@
                   <v-text-field
                     v-model="form.confirmPassword"
                     :append-inner-icon="isShowConfirmPass ? 'mdi-eye' : 'mdi-eye-off'"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details="auto"
@@ -100,6 +104,7 @@
 
                   <v-text-field
                     v-model="form.email"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details
@@ -112,6 +117,7 @@
 
                   <v-text-field
                     v-model="form.phone"
+                    bg-color="white"
                     color="teal-darken-2"
                     density="compact"
                     hide-details
@@ -131,7 +137,6 @@
                     item-value="senNo"
                     :items="tableItems"
                     :loading="isLoading"
-                    striped="odd"
                   >
                     <template #item.isApp="{ item }">
                       <v-chip
@@ -173,26 +178,26 @@
                 </v-col>
               </v-row>
             </div>
-
-            <v-row>
-              <v-col class="d-flex justify-end" cols="12">
-                <v-btn
-                  class="hnb__btn--cancel mx-1"
-                  @click="resetForm"
-                >
-                  重設
-                </v-btn>
-
-                <v-btn
-                  class="hnb__btn--default mx-1"
-                  type="submit"
-                >
-                  確定
-                </v-btn>
-              </v-col>
-            </v-row>
           </v-form>
         </v-card>
+
+        <v-row class="my-2">
+          <v-col class="d-flex justify-center" cols="12">
+            <v-btn
+              class="hnb__btn--cancel mx-1"
+              @click="resetForm"
+            >
+              重設
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1"
+              @click="sendForm"
+            >
+              確定
+            </v-btn>
+          </v-col>
+        </v-row>
       </div>
     </v-container>
     <!-- Prompt Dialog -->

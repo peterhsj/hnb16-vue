@@ -3,9 +3,9 @@ import Mock from 'mockjs'
 
 const APPLICANTS = ['台灣製造股份有限公司', '中部鋼鐵股份有限公司', '東方貿易股份有限公司', '信義科技股份有限公司', '南京工業股份有限公司', '北部物流股份有限公司', '桃園機械股份有限公司', '新竹半導體股份有限公司']
 const BENEFICIARIES = ['南部食品股份有限公司', '西部紡織股份有限公司', '松山電子股份有限公司', '嘉義農產股份有限公司', '台南化工股份有限公司', '中壢包裝股份有限公司', '新莊五金股份有限公司', '彰化紙業股份有限公司']
-const STATUSES = ['待審核', '已放行', '已拒絕', '處理中']
+const STATUSES = ['已開立', '已拒絕']
 const APPROVERS = ['台北本行經辦一', '信義分行主管一', '台中分行經辦二', '高雄分行主管二', '桃園分行經辦三']
-const COMPARISON_RESULTS = ['符合', '不符合', '待確認']
+const COMPARISON_RESULTS = ['紙本', '']
 
 const rawItems = Mock.mock({
   'list|15': [{
