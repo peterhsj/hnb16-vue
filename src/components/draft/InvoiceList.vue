@@ -25,7 +25,8 @@
 
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { api } from '@/api/axios'
+  // import { api } from '@/api/axios'
+  import { getInvoiceList } from '@/api/invoiceList'
   import { thousandsFormatting } from '@/utils/format'
 
   interface HeaderItem {
@@ -69,10 +70,10 @@
   // 取得發票列表
   async function fetchDraftList (): Promise<void> {
     loading.value = true
-    const apiUrl = '/api/draftList/list'
+    // const apiUrl = '/api/draftList/list'
     try {
       // 使用 axios POST 請求
-      const res = await api.post<ApiResponse>(apiUrl, {})
+      const res = await getInvoiceList({})
       const { code, data } = res.data
 
       // console.log('API 回應:', res.data)

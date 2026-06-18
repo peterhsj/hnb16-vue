@@ -281,6 +281,7 @@
     <!-- Draft Dialog -->
     <DraftDetailDialog
       v-model:is-draft-detail-dialog="isDraftDetailDialog"
+      :draft-no="draftNo"
       @on-close="isDraftDetailDialog = false"
     />
   </div>

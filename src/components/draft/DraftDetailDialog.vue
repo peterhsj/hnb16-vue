@@ -2,7 +2,7 @@
   <v-dialog
     v-model="show"
     persistent
-    width="auto"
+    width="900px"
   >
     <v-card
       class="hnb__dialog"
@@ -20,31 +20,27 @@
       </v-card-title>
 
       <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;">
-        <div>
-          <DraftDetail
-            :data="{
-              draftNo: props.creditNo,
-            }"
-          />
+        <DraftDetail
+          :draft-no="props.draftNo"
+        />
 
-          <!-- <div class="my-4 text-center">
-            <v-btn
-              class="hnb__btn--default mx-1"
-              prepend-icon="mdi-download"
-              @click="handleDownload"
-            >
-              下載電子檔
-            </v-btn>
+        <!-- <div class="my-4 text-center">
+          <v-btn
+            class="hnb__btn--default mx-1"
+            prepend-icon="mdi-download"
+            @click="handleDownload"
+          >
+            下載電子檔
+          </v-btn>
 
-            <v-btn
-              class="hnb__btn--orange mx-1"
-              prepend-icon="mdi-printer"
-              @click="handlePrint"
-            >
-              列印
-            </v-btn>
-          </div> -->
-        </div>
+          <v-btn
+            class="hnb__btn--orange mx-1"
+            prepend-icon="mdi-printer"
+            @click="handlePrint"
+          >
+            列印
+          </v-btn>
+        </div> -->
       </v-card-text>
 
       <v-card-actions>
@@ -68,11 +64,11 @@
 
   interface Props {
     isDraftDetailDialog?: boolean
-    creditNo?: string
+    draftNo?: string
   }
   const props = withDefaults(defineProps<Props>(), {
     isDraftDetailDialog: false,
-    creditNo: '',
+    draftNo: '',
   })
 
   const emits = defineEmits<{

@@ -3,30 +3,28 @@
     <!-- 匯票資訊 -->
     <!-- 無資料時顯示 -->
     <v-card v-if="!loading && !draftInfo" class="mx-auto my-3 w-100" color="grey-lighten-4" flat>
-        <v-card-text class="text-center py-12">
-          <v-icon color="grey-lighten-1" icon="mdi-file-document-alert-outline" size="64" />
-          <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
-        </v-card-text>
+      <v-card-text class="text-center py-12">
+        <v-icon color="grey-lighten-1" icon="mdi-file-document-alert-outline" size="64" />
+        <p class="text-h6 text-orange-darken-2 mt-4">尚無資料</p>
+      </v-card-text>
     </v-card>
 
     <v-container v-else class="ifslc__print" fluid>
-      <v-card class="w-100" flat>
+      <v-card class="w-100" color="grey-lighten-4" flat>
         <v-tabs
           v-model="currentTab"
+          class="hnb__tab"
         >
           <v-tab
             v-for="tab in draftList"
             :key="tab.value"
             class="mr-1"
-            :class="[tab.value === currentTab ? 'bg-blue-lighten-4' : 'bg-blue-grey-lighten-5 text-blue-grey-darken-2']"
-            :color="tab.value === currentTab ? 'blue-darken-4' : ''"
+            :class="{ 'active-tab': currentTab === tab.value }"
             :value="tab.value"
           >
             {{ tab.title }}
           </v-tab>
         </v-tabs>
-
-        <v-divider />
 
         <v-tabs-window v-model="currentTab">
           <v-tabs-window-item
@@ -34,59 +32,49 @@
             :key="tab.value"
             :value="tab.value"
           >
-            <v-card flat>
+            <v-card class="hnb__card--bordered bg-grey-lighten-4" flat>
               <!-- <v-card-title class="my-2 text-light-blue-darken-3">{{ tab.title }}</v-card-title> -->
               <v-card-text>
-                <DraftFront v-if="currentTab === 'draftFront'" />
-                <DraftBack v-if="currentTab === 'draftBack'" />
+                <DraftPage v-if="currentTab === 'draftPage'" />
                 <DraftApplication v-if="currentTab === 'draftApplication'" />
+                <InvoiceList v-if="currentTab === 'invoiceList'" />
               </v-card-text>
             </v-card>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card>
 
-      <invoiceList class="draft-list-print" />
     </v-container>
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { reactive, watch } from 'vue'
+  import type { BankInfo, BeneficiaryInfo, DraftInfo, LcInfo, SealInfo, SellerInfo } from '@/types/draftDetail'
+  import { ref, watch } from 'vue'
+  import { getDraftDetailList } from '@/api/draftDetail'
 
   interface Props {
-    data: any
-    isShowDeposit?: boolean
-    isShowTable?: boolean
+    draftNo?: string
   }
-
   const props = withDefaults(defineProps<Props>(), {
-    isShowDeposit: false,
-    isShowTable: false,
+    draftNo: '',
   })
 
-  // 匯票資訊
-  interface DraftInfo {
-    draftId: number // 匯票資料庫主鍵 ID
-    draftNo?: string // 匯票號碼
-    status?: number // 匯票狀態碼
-    importDate?: string // 匯票匯入日期（yyyy/MM/dd）
-    downloadFlag?: number // 是否已下載旗標
-    negoDate?: string // 押匯日期（yyyy/MM/dd），優先取 NegoDate，若為 null 則取 shipmentDate
-    shipmentDate?: string // 裝船日期（yyyy/MM/dd）
-    amount?: number // 匯票金額
-    amountInChinese?: string // 金額中文大寫
-    itemName?: string // 貨品名稱，若無則為空字串
-    itemQuantity?: number // 貨品數量（可為 null）
-    itemSubtotal?: number // 貨品小計（可為 null）
-    applicantAddr?: string // 申請人地址，若無則為空字串
-    depositAccount?: string // 存款帳號
-    negoReason?: string // 押匯原因，值同 itemName
-
-  }
-  const draftInfo = ref<DraftInfo | null>(null)
-
-  const loading = ref<boolean>(false)
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isConfirmBtn = ref<boolean>(false)
 
   interface DraftItem {
     title: string
@@ -94,19 +82,96 @@
   }
   const draftList: DraftItem[] = [
     {
-      title: '匯票正面',
-      value: 'draftFront',
-    },
-    {
-      title: '匯票反面',
-      value: 'draftBack',
-
+      title: '匯票正反面',
+      value: 'draftPage',
     },
     {
       title: '匯票申請書',
       value: 'draftApplication',
     },
+    {
+      title: '發票清冊',
+      value: 'invoiceList',
+    },
   ]
+  const currentTab = ref<string>('draftPage')
 
-  const currentTab = ref<string>('draftFront')
+  const loading = ref<boolean>(false)
+  const isSearching = ref<boolean>(false)
+  const bankInfo = ref<BankInfo | null>(null)
+  const beneficiaryInfo = ref<BeneficiaryInfo | null>(null)
+  const draftInfo = ref<DraftInfo | null>(null)
+  const lcInfo = ref<LcInfo | null>(null)
+  const sealInfo = ref<SealInfo | null>(null)
+  const sellerInfo = ref<SellerInfo | null>(null)
+
+  // 取得匯票資訊
+  async function fetchDraftInfo (): Promise<void> {
+    if (isSearching.value) {
+      return
+    }
+
+    const payload = {
+      draftNo: props.draftNo,
+    }
+    loading.value = true
+    // const apiUrl = '/api/draftInfo/list'
+    console.log('draftNo 變化:', payload.draftNo)
+    try {
+      // if (userInfo.value.token) {
+
+      const res = await getDraftDetailList(payload)
+      // {
+      //   headers: {
+      //     Authorization: `Bearer ${userInfo.value.token}`,
+      //   },
+      // }
+      // )
+      const { code, data } = res.data
+      console.log('API 回應:', res.data)
+      // const { bankInfo, beneficiaryInfo, draftInfo, lcInfo, sealInfo, sellerInfo } = data || {}
+
+      // 更新表格數據
+      if (code === 200) {
+        bankInfo.value = data.bankInfo
+        beneficiaryInfo.value = data.beneficiaryInfo
+        draftInfo.value = data.draftInfo
+        lcInfo.value = data.lcInfo
+        sealInfo.value = data.sealInfo
+        sellerInfo.value = data.sellerInfo
+      }
+    // } else {
+      // router.push('/login')
+      // return
+    // }
+    } catch (error: any) {
+      console.error('API 錯誤:', error)
+      // await handleApiError(error, fetchDraftInfo, {
+      //   messageTitle,
+      //   message,
+      //   messageStatus,
+      //   isConfirmBtn,
+      //   messageDialog,
+      // })
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // 監聽 draftNo 變化，自動重新獲取資料
+  watch(
+    () => props.draftNo,
+    newVal => {
+      if (newVal) {
+        fetchDraftInfo()
+        isSearching.value = true
+      }
+    },
+    { immediate: true },
+  )
+
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
 </script>
