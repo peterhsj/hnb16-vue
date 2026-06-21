@@ -22,7 +22,7 @@ Mock.mock('/api/invoice/list', 'post', () => {
   const formattedDate = `${year}/${month}/${day}`
 
   // 生成 1-5 筆隨機的 draftList
-  const draftCount = Mock.Random.integer(10, 20)
+  const draftCount = Mock.Random.integer(5, 5)
   // const dataList = Array.from({ length: draftCount }, () => ({
   //   invoiceNo: `${Mock.Random.integer(100_000, 999_999)}`,
   //   amount: Mock.Random.integer(1_000_000, 99_999_999),

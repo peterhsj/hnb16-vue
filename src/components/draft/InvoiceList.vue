@@ -1,5 +1,5 @@
 <template>
-  <div class="my-4">
+  <div>
     <!-- 無資料時顯示 -->
     <v-card v-if="!loading && items.length === 0" class="mx-auto my-3" color="grey-lighten-4" flat>
       <v-card-text class="text-center py-12">
@@ -10,8 +10,7 @@
 
     <v-data-table
       v-else
-      class="ifslc__table"
-      color="grey-lighten-4"
+      class="hnb__table"
       density="compact"
       fixed-header
       :headers="headers"
@@ -19,13 +18,18 @@
       :items="items"
       :loading="loading"
       striped="even"
-    />
+    >
+      <template #item.invoiceNo="{ item }">
+        <a v-if="item.invoiceNo" class="hnb__text--link" href="#" @click.prevent="handleInvoiceView(item.invoiceNo)">
+          {{ item.invoiceNo }}
+        </a>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  // import { api } from '@/api/axios'
   import { getInvoiceList } from '@/api/invoiceList'
   import { thousandsFormatting } from '@/utils/format'
 
@@ -41,11 +45,8 @@
     align?: 'start' | 'end' | 'center' | undefined
   }
   const headers: HeaderItem[] = [
-    { title: '發票號碼', key: 'invoiceNo', sortable: false, align: 'start', headerProps: { class: 'bg-blue-lighten-4' } },
-    { title: '發票金額 ( NT$ )', key: 'amount', sortable: false, align: 'end', headerProps: { class: 'bg-blue-lighten-4' } },
-    { title: '發票日期', key: 'date', sortable: false, align: 'center', headerProps: { class: 'bg-blue-lighten-4' } },
-    { title: '合約編號', key: 'contractNo', sortable: false, align: 'start', nowrap: true, headerProps: { class: 'bg-blue-lighten-4' } },
-    { title: '提單編號', key: 'billOfLadingNo', sortable: false, align: 'start', nowrap: true, headerProps: { class: 'bg-blue-lighten-4' } },
+    { title: '發票號碼', key: 'invoiceNo', sortable: false, align: 'center', headerProps: { class: 'bg-blue-lighten-4' } },
+    { title: '發票金額', key: 'amount', sortable: false, align: 'end', headerProps: { class: 'bg-blue-lighten-4' } },
   ]
 
   const loading = ref<boolean>(false)
@@ -60,17 +61,9 @@
   }
   const items = ref<TableDataItem[]>([])
 
-  interface ApiResponse<T = any> {
-    code: number
-    data: T
-    total?: number
-    message?: string
-  }
-
   // 取得發票列表
   async function fetchDraftList (): Promise<void> {
     loading.value = true
-    // const apiUrl = '/api/draftList/list'
     try {
       // 使用 axios POST 請求
       const res = await getInvoiceList({})
@@ -94,6 +87,12 @@
     } finally {
       loading.value = false
     }
+  }
+
+  // 預覽發票
+  function handleInvoiceView (invoiceNo: string): void {
+    // 在這裡可以實現查看發票詳情的邏輯，例如導航到發票詳情頁面
+    console.log('查看發票詳情:', invoiceNo)
   }
 
   onMounted(() => {
