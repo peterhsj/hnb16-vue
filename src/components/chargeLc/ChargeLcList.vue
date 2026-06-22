@@ -125,15 +125,24 @@
     @on-close="noticeDialogClose"
     @open-lc-detail="handleOpenLcDetail"
   />
+  <!-- Draft Dialog -->
+  <DraftReviewDialog
+    v-model:is-draft-review-dialog="isDraftReviewDialog"
+    :draft-no="draftNo"
+    @on-close="draftReviewDialogClose"
+  />
 </template>
 
 <script setup lang="ts">
   import type { ListItem } from '@/types/chargeLc'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDatacList } from '@/api/chargeLc'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
+
+  const isShowPaymentType = ref(true)
+  provide('isShowPaymentType', isShowPaymentType)
 
   const emits = defineEmits(['on-edit'])
 
@@ -146,7 +155,7 @@
   const isEditDialogOpen = ref(false)
   const selectedLcNo = ref<string>('')
   // Draft Dialog
-  const draftDialog = ref(false)
+  const isDraftReviewDialog = ref(false)
   const draftNo = ref<string>('')
   // Lc Dialog
   const lcDialog = ref(false)
@@ -301,6 +310,13 @@
   // 查看匯票 Draft Dialog
   function handleDraftView (value: string): void {
     draftNo.value = value
+    isDraftReviewDialog.value = true
+  }
+
+  // 離開 Draft Review Dialog
+  function draftReviewDialogClose (): void {
+    isDraftReviewDialog.value = false
+    draftNo.value = ''
   }
 
   // 查看信用狀 Lc Dialog

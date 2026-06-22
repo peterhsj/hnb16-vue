@@ -101,7 +101,7 @@
               <td colspan="2">
                 <span class="font-weight-bold">金額：</span>
                 新台幣
-                <span class="text-red font-weight-bold">伍仟萬元整</span>
+                <span class="text-red-darken-3 font-weight-bold">伍仟萬元整</span>
               </td>
             </tr>
 

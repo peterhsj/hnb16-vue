@@ -216,7 +216,7 @@
       variant="outlined"
     >
       <v-card-text class="px-7">
-        <div class="font-weight-bold">撥款方式：</div>
+        <div class="text-subtitle-1 font-weight-bold text-red-darken-3">撥款方式：</div>
 
         <div class="my-2">
           <v-icon :icon="draftData.billType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />

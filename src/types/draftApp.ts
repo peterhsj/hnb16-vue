@@ -47,6 +47,7 @@ export interface DraftLcListItem {
   beneficiary: string
   beneficiaryTaxId: string
   status: DraftLcStatusLabel
+  isAccepted: boolean
 }
 
 export interface DraftLcListSummary {

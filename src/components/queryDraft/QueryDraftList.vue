@@ -638,7 +638,10 @@
     creditNo.value = ''
   }
 
-  onMounted(fetchLcAppList)
+  onMounted(() => {
+    console.log('Component mounted, fetching initial list...')
+    fetchLcAppList()
+  })
 
   // 離開 message
   function messageClose (): void {

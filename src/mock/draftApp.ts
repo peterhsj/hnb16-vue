@@ -11,6 +11,7 @@ const mockLcItems: DraftLcListItem[] = [
     beneficiary: '中鸿龋鐵股份有限公司',
     beneficiaryTaxId: '30414175',
     status: '未到期',
+    isAccepted: true,
   },
   {
     lcNo: '099700049161000861',
@@ -21,6 +22,7 @@ const mockLcItems: DraftLcListItem[] = [
     beneficiary: '中鸿龋鐵股份有限公司',
     beneficiaryTaxId: '30414175',
     status: '未到期',
+    isAccepted: true,
   },
   {
     lcNo: '099700049161000862',
@@ -31,6 +33,7 @@ const mockLcItems: DraftLcListItem[] = [
     beneficiary: '網際測試股份有限公司',
     beneficiaryTaxId: '12345678',
     status: '已到期',
+    isAccepted: false,
   },
 ]
 

@@ -40,7 +40,7 @@
             class="hnb__btn--default mx-1 my-1"
             size="small"
             variant="flat"
-            @click="editItem(item.lcNo)"
+            @click="editItem(item.lcNo, item.isAccepted)"
           >
             填寫押匯申請書
           </v-btn>
@@ -252,8 +252,8 @@
   }
 
   // 編輯項目
-  function editItem (appNo: string): void {
-    emits('on-edit', { appNo })
+  function editItem (appNo: string, isAccepted: boolean): void {
+    emits('on-edit', { appNo, isAccepted })
   }
 
   // 查看開狀申請書 App Dialog
@@ -304,7 +304,10 @@
     noticeNo.value = ''
   }
 
-  onMounted(fetchLcAppList)
+  onMounted(() => {
+    console.log('Component mounted, fetching list...')
+    fetchLcAppList()
+  })
 
   // 離開 message
   function messageClose (): void {

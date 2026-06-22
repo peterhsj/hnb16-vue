@@ -22,7 +22,7 @@
               v-model="loginForm.auth"
               class="hnb__role--toggle"
               color="orange-darken-1"
-              density="comfortable"
+              density="compact"
               mandatory
               rounded="pill"
             >
@@ -35,7 +35,7 @@
               v-model="loginForm.account"
               autocomplete="new-account"
               color="blue-darken-1"
-              density="comfortable"
+              density="compact"
               label="帳號"
               prepend-inner-icon="mdi-account"
               readonly
@@ -50,7 +50,7 @@
               :append-inner-icon="isShow ? 'mdi-eye-off': 'mdi-eye'"
               autocomplete="new-password"
               color="blue-darken-1"
-              density="comfortable"
+              density="compact"
               label="密碼"
               prepend-inner-icon="mdi-lock"
               readonly
@@ -68,7 +68,7 @@
                 autocomplete="one-time-code"
                 class="hnb__captcha--input"
                 color="blue-darken-1"
-                density="comfortable"
+                density="compact"
                 label="驗證碼"
                 :rules="rules.captcha"
                 variant="outlined"

@@ -96,6 +96,22 @@
       @on-close="messageClose"
       @prompt-confirm="messageConfirm"
     />
+
+    <!-- Draft Dialog -->
+    <DraftDetailDialog
+      v-model:is-draft-detail-dialog="isDraftDetailDialog"
+      :draft-no="draftNo"
+      @on-close="isDraftDetailDialog = false"
+      @on-show-history-view="handleHistoryView"
+    />
+
+    <!-- 查看授信歷程資料 Dialog -->
+    <LcAppHistoryViewDialog
+      v-model:is-history-dialog-open="isHistoryDialogOpen"
+      :credit-no="creditNo"
+      :is-show-history="isShowHistory"
+      @on-close="historyDialogClose"
+    />
   </div>
 </template>
 
@@ -114,6 +130,11 @@
   const tableItems = ref<ListItem[]>([])
   const lcAppSelected = ref<ListItem[]>([])
   const isLoading = ref(false)
+
+  // 查看授信歷程資料 Dialog
+  const isShowHistory = ref(true)
+  const isHistoryDialogOpen = ref(false)
+  const creditNo = ref<string>('') // 這裡可以根據實際情況設定 creditNo 的值
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -244,12 +265,12 @@
     }
   }
 
-  onMounted(fetchLcAppList)
-
   // 查看匯票 Draft Dialog
+  const isDraftDetailDialog = ref(false)
   const draftNo = ref<string>('')
   function handleDraftView (value: string): void {
     draftNo.value = value
+    isDraftDetailDialog.value = true
   }
 
   // 重設選取
@@ -267,6 +288,25 @@
     messageDialog.value = true
     // processStatus.value.action = 'reNotice'
   }
+
+  // 處理查看歷程資料事件
+  function handleHistoryView (value: string): void {
+    console.log('查看歷程資料', value)
+    // 這裡可以加入實際的處理邏輯，例如根據傳入的值顯示歷程資料等
+    isHistoryDialogOpen.value = true
+    creditNo.value = value
+  }
+
+  // 查看歷程資料 Dialog 關閉事件
+  function historyDialogClose (): void {
+    isHistoryDialogOpen.value = false
+    creditNo.value = ''
+  }
+
+  onMounted(() => {
+    console.log('Component mounted, fetching initial list...')
+    fetchLcAppList()
+  })
 
   // 離開 message
   function messageClose (): void {

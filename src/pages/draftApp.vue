@@ -191,6 +191,17 @@
         />
       </div>
     </v-container>
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :dialog-width="messageWidth"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
   </div>
 </template>
 
@@ -198,17 +209,33 @@
   import type { DraftLcData, DraftQueryFormPayload } from '@/types/draftApp'
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref, watch } from 'vue'
+  import { useRouter } from 'vue-router'
   import { VForm } from 'vuetify/components'
+
   import {
     createInitialDraftQueryForm,
     LC_STATUS_ITEMS,
   } from '@/types/draftApp'
 
+  const router = useRouter()
   const breadcrumbs = [
     { title: '首頁', to: '/' },
     { title: '申請作業' },
     { title: '押匯申請', to: '/draftApp' },
   ]
+
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('400px')
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<string>('')
+  // const processStatus = ref<{ action: string, status: number }>({
+  //   action: '',
+  //   status: 0,
+  // })
 
   const currentView = ref('search')
   const isEdit = ref(false)
@@ -260,8 +287,19 @@
   }
 
   // 編輯押匯申請書
-  function handleEdit (payload: { appNo: string }): void {
+  function handleEdit (payload: { appNo: string, isAccepted: boolean }): void {
     console.log('編輯事件觸發，接收到 payload:', payload)
+    if (!payload.isAccepted) {
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = `此筆押匯尚未完成 "信用狀修改接受註記" 作業！<br />
+        請點選下方確定按鈕前往接受註記或關閉`
+      messageStatus.value = 'alert'
+      messageWidth.value = '600px'
+      isConfirmBtn.value = true
+      processStatus.value = 'acceptNotice'
+      return
+    }
     draftLcData.value = { appNo: payload.appNo }
     currentView.value = ''
     isShowList.value = false
@@ -296,5 +334,20 @@
         searchForm.queryMode = '' // 重置查詢方式，強制使用者重新選擇
       }
     }
+  }
+
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
+
+  // 確認 message
+  function messageConfirm (): void {
+    if (processStatus.value === 'acceptNotice') {
+      // 導向信用狀修改接受註記頁面
+      // location.href = `/amendAccept?appNo=${draftLcData.value.appNo}`
+      router.push(`/amendAccept?appNo=${draftLcData.value.appNo}`)
+    }
+    messageDialog.value = false
   }
 </script>
