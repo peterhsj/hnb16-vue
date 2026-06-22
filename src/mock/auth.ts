@@ -67,7 +67,7 @@ Mock.mock('/api/auth/login', 'post', (options: any) => {
     name: ['林大華', '陳小明', '王小美'][Mock.Random.integer(0, 2)] || '',
     email: `${account}@example.com`,
     roleId: [1, 2, 3][Mock.Random.integer(0, 2)] || 1, // 角色：S(系統管理員), C(公司管理員), O(承辦人)
-    roleName: ['系統管理員', '公司管理員', '承辦人'][Mock.Random.integer(0, 2)] || '',
+    roleName: 'SM', // 角色代碼: BH=經辦, BS=主管, SM=系統管理員, MB=總行, BM=分行管理員
     categoryId: [1, 2, 3][Mock.Random.integer(0, 2)] || 1, // 類別：SC(系統公司), BU(買方), SE(賣方)
     categoryName: ['系統公司', '買方', '賣方'][Mock.Random.integer(0, 2)] || '',
     companyId: Mock.Random.integer(1000, 9999) || 123, // 公司 ID

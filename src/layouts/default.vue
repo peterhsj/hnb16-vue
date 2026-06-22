@@ -209,6 +209,7 @@
 
   // 依照角色動態取得選單
   const menu = computed(() => {
+    console.log('使用者資訊:', userInfo.value.roleName)
     const role = userInfo.value.roleName || 'BH'
     return menuByRole[role] ?? menuByRole.BH
   })

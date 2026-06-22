@@ -99,7 +99,7 @@ body,
       width: 100%;
       max-width: 420px;
       padding: 36px 32px;
-      border-radius: 24px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(61, 54, 44, 0.12);
@@ -119,9 +119,12 @@ body,
     }
 
     &--button {
-      margin-top: 8px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      background-color: #b3000e;
+      color: #fff;
+      // height: 32px;
+      &:hover {
+        background-color: #df0011;
+      }
     }
 
     &--footer {
@@ -150,8 +153,8 @@ body,
 
     &--title {
       margin: 8px 0 0;
-      font-size: 28px;
-      color: var(--ink);
+      font-size: 1.5rem;
+      // color: var(--teal);
     }
 
     &--note {

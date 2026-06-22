@@ -1,22 +1,22 @@
 <template>
   <v-container class="hnb__login--wrapper" fluid>
     <v-row align="stretch" class="fill-height my-0">
-      <v-col class="hnb__login--panel">
-        <v-sheet class="hnb__login--card" elevation="16">
-          <div class="hnb__header mb-5">
-            <div class="hnb__header--kicker">
-              <v-img
-                alt="HNB 華南銀行 Logo"
-                class="d-inline-flex mr-2"
-                :src="`${BaseURL}/images/logo-hncb.png`"
-                width="140"
-              />
-            </div>
-
-            <h2 class="hnb__header--title text-blue-darken-3">華南銀行 - 國內信用狀系統</h2>
-            <!-- <p class="hnb__header--note">請選擇角色並輸入帳號資訊</p> -->
+      <v-col class="hnb__login--panel flex-column align-center justify-center">
+        <div class="hnb__header mb-5">
+          <div class="hnb__header--kicker">
+            <v-img
+              alt="HNB 華南銀行 Logo"
+              class="d-inline-flex mr-2"
+              :src="`${BaseURL}/images/logo-hncb.png`"
+              width="160"
+            />
           </div>
 
+          <h2 class="hnb__header--title text-cyan-darken-3">國內信用狀系統</h2>
+          <!-- <p class="hnb__header--note">請選擇角色並輸入帳號資訊</p> -->
+        </div>
+
+        <v-sheet class="hnb__login--card" elevation="3">
           <v-form ref="loginFormRef" class="hnb__login--form" @submit.prevent="login">
             <!-- <v-btn-toggle
               v-model="loginForm.auth"
@@ -62,7 +62,7 @@
               @focus="$event.target.removeAttribute('readonly')"
             />
 
-            <div class="hnb__captcha--row">
+            <!-- <div class="hnb__captcha--row">
               <v-text-field
                 v-model="captcha"
                 autocomplete="one-time-code"
@@ -89,7 +89,7 @@
                   <v-icon>mdi-refresh</v-icon>
                 </v-btn>
               </div>
-            </div>
+            </div> -->
 
             <!-- <div class="hnb__login--actions">
               <v-spacer />
@@ -98,20 +98,12 @@
             <v-btn
               block
               class="hnb__login--button mt-0"
-              color="primary"
               size="large"
               type="submit"
             >
               登入
             </v-btn>
           </v-form>
-
-          <div class="hnb__login--footer">
-            登入即代表您同意公司
-            <a class="hnb__login--link" href="#" @click.prevent="privacyDialog = true">隱私權及安全宣告</a>
-            與
-            <a class="hnb__login--link" href="#" @click.prevent="securityDialog = true">資訊安全政策宣告</a>。
-          </div>
         </v-sheet>
       </v-col>
     </v-row>

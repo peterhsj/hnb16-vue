@@ -300,4 +300,4 @@ export const menuByRole: Record<string, MenuItem[]> = {
 }
 
 // 預設使用 BH 選單（登入後依角色切換）
-export const menu = menuByRole.BH
+export const menu = menuByRole.BM
