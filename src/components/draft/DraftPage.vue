@@ -209,6 +209,52 @@
       </v-row>
     </v-card>
 
+    <v-card
+      v-if="isShowPaymentType"
+      class="my-6 border-sm bg-white"
+      elevation="2"
+      variant="outlined"
+    >
+      <v-card-text class="px-7">
+        <div class="font-weight-bold">撥款方式：</div>
+
+        <div class="my-2">
+          <v-icon :icon="draftData.billType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+          本行-轉入帳號：---
+        </div>
+
+        <div class="my-2">
+          <v-icon :icon="draftData.billType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+          跨行-付款內容詳受益人匯出匯款申請書
+        </div>
+
+        <div class="my-2 d-flex">
+          <v-icon :icon="draftData.billType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+
+          <div class="ms-1 d-flex ">
+            <span class="font-weight-bold">轉入科目：</span>
+
+            <div>
+              <span>轉入會計科目：13097-099：其他應收款-雜項</span>
+
+              <div class="my-2">
+                轉入銷帳序號：---
+              </div>
+
+              <div class="my-2">
+                轉入科目金額：---
+              </div>
+
+              <div class="my-2">
+                轉入科目摘要：---
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+
     <div class="my-4 text-center">
       <v-btn
         class="hnb__btn--default mx-1"
@@ -229,6 +275,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+  import { inject, ref } from 'vue'
+
+  const isShowPaymentType = inject<boolean>('isShowPaymentType', false)
+
+  const draftData = ref({
+    draftType: '01', // 押匯/承兌類型
+    billType: '01', // 撥款方式
+    paymentType: '01', // 費用付款方式
+    feeDiscount: false, // 押匯手續費優惠
+  })
+
   function handleDownload (): void {
     console.log('handleDownload')
   }

@@ -526,7 +526,7 @@
 
                       <td>
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">支票存款帳號 1：</div>
+                          <div class="font-weight-bold w-25 text-end">支票存款帳號 1：</div>
 
                           <v-text-field
                             v-model="formData.checkAccount1"
@@ -540,7 +540,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">支票號碼 1：</div>
+                          <div class="font-weight-bold w-25 text-end">支票號碼 1：</div>
 
                           <v-text-field
                             v-model="formData.checkNumber1"
@@ -554,7 +554,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">金額 1：</div>
+                          <div class="font-weight-bold w-25 text-end">金額 1：</div>
 
                           <v-text-field
                             v-model="formData.checkAmount1"
@@ -573,7 +573,7 @@
 
                       <td>
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">支票存款帳號 2：</div>
+                          <div class="font-weight-bold w-25 text-end">支票存款帳號 2：</div>
 
                           <v-text-field
                             v-model="formData.checkAccount2"
@@ -587,7 +587,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">支票號碼 2：</div>
+                          <div class="font-weight-bold w-25 text-end">支票號碼 2：</div>
 
                           <v-text-field
                             v-model="formData.checkNumber2"
@@ -601,7 +601,7 @@
                         </div>
 
                         <div class="d-flex align-center">
-                          <div class="font-weight-bold w-20 text-end">金額 2：</div>
+                          <div class="font-weight-bold w-25 text-end">金額 2：</div>
 
                           <v-text-field
                             v-model="formData.checkAmount2"

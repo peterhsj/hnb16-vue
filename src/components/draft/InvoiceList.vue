@@ -10,9 +10,8 @@
 
     <v-data-table
       v-else
-      class="hnb__table"
+      class="table-sm hnb__table"
       density="compact"
-      fixed-header
       :headers="headers"
       hide-default-footer
       :items="items"
@@ -45,8 +44,8 @@
     align?: 'start' | 'end' | 'center' | undefined
   }
   const headers: HeaderItem[] = [
-    { title: '發票號碼', key: 'invoiceNo', sortable: false, align: 'center', headerProps: { class: 'bg-blue-lighten-4' } },
-    { title: '發票金額', key: 'amount', sortable: false, align: 'end', headerProps: { class: 'bg-blue-lighten-4' } },
+    { title: '發票號碼', key: 'invoiceNo', sortable: false, align: 'center' },
+    { title: '發票金額', key: 'amount', sortable: false, align: 'end' },
   ]
 
   const loading = ref<boolean>(false)

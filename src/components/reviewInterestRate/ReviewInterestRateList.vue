@@ -27,7 +27,7 @@
         </template>
 
         <template #item.draftNo="{ item }">
-          <a v-if="item.draftNo" class="hnb__text--link" href="#" @click.prevent="handleDraftView(item.draftNo)">
+          <a v-if="item.draftNo" class="hnb__text--link" href="#" @click.prevent="handleDraftReviewView(item.draftNo)">
             {{ item.draftNo }}
           </a>
 
@@ -105,13 +105,20 @@
       @on-close="noticeDialogClose"
       @open-lc-detail="handleOpenLcDetail"
     />
+
+    <!-- Draft Dialog -->
+    <DraftReviewDialog
+      v-model:is-draft-review-dialog="isDraftReviewDialog"
+      :draft-no="draftNo"
+      @on-close="draftReviewDialogClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
   import type { LcListItem, QueryFormPayload } from '@/types/reviewInterestRate'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDatacList } from '@/api/reviewInterestRate'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
@@ -134,6 +141,12 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+  // Draft Review Dialog
+  const isDraftReviewDialog = ref(false)
+  const draftNo = ref<string>('')
+
+  const isShowPaymentType = ref<boolean>(true)
+  provide('isShowPaymentType', isShowPaymentType)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -269,16 +282,16 @@
     emits('on-edit', { appNo })
   }
 
-  // 查看匯票 Draft Dialog
-  function handleDraftView (value: string): void {
-    appNo.value = value
-    appDialog.value = true
+  // 查看匯票 Draft Review Dialog
+  function handleDraftReviewView (value: string): void {
+    draftNo.value = value
+    isDraftReviewDialog.value = true
   }
 
-  // 離開 Draft Dialog
-  function draftDialogClose (): void {
-    appDialog.value = false
-    appNo.value = ''
+  // 離開 Draft Review Dialog
+  function draftReviewDialogClose (): void {
+    isDraftReviewDialog.value = false
+    draftNo.value = ''
   }
 
   // 查看信用狀 Lc Dialog

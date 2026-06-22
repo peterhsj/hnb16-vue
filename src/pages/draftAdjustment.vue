@@ -23,8 +23,7 @@
 
         <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
           <v-data-table
-            class="table-sm hnb__table bg-white"
-            color="blue-darken-2"
+            class="table-sm hnb__table"
             density="compact"
             :headers="tableHeaders"
             hide-default-footer
@@ -131,6 +130,12 @@
         @on-close="noticeDialogClose"
         @open-lc-detail="handleOpenLcDetail"
       />
+      <!-- Draft Dialog -->
+      <DraftReviewDialog
+        v-model:is-draft-review-dialog="isDraftReviewDialog"
+        :draft-no="draftNo"
+        @on-close="draftReviewDialogClose"
+      />
     </v-container>
   </div>
 </template>
@@ -139,7 +144,7 @@
   import type { PageOptions } from '@/types/common'
   import type { ListItem } from '@/types/draftAdjustment'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDateList } from '@/api/draftAdjustment'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { thousandsFormatting } from '@/utils/format'
@@ -157,6 +162,12 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+  // Draft Review Dialog
+  const isDraftReviewDialog = ref(false)
+  const draftNo = ref<string>('')
+
+  const isShowPaymentType = ref<boolean>(true)
+  provide('isShowPaymentType', isShowPaymentType)
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -256,8 +267,17 @@
     }
   }
 
-  function handledraftView (draftNo: string): void {
-    console.log('View Draft:', draftNo)
+  // 查看匯票 Draft Review Dialog
+  function handledraftView (value: string): void {
+    console.log('View Draft:', value)
+    draftNo.value = value
+    isDraftReviewDialog.value = true
+  }
+
+  // 離開 Draft Review Dialog
+  function draftReviewDialogClose (): void {
+    isDraftReviewDialog.value = false
+    draftNo.value = ''
   }
 
   function handlerCredit (draftNo: string): void {
