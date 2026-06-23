@@ -110,6 +110,13 @@ body,
       display: flex;
       flex-direction: column;
       gap: 14px;
+
+      
+
+      .v-field__field {
+        height: initial;
+        font-size: initial;
+      }
     }
 
     &--actions {

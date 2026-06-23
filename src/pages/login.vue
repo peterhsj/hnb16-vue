@@ -35,7 +35,6 @@
               v-model="loginForm.account"
               autocomplete="new-account"
               color="blue-darken-1"
-              density="compact"
               label="帳號"
               prepend-inner-icon="mdi-account"
               readonly
@@ -50,7 +49,6 @@
               :append-inner-icon="isShow ? 'mdi-eye-off': 'mdi-eye'"
               autocomplete="new-password"
               color="blue-darken-1"
-              density="compact"
               label="密碼"
               prepend-inner-icon="mdi-lock"
               readonly

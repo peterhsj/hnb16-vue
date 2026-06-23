@@ -47,6 +47,7 @@ import './setBeneficiary' // '設定受益人資料'
 import './managerPersonal' // '個人設定'
 import './draftDetail' // '匯票資料'
 import './invoiceList' // '發票資料'
+import './draftRejection' // '拒絕押匯清冊'
 // 系統管理員
 import './queryAccessLog' // '查詢存取紀錄'
 
