@@ -14,12 +14,42 @@
           <h2 class="hnb16__title">
             分行管理
           </h2>
+        </div>
+
+        <div class="d-flex align-center justify-space-between">
+          <div class="d-inline-flex align-top mb-2">
+            <div class="text-no-wrap hnb__form-label mt-1 me-2">匯入分行資料</div>
+
+            <v-file-input
+              v-model="branchFile"
+              accept=".xlsx, .xls, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              class="mx-1"
+              clearable
+              color="teal-darken-2"
+              density="compact"
+              hide-details="auto"
+              placeholder="檔案大小不能超過 5 MB"
+              prepend-icon=""
+              :rules="[v => !v || v.length === 0 || v[0].size < 5242880 || '檔案大小不能超過 5 MB']"
+              show-size
+              variant="outlined"
+              width="300px"
+            />
+
+            <v-btn
+              class="hnb__btn--default mx-1"
+              prepend-icon="mdi-file-excel"
+              variant="flat"
+              @click="onSaveBranchFile"
+            >
+              確認
+            </v-btn>
+          </div>
 
           <div>
             <v-btn
-              class="hnb__btn--orange mx-1"
+              class="hnb__btn--orange my-2"
               prepend-icon="mdi-plus"
-              size="small"
               variant="flat"
               @click="onEdit({ branchId: '', branchName: '', branchCode: '', address: '', phone: '', contactPerson: '' }, 'new')"
             >
@@ -106,7 +136,7 @@
 <script setup lang="ts">
   import type { ListItem } from '@/types/managerBranch'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, watch } from 'vue'
   import { getDatacList } from '@/api/managerBranch'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
 
@@ -122,6 +152,8 @@
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
+
+  const branchFile = ref<File | null>(null)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -235,11 +267,29 @@
     console.log('執行刪除操作')
     // 在這裡執行刪除操作，例如呼叫 API 刪除資料
     // 刪除後重新取得列表資料
-    messageTitle.value = '作業訊息'
-    message.value = `作業已完成`
-    messageStatus.value = 'success'
-    isConfirmBtn.value = false
-    messageDialog.value = true
+    fetchLcAppList()
+    nextTick(() => {
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+    })
+  }
+
+  // 匯入分行資料
+  function onSaveBranchFile (): void {
+    if (!branchFile.value) {
+      messageTitle.value = '作業訊息'
+      message.value = `請選擇要匯入的檔案`
+      messageStatus.value = 'alert'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+      return
+    }
+    console.log('匯入分行資料', branchFile.value)
+    // 在這裡執行匯入操作，例如呼叫 API 匯入資料
+    // 匯入後重新取得列表資料
     fetchLcAppList()
   }
 
