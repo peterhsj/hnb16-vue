@@ -65,6 +65,7 @@
                     hide-details
                     :type="isShowPass ? 'text' : 'password'"
                     variant="outlined"
+                    @click:append-inner="isShowPass = !isShowPass"
                   />
                 </v-col>
 
@@ -80,6 +81,7 @@
                     hide-details="auto"
                     :type="isShowNewPass ? 'text' : 'password'"
                     variant="outlined"
+                    @click:append-inner="isShowNewPass = !isShowNewPass"
                   />
                 </v-col>
 
@@ -96,6 +98,7 @@
                     :rules="rules.confirmPassword"
                     :type="isShowConfirmPass ? 'text' : 'password'"
                     variant="outlined"
+                    @click:append-inner="isShowConfirmPass = !isShowConfirmPass"
                   />
                 </v-col>
 
