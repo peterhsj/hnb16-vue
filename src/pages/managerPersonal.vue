@@ -26,22 +26,22 @@
             <div class="pt-4">
               <v-row class="align-center">
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">角色選擇</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">角色選擇</div>
                   <span>分行管理員</span>
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">所屬分行</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">所屬分行</div>
                   <span>高雄分行</span>
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">用戶帳號</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">用戶帳號</div>
                   <span>hn7007</span>
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">用戶姓名</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">用戶姓名</div>
 
                   <v-text-field
                     v-model="form.userName"
@@ -54,7 +54,7 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">用戶密碼</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">用戶密碼</div>
 
                   <v-text-field
                     v-model="form.password"
@@ -69,7 +69,7 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">密碼修改</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">密碼修改</div>
 
                   <v-text-field
                     v-model="form.newPassword"
@@ -84,7 +84,7 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">密碼確認</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">密碼確認</div>
 
                   <v-text-field
                     v-model="form.confirmPassword"
@@ -100,7 +100,7 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">電子郵件</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">電子郵件</div>
 
                   <v-text-field
                     v-model="form.email"
@@ -113,7 +113,7 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">連絡電話</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">連絡電話</div>
 
                   <v-text-field
                     v-model="form.phone"
@@ -126,10 +126,10 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">作業群組</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">作業群組</div>
 
                   <v-data-table
-                    class="table-sm hnb__table bg-white"
+                    class="table-sm hnb__table bg-white w-90"
                     color="blue-darken-2"
                     density="compact"
                     :headers="tableHeaders"
@@ -163,17 +163,17 @@
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">權限</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">權限</div>
                   <span>主要審核者</span>
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">代理者帳號</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">代理者帳號</div>
                   <span>CCXXK</span>
                 </v-col>
 
                 <v-col class="d-flex align-center ga-4 text-body-1 " cols="12">
-                  <div class="font-weight-medium text-no-wrap hnb__form-label">啟動代理</div>
+                  <div class="font-weight-medium text-no-wrap hnb__form-label w-10">啟動代理</div>
                   <span>Yes</span>
                 </v-col>
               </v-row>

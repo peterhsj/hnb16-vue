@@ -51,6 +51,7 @@ import './draftRejection' // '拒絕押匯清冊'
 // 系統管理員
 import './queryAccessLog' // '查詢存取紀錄'
 import './managerBranch' // '查詢分行清冊'
+import './managerMember' // '查詢會員清冊'
 
 // 設定 mock 配置
 Mock.setup({
