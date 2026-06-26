@@ -58,6 +58,7 @@ import './queryNegotiationFee' // '查詢未結案信用狀額度與保證金清
 import './queryBeneficiaryBlcAmount' // '查詢受益人未結案信用狀額度與保證金清冊'
 import './queryLcFeeDetail' // '查詢信用狀手續費明細表清冊'
 import './queryFpcCtsv' // '查詢信用狀手續費明細表清冊'
+import './queryFpcLcRpt' // '查詢台塑網通訊傳輸排程檢視'
 
 // 設定 mock 配置
 Mock.setup({

@@ -9,19 +9,148 @@
         </v-breadcrumbs>
       </div>
 
-      <h1 class="hnb16__title">台塑信用狀統計表</h1>
+      <div>
+        <h2 class="mx-4 hnb16__title">查詢台塑信用狀統計表</h2>
 
-      <v-card class="pa-6 mt-4" flat>
-        <p class="text-blue-grey-darken-2">此功能頁面開發中...</p>
-      </v-card>
+        <v-card class="border-sm mx-4 pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
+          <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
+            <v-row class="ma-0">
+              <v-col class="d-flex align-center ga-4" cols="12" lg="4" md="6">
+                <div class="text-body-1 font-weight-medium text-no-wrap hnb__form-label">交易年份</div>
+
+                <v-select
+                  v-model="searchForm.transactionYear"
+                  bg-color="white"
+                  clearable
+                  color="teal-darken-2"
+                  density="compact"
+                  hide-details="auto"
+                  item-title="title"
+                  item-value="value"
+                  :items="[...YEAR_ITEMS]"
+                  variant="outlined"
+                >
+                  <template #append-inner>
+                    <span class="text-body-2">年</span>
+                  </template>
+                </v-select>
+
+                <v-select
+                  v-model="searchForm.transactionMonth"
+                  bg-color="white"
+                  clearable
+                  color="teal-darken-2"
+                  density="compact"
+                  hide-details="auto"
+                  item-title="title"
+                  item-value="value"
+                  :items="[...MONTH_ITEMS]"
+                  placeholder="請選擇"
+                  variant="outlined"
+                >
+                  <template #append-inner>
+                    <span class="text-body-2">月</span>
+                  </template>
+                </v-select>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="d-flex justify-end" cols="12">
+                <v-btn
+                  class="hnb__btn--cancel mx-1"
+                  @click="resetForm"
+                >
+                  重設
+                </v-btn>
+
+                <v-btn
+                  class="hnb__btn--default mx-1"
+                  :disabled="!searchEnabled"
+                  type="submit"
+                >
+                  確定
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </div>
+
+      <!-- 台塑信用狀統計表清冊 -->
+      <div v-if="isShowList" class="mt-4 mx-4">
+        <div class="d-flex align-center justify-space-between">
+          <h2 class="hnb16__title">
+            台塑信用狀統計表清冊
+          </h2>
+
+          <!-- <div>
+            <v-btn
+              class="hnb__btn--default mx-1"
+              prepend-icon="mdi-download"
+              size="small"
+              variant="flat"
+              @click="handleDownload"
+            >
+              下載電子檔
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1"
+              prepend-icon="mdi-printer"
+              size="small"
+              variant="flat"
+              @click="handlePrint"
+            >
+              列印
+            </v-btn>
+          </div> -->
+        </div>
+
+        <QueryFpcLcRptList :form-data="propsFormData" />
+      </div>
     </v-container>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { isAfter, isBefore } from 'date-fns'
+  import { computed, reactive, ref } from 'vue'
+  import { VForm } from 'vuetify/components'
+  import { MONTH_ITEMS, type QueryFormPayload, YEAR_ITEMS } from '@/types/queryFpcLcRpt'
+  import { createInitialQueryForm } from '@/types/queryFpcLcRpt'
+
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '查詢作業' },
     { title: '台塑信用狀統計表', disabled: true },
   ]
+
+  const isShowList = ref(false)
+  const searchFormRef = ref<InstanceType<typeof VForm>>()
+  const searchForm = reactive<QueryFormPayload>(createInitialQueryForm())
+  const propsFormData = ref<QueryFormPayload>({ ...searchForm })
+
+  const searchEnabled = computed(() => {
+    return searchForm.transactionYear !== null || searchForm.transactionMonth !== null
+  })
+
+  function resetForm (): void {
+    searchFormRef.value?.reset()
+    isShowList.value = false
+  }
+
+  function sendSearchForm (): void {
+    console.log('送出表單', searchForm)
+    isShowList.value = true
+    propsFormData.value = { ...searchForm }
+  }
+
+  function handlePrint (): void {
+    window.print()
+  }
+
+  function handleDownload (): void {
+    console.log('下載電子檔')
+  }
 </script>
