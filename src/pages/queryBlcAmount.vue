@@ -162,7 +162,6 @@
     return searchForm.issueDateStart !== '' || searchForm.issueDateEnd !== '' || searchForm.draftDateStart !== '' || searchForm.draftDateEnd !== ''
   })
 
-
   interface Rules {
     issueDateStartRule: ((v: string) => boolean | string)[]
     issueDateEndRule: ((v: string) => boolean | string)[]

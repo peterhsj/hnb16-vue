@@ -54,6 +54,7 @@ import './managerBranch' // '查詢分行清冊'
 import './managerMember' // '查詢會員清冊'
 // 總行
 import './queryBlcAmount' // '查詢未結案信用狀額度與保證金清冊'
+import './queryNegotiationFee' // '查詢未結案信用狀額度與保證金清冊'
 
 // 設定 mock 配置
 Mock.setup({
