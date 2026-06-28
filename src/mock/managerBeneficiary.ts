@@ -1,22 +1,27 @@
 import type { ListItem, ListResponse } from '@/types/managerBeneficiary'
 import Mock from 'mockjs'
 
-const SEND_STATUS = ['待傳送', '傳送成功', '傳送失敗']
+const COMP_IDS = ['75708007', '85214783', '96325898']
+const COMP_NAMES = ['台灣塑膠工業股份有限公司', '台灣石油工業股份有限公司', '台灣化學工業股份有限公司']
+const MANAGER_NAMES = ['李志村', '王美玲', '陳建宏']
+const MANAGER_TITLES = ['經理', '副理', '主任']
+const ADDRESS = ['高雄市中山三路39號', '台北市信義路100號', '台中市中港路200號']
+const PHONE = ['07-1234567', '02-2345678', '04-3456789']
+const EMAIL = ['example1@example.com', 'example2@example.com', 'example3@example.com']
+const BENEFICIARY_DEPARTMENTS = ['事業部A', '事業部B', '事業部C']
 const CONFIRM_STATUS = [true, false]
-const TRANSACTION_TYPES = ['押匯申請', '開狀回應']
-const LC_SOURCES = ['台塑網 → 華銀', '華銀 → 台塑網']
 
 const mockItems: ListItem[] = Array.from({ length: 5 }, (_, i) => ({
-  appNo: Mock.Random.integer(0, 1_000_000_000).toString(),
-  lcNo: Mock.Random.integer(0, 1_000_000_000).toString(),
-  lcSource: LC_SOURCES[i % LC_SOURCES.length]!,
-  transactionType: TRANSACTION_TYPES[i % TRANSACTION_TYPES.length]!,
-  sendStatus: SEND_STATUS[(i + 1) % SEND_STATUS.length]!,
-  resendCount: Mock.Random.integer(0, 10),
-  sendTime: Mock.Random.date('yyyy/MM/dd HH:mm:ss'),
-  sendBranchCode: Mock.Random.integer(0, 100_000).toString(),
+  serNo: i + 1,
+  compId: COMP_IDS[i % COMP_IDS.length]!,
+  compName: COMP_NAMES[i % COMP_NAMES.length]!,
+  managerName: MANAGER_NAMES[i % MANAGER_NAMES.length]!,
+  managerTitle: MANAGER_TITLES[i % MANAGER_TITLES.length]!,
+  address: ADDRESS[i % ADDRESS.length]!,
+  phone: PHONE[i % PHONE.length]!,
+  email: EMAIL[i % EMAIL.length]!,
+  beneficiaryDepartment: BENEFICIARY_DEPARTMENTS[i % BENEFICIARY_DEPARTMENTS.length]!,
   confirmStatus: CONFIRM_STATUS[i % CONFIRM_STATUS.length]!,
-  createTime: Mock.Random.date('yyyy/MM/dd HH:mm:ss'),
 }))
 
 // 查詢台塑網通訊傳輸排程檢視

@@ -28,16 +28,16 @@ export const TRANSACTION_TYPE_ITEMS: readonly TransactionTypeItem[] = [
 
 // ── 清冊資料 ──────────────────────────────────────────────────────────────────
 interface ListItem {
-  appNo: string // 申請書號碼
-  lcNo: string // 信用狀號碼
-  lcSource: string // 資料流向
-  transactionType: string // 交易類別
-  sendStatus: string // 傳送狀態
-  resendCount: number // 重送次數
-  sendTime: string // 傳送時間
-  sendBranchCode: string // 傳送分行代碼
-  confirmStatus: boolean // 確認狀態
-  createTime: string // 建立時間
+  serNo: number // 編號
+  compId: string // 公司統編
+  compName: string // 公司名稱
+  managerName: string // 負責人姓名
+  managerTitle: string // 負責人職稱
+  address: string // 登記地址
+  phone: string // 連絡電話
+  email: string // 電子信箱
+  beneficiaryDepartment: string // 受益人事業部
+  confirmStatus: boolean // 審核狀態
 }
 
 export type { ListItem }

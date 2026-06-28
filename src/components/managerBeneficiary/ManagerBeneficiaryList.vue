@@ -16,12 +16,46 @@
         sort-icon="mdi-swap-vertical"
         striped="odd"
       >
-        <template #item.resendCount="{ item }">
-          {{ thousandsFormatting(item.resendCount.toLocaleString()) }}
+        <template #item.confirmStatus="{ item }">
+          {{ item.confirmStatus ? '啟用' : '停用' }}
         </template>
 
-        <template #item.confirmStatus="{ item }">
-          {{ item.confirmStatus ? '已確認' : '未確認' }}
+        <template #item.actions="{ item }">
+          <v-btn
+            class="hnb__btn--default mx-1 my-1"
+            size="small"
+            variant="flat"
+            @click="onEdit(item, 'edit')"
+          >
+            編輯
+          </v-btn>
+
+          <v-btn
+            class="hnb__btn--red mx-1 my-1"
+            size="small"
+            variant="flat"
+            @click="onDelete(item)"
+          >
+            刪除
+          </v-btn>
+
+          <v-btn
+            class="hnb__btn--default mx-1 my-1"
+            size="small"
+            variant="flat"
+            @click="onApprove(item, 'approve')"
+          >
+            核准
+          </v-btn>
+
+          <v-btn
+            class="hnb__btn--red mx-1 my-1"
+            size="small"
+            variant="flat"
+            @click="onReject(item, 'reject')"
+          >
+            拒絕
+          </v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -65,25 +99,20 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
-  // const _isShowCurrentPageTotalAmount = ref<boolean>(true)
-  // const _isShowTotalPages = ref<boolean>(false)
-  // const _isShowTotalAmount = ref<boolean>(true)
-  // const processStatus = ref<{ action: string, status: number }>({
-  //   action: '',
-  //   status: 0,
-  // })
+  const processStatus = ref<string>('')
 
   const tableHeaders: DataTableHeader[] = [
-    { title: '申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
-    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
-    { title: '資料流向', key: 'lcSource', align: 'center', sortable: false, nowrap: true },
-    { title: '交易類別', key: 'transactionType', align: 'center', sortable: false, nowrap: true },
-    { title: '傳送狀態', key: 'sendStatus', align: 'center', sortable: false, nowrap: true },
-    { title: '重送次數', key: 'resendCount', align: 'center', sortable: false, nowrap: true },
-    { title: '傳送時間', key: 'sendTime', align: 'center', sortable: false, nowrap: true },
-    { title: '傳送分行代碼', key: 'sendBranchCode', align: 'center', sortable: false, nowrap: true },
-    { title: '確認狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
-    { title: '建立時間', key: 'createTime', align: 'center', sortable: false, nowrap: true },
+    { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
+    { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
+    { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
+    { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
+    { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
+    { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
+    { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
+    { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+    { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
+    { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
+    { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
   ]
 
   interface Props {
@@ -155,6 +184,85 @@
     }
   }
 
+  // 編輯
+  const editType = ref<string>('') // 'new' or 'edit'
+  const isEditDialogOpen = ref<boolean>(false)
+  const selectedItem = ref<ListItem>({
+    serNo: 0,
+    compId: '',
+    compName: '',
+    managerName: '',
+    managerTitle: '',
+    address: '',
+    phone: '',
+    email: '',
+    beneficiaryDepartment: '',
+    confirmStatus: false })
+
+  function onEdit (item: ListItem, type: string): void {
+    console.log('編輯', item)
+    editType.value = type
+    selectedItem.value = item
+    isEditDialogOpen.value = true
+  }
+
+  // saveHandler
+  function saveHandler (): void {
+    isEditDialogOpen.value = false
+    console.log('儲存資料')
+    // 在這裡執行儲存操作，例如呼叫 API 儲存資料
+    // 儲存後重新取得列表資料
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+    fetchLcAppList()
+  }
+
+  // 刪除
+  function onDelete (item: ListItem): void {
+    console.log('刪除', item)
+    messageTitle.value = '作業訊息'
+    message.value = `您確定要刪除此筆資料嗎？`
+    messageStatus.value = 'alert'
+    processStatus.value = 'delete'
+    isConfirmBtn.value = true
+    messageDialog.value = true
+  }
+
+  function deleteHandler (): void {
+    console.log('執行刪除操作')
+    // 在這裡執行刪除操作，例如呼叫 API 刪除資料
+    // 刪除後重新取得列表資料
+    fetchLcAppList()
+    nextTick(() => {
+      messageTitle.value = '作業訊息'
+      message.value = `作業已完成`
+      messageStatus.value = 'success'
+      isConfirmBtn.value = false
+      messageDialog.value = true
+    })
+  }
+
+  // 核准
+  function onApprove (item: ListItem, type: string): void {
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+  }
+
+  // 拒絕
+  function onReject (item: ListItem, type: string): void {
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+  }
+
   onMounted(() => {
     fetchLcAppList()
   })
@@ -166,6 +274,12 @@
 
   // 確認 message
   function messageConfirm (): void {
+    if (processStatus.value === 'delete') {
+      console.log('確認刪除')
+      // 在這裡執行刪除操作，例如呼叫 API 刪除資料
+      // 刪除後重新取得列表資料
+      deleteHandler()
+    }
     messageDialog.value = false
   }
 </script>
