@@ -27,15 +27,7 @@
             sort-desc-icon="mdi-sort-descending"
             sort-icon="mdi-swap-vertical"
             striped="odd"
-          >
-            <template #item.count="{ item }">
-              {{ thousandsFormatting(item.count.toLocaleString()) }}
-            </template>
-
-            <template #item.totalFee="{ item }">
-              ${{ thousandsFormatting(item.totalFee.toLocaleString()) }}
-            </template>
-          </v-data-table>
+          />
         </v-card>
 
         <!-- <TablePagination
@@ -63,10 +55,9 @@
 <script setup lang="ts">
   import type { ListItem } from '@/types/queryClientConnect'
   import type { DataTableHeader } from 'vuetify'
-  import { onMounted, ref, watch } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { getDatacList } from '@/api/queryClientConnect'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
 
@@ -85,13 +76,6 @@
   const message = ref<string>('')
   const messageStatus = ref<string>('')
   const isConfirmBtn = ref<boolean>(false)
-  // const _isShowCurrentPageTotalAmount = ref<boolean>(true)
-  // const _isShowTotalPages = ref<boolean>(false)
-  // const _isShowTotalAmount = ref<boolean>(true)
-  // const processStatus = ref<{ action: string, status: number }>({
-  //   action: '',
-  //   status: 0,
-  // })
 
   const tableHeaders: DataTableHeader[] = [
     { title: '編號', key: 'senId', align: 'center', sortable: false, nowrap: true },
@@ -117,11 +101,6 @@
   })
   const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
   const totalCount = ref<number>(0) // 總筆數
-  const totalPageAmount = ref<number>(0) // 總金額
-
-  const totalPages = computed(() =>
-    Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
-  )
 
   // 取得列表資料
   async function fetchLcAppList () {

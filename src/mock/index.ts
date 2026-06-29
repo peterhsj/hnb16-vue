@@ -62,6 +62,7 @@ import './queryFpcLcRpt' // '查詢台塑網通訊傳輸排程檢視'
 import './queryDomesticLcFee' // '查詢國內信用狀開狀手續費'
 import './queryClientConnect' // 'Client連線狀態'
 import './managerBeneficiary' // '查詢受益人資料'
+import './settingSi' // '設定客戶特別指示條款'
 
 // 設定 mock 配置
 Mock.setup({
