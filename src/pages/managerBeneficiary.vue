@@ -32,7 +32,7 @@
                     density="compact"
                     hide-details
                     style="flex: none;"
-                    value="01"
+                    value="fpc"
                   >
                     <template #label>
                       台塑 e 化集團
@@ -44,7 +44,7 @@
                     density="compact"
                     hide-details
                     style="flex: none;"
-                    value="02"
+                    value="cds"
                   >
                     <template #label>
                       CDS 客戶受益人
@@ -89,31 +89,77 @@
               prepend-icon="mdi-plus"
               size="small"
               variant="flat"
-              @click="handlePrint"
+              @click="onEdit({ item: createInitialEditForm(), type: 'new' })"
             >
               新增
             </v-btn>
           </div>
         </div>
 
-        <ManagerBeneficiaryList :form-data="propsFormData" />
+        <ManagerBeneficiaryList
+          :bene-type="beneType"
+          @on-edit="onEdit"
+        />
       </div>
     </v-container>
+
+    <EditManagerBeneficiaryDialog
+      v-model:is-edit-dialog-open="isEditDialogOpen"
+      :bene-type="searchForm.importType"
+      :data-item="selectedItem"
+      :edit-type="editType"
+      @on-close="isEditDialogOpen = false"
+      @on-save="saveHandler"
+    />
+    <!-- Prompt Dialog -->
+    <PromptDialog
+      v-model:message-dialog="messageDialog"
+      :is-confirm-btn="isConfirmBtn"
+      :message="message"
+      :message-status="messageStatus"
+      :message-title="messageTitle"
+      @on-close="messageClose"
+      @prompt-confirm="messageConfirm"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { isAfter, isBefore } from 'date-fns'
+  import type { ListItem, QueryFormPayload } from '@/types/managerBeneficiary'
   import { computed, reactive, ref } from 'vue'
   import { VForm } from 'vuetify/components'
-  import { type QueryFormPayload, TRANSACTION_TYPE_ITEMS } from '@/types/managerBeneficiary'
-  import { createInitialQueryForm } from '@/types/managerBeneficiary'
+  import { createInitialEditForm, createInitialQueryForm } from '@/types/managerBeneficiary'
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '會員管理作業' },
     { title: '受益人資料維護', disabled: true },
   ]
+
+  // Prompt Message Dialog
+  const messageDialog = ref<boolean>(false)
+  const messageTitle = ref<string>('')
+  const message = ref<string>('')
+  const messageStatus = ref<string>('')
+  const isConfirmBtn = ref<boolean>(false)
+  const processStatus = ref<string>('')
+
+  // 編輯
+  const beneType = ref<string>('')
+  const editType = ref<string>('') // 'new' or 'edit'
+  const isEditDialogOpen = ref<boolean>(false)
+  const selectedItem = ref<ListItem>({
+    serNo: 0,
+    compId: '',
+    compName: '',
+    managerName: '',
+    managerTitle: '',
+    address: '',
+    phone: '',
+    email: '',
+    beneficiaryDepartment: '',
+    confirmStatus: false,
+  })
 
   const isShowList = ref(false)
   const searchFormRef = ref<InstanceType<typeof VForm>>()
@@ -130,16 +176,39 @@
   }
 
   function sendSearchForm (): void {
-    console.log('送出表單', searchForm)
+    beneType.value = searchForm.importType || ''
+    console.log('送出表單', beneType.value)
     isShowList.value = true
-    propsFormData.value = { ...searchForm }
   }
 
-  function handlePrint (): void {
-    window.print()
+  function onEdit ({ item, type }: { item: ListItem, type: string }): void {
+    console.log('編輯', { item, type })
+    editType.value = type
+    selectedItem.value = item
+    isEditDialogOpen.value = true
   }
 
-  function handleDownload (): void {
-    console.log('下載電子檔')
+  // saveHandler
+  function saveHandler (): void {
+    isEditDialogOpen.value = false
+    console.log('儲存資料')
+    // 在這裡執行儲存操作，例如呼叫 API 儲存資料
+    // 儲存後重新取得列表資料
+    messageTitle.value = '作業訊息'
+    message.value = `作業已完成`
+    messageStatus.value = 'success'
+    isConfirmBtn.value = false
+    messageDialog.value = true
+    // fetchLcAppList()
+  }
+
+  // 離開 message
+  function messageClose (): void {
+    messageDialog.value = false
+  }
+
+  // 確認 message
+  function messageConfirm (): void {
+    messageDialog.value = false
   }
 </script>

@@ -8,6 +8,33 @@ export function createInitialQueryForm (): QueryFormPayload {
     importType: null, // 受益人類型
   }
 }
+export interface EditFormPayload {
+  serNo: number // 編號
+  compId: string // 公司統編
+  compName: string // 公司名稱
+  managerName: string // 負責人姓名
+  managerTitle: string // 負責人職稱
+  address: string // 登記地址
+  phone: string // 連絡電話
+  email: string // 電子信箱
+  beneficiaryDepartment: string // 受益人事業部
+  confirmStatus: boolean // 審核狀態
+}
+
+export function createInitialEditForm (): EditFormPayload {
+  return {
+    serNo: 0,
+    compId: '',
+    compName: '',
+    managerName: '',
+    managerTitle: '',
+    address: '',
+    phone: '',
+    email: '',
+    beneficiaryDepartment: '',
+    confirmStatus: false,
+  }
+}
 
 // 保留供向下相容（如有其他檔案引用）
 export interface TransactionTypeItem {

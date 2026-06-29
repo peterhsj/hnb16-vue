@@ -86,7 +86,6 @@
   import { onMounted, ref, watch } from 'vue'
   import { getDatacList } from '@/api/managerBeneficiary'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
 
@@ -101,7 +100,15 @@
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
-  const tableHeaders: DataTableHeader[] = [
+  interface Props {
+    beneType?: string | null
+  }
+  const props = defineProps<Props>()
+  const emits = defineEmits<{
+    'on-edit': [{ item: ListItem, type: string }]
+  }>()
+
+  const tableHeaders = ref<DataTableHeader[]>([
     { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
     { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
     { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
@@ -110,31 +117,45 @@
     { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
     { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
     { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
-    { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
     { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
     { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
-  ]
-
-  interface Props {
-    formData?: QueryFormPayload
-  }
-  const props = defineProps<Props>()
-  const searchForm = ref<QueryFormPayload>(props.formData ?? {
-    importType: null, // 受益人類型
-  })
+  ])
 
   watch(
-    () => props.formData,
+    () => props.beneType,
     newVal => {
-      searchForm.value = newVal
-        ? { ...newVal }
-        : {
-          importType: null, // 受益人類型
-        }
-      console.log('Search form data changed:', searchForm.value)
+      console.log('Search beneType:', newVal)
+      tableHeaders.value
+        = newVal === 'fpc'
+          ? [
+            { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
+            { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
+            { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
+            { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
+            { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
+            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+            { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
+            { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
+            { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
+          ]
+          : [
+            { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
+            { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
+            { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
+            { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
+            { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
+            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+            { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
+            { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
+          ]
+
       fetchLcAppList()
     },
-    { deep: true },
+    { immediate: true },
   )
 
   interface PageOptions {
@@ -152,7 +173,6 @@
   })
   const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
   const totalCount = ref<number>(0) // 總筆數
-  const totalPageAmount = ref<number>(0) // 總金額
 
   const totalPages = computed(() =>
     Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
@@ -160,8 +180,7 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
-    const { importType } = searchForm.value
-    const payload = { importType }
+    const payload = { importType: props.beneType }
     console.log('Fetching list with payload:', payload)
     isLoading.value = true
     try {
@@ -185,39 +204,9 @@
   }
 
   // 編輯
-  const editType = ref<string>('') // 'new' or 'edit'
-  const isEditDialogOpen = ref<boolean>(false)
-  const selectedItem = ref<ListItem>({
-    serNo: 0,
-    compId: '',
-    compName: '',
-    managerName: '',
-    managerTitle: '',
-    address: '',
-    phone: '',
-    email: '',
-    beneficiaryDepartment: '',
-    confirmStatus: false })
-
   function onEdit (item: ListItem, type: string): void {
     console.log('編輯', item)
-    editType.value = type
-    selectedItem.value = item
-    isEditDialogOpen.value = true
-  }
-
-  // saveHandler
-  function saveHandler (): void {
-    isEditDialogOpen.value = false
-    console.log('儲存資料')
-    // 在這裡執行儲存操作，例如呼叫 API 儲存資料
-    // 儲存後重新取得列表資料
-    messageTitle.value = '作業訊息'
-    message.value = `作業已完成`
-    messageStatus.value = 'success'
-    isConfirmBtn.value = false
-    messageDialog.value = true
-    fetchLcAppList()
+    emits('on-edit', { item, type })
   }
 
   // 刪除
