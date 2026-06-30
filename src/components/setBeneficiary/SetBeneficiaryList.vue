@@ -94,26 +94,10 @@
   const totalAmount = ref<number>(0)
   const processStatus = ref<string>('')
 
-  const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true, width: 80 },
-    { title: '公司統編', key: 'companyTaxId', align: 'center', sortable: false, nowrap: true },
-    { title: '公司名稱', key: 'companyName', align: 'start', sortable: false, nowrap: true },
-    { title: '負責人姓名', key: 'responsiblePersonName', align: 'start', sortable: false, nowrap: true },
-    { title: '負責人職稱', key: 'responsiblePersonTitle', align: 'start', sortable: false, nowrap: true },
-    { title: '登記地址', key: 'registeredAddress', align: 'start', sortable: false, nowrap: true },
-    { title: '連絡電話', key: 'contactPhone', align: 'center', sortable: false, nowrap: true },
-    { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
-    { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
-    { title: '審核狀態', key: 'reviewStatus', align: 'center', sortable: false, nowrap: true },
-  ]
-
   interface Props {
-    formData?: QueryFormPayload
+    beneType?: string | null
   }
-
   const props = defineProps<Props>()
-
-  const searchForm = ref(props.formData ?? { queryMode: '' })
 
   interface PageOptions {
     page: number
@@ -135,19 +119,52 @@
     Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
   )
 
+  const tableHeaders = ref<DataTableHeader[]>([
+    { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true, width: 80 },
+    { title: '公司統編', key: 'companyTaxId', align: 'center', sortable: false, nowrap: true },
+    { title: '公司名稱', key: 'companyName', align: 'start', sortable: false, nowrap: true },
+    { title: '負責人姓名', key: 'responsiblePersonName', align: 'start', sortable: false, nowrap: true },
+    { title: '負責人職稱', key: 'responsiblePersonTitle', align: 'start', sortable: false, nowrap: true },
+    { title: '登記地址', key: 'registeredAddress', align: 'start', sortable: false, nowrap: true },
+    { title: '連絡電話', key: 'contactPhone', align: 'center', sortable: false, nowrap: true },
+    { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+    { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
+    { title: '審核狀態', key: 'reviewStatus', align: 'center', sortable: false, nowrap: true },
+  ])
+
   watch(
-    () => props.formData,
+    () => props.beneType,
     newVal => {
-      searchForm.value = newVal
-        ? { ...newVal }
-        : {
-          queryMode: '',
-        }
-      pageOptions.value.page = 1
-      console.log('Search form data changed:', searchForm.value)
+      console.log('Search beneType:', newVal)
+      tableHeaders.value
+        = newVal === 'fpc'
+          ? [
+            { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true, width: 80 },
+            { title: '公司統編', key: 'companyTaxId', align: 'center', sortable: false, nowrap: true },
+            { title: '公司名稱', key: 'companyName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人姓名', key: 'responsiblePersonName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人職稱', key: 'responsiblePersonTitle', align: 'start', sortable: false, nowrap: true },
+            { title: '登記地址', key: 'registeredAddress', align: 'start', sortable: false, nowrap: true },
+            { title: '連絡電話', key: 'contactPhone', align: 'center', sortable: false, nowrap: true },
+            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+            { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
+            { title: '審核狀態', key: 'reviewStatus', align: 'center', sortable: false, nowrap: true },
+          ]
+          : [
+            { title: '編號', key: 'senNo', align: 'center', sortable: false, nowrap: true, width: 80 },
+            { title: '公司統編', key: 'companyTaxId', align: 'center', sortable: false, nowrap: true },
+            { title: '公司名稱', key: 'companyName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人姓名', key: 'responsiblePersonName', align: 'start', sortable: false, nowrap: true },
+            { title: '負責人職稱', key: 'responsiblePersonTitle', align: 'start', sortable: false, nowrap: true },
+            { title: '登記地址', key: 'registeredAddress', align: 'start', sortable: false, nowrap: true },
+            { title: '連絡電話', key: 'contactPhone', align: 'center', sortable: false, nowrap: true },
+            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+            { title: '審核狀態', key: 'reviewStatus', align: 'center', sortable: false, nowrap: true },
+          ]
+
       fetchDataList()
     },
-    { deep: true },
+    { immediate: true },
   )
 
   watch(
@@ -161,10 +178,9 @@
 
   // 取得列表資料
   async function fetchDataList () {
-    const { queryMode } = searchForm.value
     const { page, itemsPerPage } = pageOptions.value
     const payload = {
-      queryMode,
+      importType: props.beneType,
       page,
       itemsPerPage,
     }

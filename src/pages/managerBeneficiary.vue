@@ -21,35 +21,24 @@
                 <v-radio-group
                   v-model="searchForm.importType"
                   class="mt-2"
-                  color="cyan-darken-3"
                   density="compact"
                   hide-details="auto"
                   inline
                 >
-                  <v-radio
-                    class="me-4"
-                    color="cyan-darken-3"
-                    density="compact"
-                    hide-details
-                    style="flex: none;"
-                    value="fpc"
-                  >
-                    <template #label>
-                      台塑 e 化集團
-                    </template>
-                  </v-radio>
-
-                  <v-radio
-                    color="cyan-darken-3"
-                    density="compact"
-                    hide-details
-                    style="flex: none;"
-                    value="cds"
-                  >
-                    <template #label>
-                      CDS 客戶受益人
-                    </template>
-                  </v-radio>
+                  <v-row class="ma-0">
+                    <v-col v-for="option in QUERY_MODE_OPTIONS" :key="option.value" class="px-2" cols="auto">
+                      <v-radio
+                        color="teal-darken-2"
+                        density="compact"
+                        hide-details
+                        :value="option.value"
+                      >
+                        <template #label>
+                          <span class="px-2">{{ option.title }}</span>
+                        </template>
+                      </v-radio>
+                    </v-col>
+                  </v-row>
                 </v-radio-group>
               </v-col>
             </v-row>
@@ -134,6 +123,16 @@
     { title: '首頁', href: '/' },
     { title: '會員管理作業' },
     { title: '受益人資料維護', disabled: true },
+  ]
+
+  interface QueryModeItem {
+    value: string
+    title: string
+  }
+
+  const QUERY_MODE_OPTIONS: QueryModeItem[] = [
+    { value: 'fpc', title: '台塑 e 化集團' },
+    { value: 'cds', title: 'CDS 客戶受益人' },
   ]
 
   // Prompt Message Dialog

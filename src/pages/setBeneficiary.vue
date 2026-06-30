@@ -16,7 +16,7 @@
           <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
             <div class="py-1">
               <v-radio-group
-                v-model="searchForm.queryMode"
+                v-model="searchForm.importType"
                 hide-details="auto"
                 inline
               >
@@ -65,7 +65,10 @@
           受益人資料清冊
         </h2>
 
-        <SetBeneficiaryList :form-data="propsFormData" @on-edit="handleEdit" />
+        <SetBeneficiaryList
+          :bene-type="beneType"
+          @on-edit="handleEdit"
+        />
       </div>
     </v-container>
   </div>
@@ -93,6 +96,7 @@
     { value: 'fpc', title: '台塑 e 化集團' },
     { value: 'cds', title: 'CDS 客戶受益人' },
   ]
+  const beneType = ref<string>('')
 
   const currentView = ref('search')
   const isEdit = ref(false)
@@ -101,7 +105,7 @@
   const searchForm = reactive<QueryFormPayload>(createInitialQueryForm())
   const propsFormData = ref<QueryFormPayload>({ ...searchForm })
 
-  const searchEnabled = computed(() => searchForm.queryMode !== '')
+  const searchEnabled = computed(() => searchForm.importType !== '')
 
   function resetForm (): void {
     searchFormRef.value?.reset()
@@ -110,8 +114,8 @@
 
   function sendSearchForm (): void {
     console.log('送出表單', searchForm)
+    beneType.value = searchForm.importType || ''
     isShowList.value = true
-    propsFormData.value = { ...searchForm }
   }
 
   // 編輯押匯申請書
@@ -148,7 +152,7 @@
         isEdit.value = false
         isShowList.value = false
         currentView.value = 'search'
-        searchForm.queryMode = '' // 重置查詢方式，強制使用者重新選擇
+        searchForm.importType = '' // 重置查詢方式，強制使用者重新選擇
       }
     }
   }

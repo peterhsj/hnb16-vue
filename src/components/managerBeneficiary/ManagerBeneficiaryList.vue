@@ -180,7 +180,12 @@
 
   // 取得列表資料
   async function fetchLcAppList () {
-    const payload = { importType: props.beneType }
+    const { page, itemsPerPage } = pageOptions.value
+    const payload = {
+      importType: props.beneType,
+      page,
+      itemsPerPage,
+    }
     console.log('Fetching list with payload:', payload)
     isLoading.value = true
     try {

@@ -30,12 +30,12 @@ export interface TransactionTypeItem {
 }
 
 export interface QueryFormPayload {
-  queryMode?: QueryMode // 查詢模式
+  importType?: string // 查詢模式
 }
 
 export function createInitialQueryForm (): QueryFormPayload {
   return {
-    queryMode: '', // 查詢模式
+    importType: '', // 查詢模式
   }
 }
 
