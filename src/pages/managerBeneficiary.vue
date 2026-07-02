@@ -10,7 +10,7 @@
       </div>
 
       <div>
-        <h2 class="mx-4 hnb16__title">查詢受益人資料維護</h2>
+        <h2 class="mx-4 hnb16__title">查詢受益人資料</h2>
 
         <v-card class="border-sm mx-4 pa-4 pt-1 bg-grey-lighten-4" variant="outlined">
           <v-form ref="searchFormRef" @submit.prevent="sendSearchForm">
@@ -72,7 +72,7 @@
             受益人資料清冊
           </h2>
 
-          <div>
+          <div v-if="userInfo.roleName === 'MB'">
             <v-btn
               class="hnb__btn--orange mx-1"
               prepend-icon="mdi-plus"
@@ -117,12 +117,16 @@
   import type { ListItem, QueryFormPayload } from '@/types/managerBeneficiary'
   import { computed, reactive, ref } from 'vue'
   import { VForm } from 'vuetify/components'
+  import { useUserStore } from '@/stores/user'
   import { createInitialEditForm, createInitialQueryForm } from '@/types/managerBeneficiary'
+
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
 
   const breadcrumbs = [
     { title: '首頁', href: '/' },
     { title: '會員管理作業' },
-    { title: '受益人資料維護', disabled: true },
+    { title: '受益人資料', disabled: true },
   ]
 
   interface QueryModeItem {

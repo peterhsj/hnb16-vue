@@ -17,7 +17,7 @@
         </div>
 
         <v-sheet class="hnb__login--card" elevation="3">
-          <v-form ref="loginFormRef" class="hnb__login--form" @submit.prevent="login">
+          <v-form ref="loginFormRef" class="hnb__login--form" @submit.prevent="userLogin">
             <!-- <v-btn-toggle
               v-model="loginForm.auth"
               class="hnb__role--toggle"
@@ -46,7 +46,7 @@
 
             <v-text-field
               v-model="loginForm.password"
-              :append-inner-icon="isShow ? 'mdi-eye-off': 'mdi-eye'"
+              :append-inner-icon="isShowText ? 'mdi-eye-off': 'mdi-eye'"
               autocomplete="new-password"
               color="blue-darken-1"
               label="密碼"
@@ -54,9 +54,9 @@
               readonly
               required
               :rules="rules.password"
-              :type="isShow ? 'text' : 'password'"
+              :type="isShowText ? 'text' : 'password'"
               variant="outlined"
-              @click:append-inner="isShow = !isShow"
+              @click:append-inner="isShowText = !isShowText"
               @focus="$event.target.removeAttribute('readonly')"
             />
 
@@ -107,8 +107,8 @@
     </v-row>
 
     <CommonOverlay :overlay="loading" />
-    <SecurityDialog v-model:security-dialog="securityDialog" @on-close="securityDialog = false" />
-    <PrivacyDialog v-model:privacy-dialog="privacyDialog" @on-close="privacyDialog = false" />
+    <!-- <SecurityDialog v-model:security-dialog="securityDialog" @on-close="securityDialog = false" />
+    <PrivacyDialog v-model:privacy-dialog="privacyDialog" @on-close="privacyDialog = false" /> -->
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
@@ -131,18 +131,19 @@
 </route>
 
 <script setup lang="ts">
+  import type { FormData } from '@/types/auth'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { VForm } from 'vuetify/components'
-  import { api } from '@/api/axios'
+  import { login } from '@/api/auth'
   import { useUserStore } from '@/stores/user'
 
   const router = useRouter()
   const userStore = useUserStore()
   const BaseURL = import.meta.env.VITE_BASE_URL
   const loading = ref<boolean>(false)
-  const securityDialog = ref<boolean>(false)
-  const privacyDialog = ref<boolean>(false)
+  // const securityDialog = ref<boolean>(false)
+  // const privacyDialog = ref<boolean>(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -154,58 +155,52 @@
   // const isAuthenticated = ref<boolean>(false)
   const loginFormRef = ref<InstanceType<typeof VForm> | null>(null)
 
-  interface LoginForm {
-    // auth: string
-    account: string
-    password: string
-  }
-  const loginForm = ref<LoginForm>({
-    // auth: 'systemAdmin',
+  const loginForm = ref<FormData>({
     account: '',
     password: '',
   })
-  const captcha = ref<string>('')
-  // const remember = ref<boolean>(false)
-  const captchaText = ref<string>(makeCaptcha())
-  const isShow = ref<boolean>(false)
+  // const captcha = ref<string>('')
+  // // const remember = ref<boolean>(false)
+  // const captchaText = ref<string>(makeCaptcha())
+  const isShowText = ref<boolean>(false)
 
   interface Rules {
     account: ((v: string) => boolean | string)[]
     password: ((v: string) => boolean | string)[]
-    captcha: ((v: string) => boolean | string)[]
+    // captcha: ((v: string) => boolean | string)[]
   }
   const rules: Rules = {
     account: [v => !!v || '請輸入帳號'],
     password: [v => !!v || '請輸入密碼'],
-    captcha: [
-      v => !!v || '請輸入驗證碼',
-      v => v.toUpperCase() === captchaText.value || '驗證碼錯誤',
-    ],
+    // captcha: [
+    //   v => !!v || '請輸入驗證碼',
+    //   v => v.toUpperCase() === captchaText.value || '驗證碼錯誤',
+    // ],
   }
 
   // 產生 5 碼驗證碼，避免使用容易混淆的字元
-  function makeCaptcha (): string {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-    let text = ''
-    for (let i = 0; i < 5; i += 1) {
-      text += chars[Math.floor(Math.random() * chars.length)]
-    }
-    return text
-  }
+  // function makeCaptcha (): string {
+  //   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  //   let text = ''
+  //   for (let i = 0; i < 5; i += 1) {
+  //     text += chars[Math.floor(Math.random() * chars.length)]
+  //   }
+  //   return text
+  // }
 
   // 重新產生驗證碼並清空輸入
-  function refreshCaptcha (): void {
-    captchaText.value = makeCaptcha()
-  }
+  // function refreshCaptcha (): void {
+  //   captchaText.value = makeCaptcha()
+  // }
 
-  interface ApiResponse<T = any> {
-    code: number
-    message: string
-    data?: T
-  }
+  // interface ApiResponse<T = any> {
+  //   code: number
+  //   message: string
+  //   data?: T
+  // }
 
   // 登入
-  async function login (): Promise<void> {
+  async function userLogin (): Promise<void> {
     // 檢核欄位
     const { valid } = await loginFormRef.value?.validate() || { valid: false }
     if (!valid) return
@@ -219,9 +214,9 @@
     const payload: Payload = { account, password }
 
     loading.value = true
-    const apiUrl = '/api/auth/login'
+    // const apiUrl = '/api/auth/login'
     try {
-      const res = await api.post<ApiResponse>(apiUrl, payload)
+      const res = await login(payload)
       const { status, data } = res
       const { data: resData } = data
       if (status === 200) {

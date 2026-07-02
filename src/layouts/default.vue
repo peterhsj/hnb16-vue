@@ -22,7 +22,7 @@
 
     <div class="d-none d-md-flex d-lg-flex align-center">
       <span class="text-body-2 text-blue-grey-darken-1">
-        經辦 {{ userInfo.name }} 您好，歡迎使用本系統
+        {{ roleName }} {{ userInfo.name }} 您好，歡迎使用本系統
       </span>
 
       <v-divider
@@ -190,13 +190,14 @@
 </template>
 
 <script setup lang="ts">
+  import type { MenuItem, MenuPathResult } from '@/plugins/menu'
   import { storeToRefs } from 'pinia'
-  import { computed, ref, watch } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useDisplay } from 'vuetify'
-  import { api } from '@/api/axios'
+  import { logout } from '@/api/auth'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { menuByRole, type MenuItem } from '@/plugins/menu'
+  import { menuByRole } from '@/plugins/menu'
   import { useUserStore } from '@/stores/user'
 
   const userStore = useUserStore()
@@ -212,6 +213,31 @@
     console.log('使用者資訊:', userInfo.value.roleName)
     const role = userInfo.value.roleName || 'BH'
     return menuByRole[role] ?? menuByRole.BH
+  })
+
+  // 取得職稱
+  const roleName = computed((): string => {
+    const role = userInfo.value.roleName || ''
+    switch (role) {
+      case 'BH': {
+        return '經辦'
+      }
+      case 'BS': {
+        return '主管'
+      }
+      case 'SM': {
+        return '系統管理員'
+      }
+      case 'MB': {
+        return '總行'
+      }
+      case 'BM': {
+        return '分行管理員'
+      }
+      default: {
+        return ''
+      }
+    }
   })
 
   // Prompt Message Dialog
@@ -230,6 +256,7 @@
   const mainMenu = ref<string | null>(null) // 第一層選單
   const currentSecMenu = ref<string | null>(null) // 第二層選單
 
+  // 選單項目選擇處理函式
   function selectedHandler (value: string): void {
     nextTick(() => {
       // console.log('選擇項目:', open.value, value)
@@ -255,11 +282,7 @@
     })
   }
 
-  interface MenuPathResult {
-    mainMenu: string | null
-    subMenu: string | null
-  }
-
+  // 根據選單項目值尋找對應的主選單和子選單
   function findMenuPath (targetValue: string, menuItems: MenuItem[] = menu.value || [], parentMain: string | null = null, parentSub: string | null = null): MenuPathResult | null {
     for (const item of menuItems) {
       // 如果當前項目匹配
@@ -294,31 +317,20 @@
         }
       }
     }
-
     return null
   }
 
-  interface ApiResponse<T = any> {
-    code: number
-    message: string
-    data?: T
-  }
   // 登出
   async function handleLogout (): Promise<void> {
     interface Payload {
       account: string
     }
     const payload: Payload = { account: userInfo.value.account }
-    const apiUrl = '/api/auth/logout'
 
     loading.value = true
     try {
       if (userInfo.value.token) {
-        const res = await api.post<ApiResponse>(apiUrl, payload, {
-          headers: {
-            Authorization: `Bearer ${userInfo.value.token}`,
-          },
-        })
+        const res = await logout(payload)
         const { status } = res
         if (status === 200) {
           // 清除 localStorage 中的登入資訊
@@ -343,6 +355,7 @@
     }
   }
 
+  // 初始化選單狀態
   function initMenuState (): void {
     const currentPath = router.currentRoute.value.path
     // console.log('當前路由:', currentPath)
@@ -374,9 +387,12 @@
     }
   }
 
-  watch(() => router.currentRoute.value.path, () => {
-    initMenuState()
-  }, { immediate: true })
+  watch(
+    () => router.currentRoute.value.path,
+    () => {
+      initMenuState()
+    },
+    { immediate: true })
 
   function todoListHandler (): void {
     open.value = []

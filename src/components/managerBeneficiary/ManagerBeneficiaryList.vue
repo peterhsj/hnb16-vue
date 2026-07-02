@@ -81,13 +81,16 @@
 </template>
 
 <script setup lang="ts">
-  import type { ListItem, QueryFormPayload } from '@/types/managerBeneficiary'
+  import type { ListItem } from '@/types/managerBeneficiary'
   import type { DataTableHeader } from 'vuetify'
-  import { onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { getDatacList } from '@/api/managerBeneficiary'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)
@@ -108,55 +111,28 @@
     'on-edit': [{ item: ListItem, type: string }]
   }>()
 
-  const tableHeaders = ref<DataTableHeader[]>([
-    { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
-    { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
-    { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
-    { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
-    { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
-    { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
-    { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
-    { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
-    { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
-    { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
-  ])
+  const tableHeaders = computed((): DataTableHeader[] => {
+    const headers: DataTableHeader[] = [
+      { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
+      { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
+      { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
+      { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
+      { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
+      { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
+      { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
+      { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
+      { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
+    ]
 
-  watch(
-    () => props.beneType,
-    newVal => {
-      console.log('Search beneType:', newVal)
-      tableHeaders.value
-        = newVal === 'fpc'
-          ? [
-            { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
-            { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
-            { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
-            { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
-            { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
-            { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
-            { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
-            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
-            { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true },
-            { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
-            { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
-          ]
-          : [
-            { title: '編號', key: 'serNo', align: 'center', sortable: false, nowrap: true },
-            { title: '公司統編', key: 'compId', align: 'center', sortable: false, nowrap: true },
-            { title: '公司名稱', key: 'compName', align: 'start', sortable: false, nowrap: true },
-            { title: '負責人姓名', key: 'managerName', align: 'start', sortable: false, nowrap: true },
-            { title: '負責人職稱', key: 'managerTitle', align: 'center', sortable: false, nowrap: true },
-            { title: '登記地址', key: 'address', align: 'start', sortable: false, nowrap: true },
-            { title: '連絡電話', key: 'phone', align: 'start', sortable: false, nowrap: true },
-            { title: '電子信箱', key: 'email', align: 'start', sortable: false, nowrap: true },
-            { title: '審核狀態', key: 'confirmStatus', align: 'center', sortable: false, nowrap: true },
-            { title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true },
-          ]
+    if (props.beneType === 'fpc') {
+      headers.splice(7, 0, { title: '受益人事業部', key: 'beneficiaryDepartment', align: 'start', sortable: false, nowrap: true })
+    }
+    if (userInfo.value.roleName === 'MB') {
+      headers.push({ title: '操作', key: 'actions', align: 'center', sortable: false, nowrap: true })
+    }
 
-      fetchLcAppList()
-    },
-    { immediate: true },
-  )
+    return headers
+  })
 
   interface PageOptions {
     page: number
@@ -241,6 +217,7 @@
 
   // 核准
   function onApprove (item: ListItem, type: string): void {
+    console.log('核准', { item, type })
     messageTitle.value = '作業訊息'
     message.value = `作業已完成`
     messageStatus.value = 'success'
@@ -250,6 +227,7 @@
 
   // 拒絕
   function onReject (item: ListItem, type: string): void {
+    console.log('拒絕', { item, type })
     messageTitle.value = '作業訊息'
     message.value = `作業已完成`
     messageStatus.value = 'success'

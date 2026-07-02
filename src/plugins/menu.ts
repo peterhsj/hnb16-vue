@@ -3,6 +3,12 @@
  * 角色代碼: BH=經辦, BS=主管, SM=系統管理員, MB=總行, BM=分行管理員
  */
 
+// 選單路徑結果
+export interface MenuPathResult {
+  mainMenu: string | null
+  subMenu: string | null
+}
+
 export interface MenuItem {
   text: string
   value: string
@@ -103,7 +109,8 @@ export const menuByRole: Record<string, MenuItem[]> = {
         { text: '設定客戶群組', value: 'setGroup' },
         { text: '設定客戶資料', value: 'setCustomer' },
         { text: '客戶所屬分行異動', value: 'setCustomerBranch' },
-        { text: '受益人資料', value: 'setBeneficiary' },
+        // { text: '受益人資料', value: 'setBeneficiary' },
+        { text: '受益人資料', value: 'managerBeneficiary' },
       ],
     },
     {
@@ -194,7 +201,8 @@ export const menuByRole: Record<string, MenuItem[]> = {
       value: 'customer',
       subMenu: [
         { text: '設定客戶群組', value: 'setGroup' },
-        { text: '受益人資料', value: 'setBeneficiary' },
+        // { text: '受益人資料', value: 'setBeneficiary' },
+        { text: '受益人資料', value: 'managerBeneficiary' },
       ],
     },
     {

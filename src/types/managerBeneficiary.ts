@@ -17,7 +17,7 @@ export interface EditFormPayload {
   address: string // 登記地址
   phone: string // 連絡電話
   email: string // 電子信箱
-  beneficiaryDepartment: string // 受益人事業部
+  beneficiaryDepartment?: string // 受益人事業部
   confirmStatus: boolean // 審核狀態
 }
 
@@ -63,7 +63,7 @@ interface ListItem {
   address: string // 登記地址
   phone: string // 連絡電話
   email: string // 電子信箱
-  beneficiaryDepartment: string // 受益人事業部
+  beneficiaryDepartment?: string // 受益人事業部
   confirmStatus: boolean // 審核狀態
 }
 
