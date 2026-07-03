@@ -62,7 +62,7 @@
       <!-- 押匯方式：卡片 -->
       <!-- <v-row justify="center">
         <v-col cols="12" md="6"> -->
-      <v-card class="mx-auto border-sm bg-white" elevation="2" style="max-width: 800px;" variant="outlined">
+      <v-card class="mx-auto border-md bg-white" style="max-width: 800px;" variant="outlined">
         <v-card-text class="px-7">
           <h6 class="hnb16__title text-h6">押匯方式：</h6>
 

@@ -82,7 +82,11 @@
       <div v-if="isShowApp" class="mt-4 mx-4">
         <h1 class="hnb16__title">開狀申請書-授信資料</h1>
 
-        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+        <v-card
+          v-if="userInfo.roleName === 'BH'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
           <v-card-text class="bg-grey-lighten-4">
             <LcAppCreditEditForm
               :app-no="appNo"
@@ -111,6 +115,45 @@
               @click="saveCreditData"
             >
               確定
+            </v-btn>
+
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+
+        <v-card
+          v-if="userInfo.roleName === 'BS'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
+          <v-card-text class="bg-grey-lighten-4">
+            <LcAppCreditInfo
+              :app-no="appNo"
+            />
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              class="hnb__btn--cancel mx-1 my-2"
+              @click="handleAppClose"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1 my-2"
+              @click="handleAdjustment(appNo)"
+            >
+              當日帳務調整
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1 my-2"
+              @click="handleNoAdjustment(appNo)"
+            >
+              不調整
             </v-btn>
 
             <v-spacer />
@@ -174,9 +217,13 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDataList } from '@/api/lcAdjustment'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
+
   const isLoading = ref(false)
   const isShowList = ref(true)
 
@@ -354,6 +401,68 @@
     creditNo.value = ''
   }
 
+  // 當日帳務調整
+  function handleAdjustment (value: string): void {
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要調整此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
+  }
+
+  // 送出當日帳務調整確認邏輯
+  async function confirmAdjustment (): Promise<void> {
+    console.log('確認當日帳務調整的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行調整操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchDataList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的申請書號碼：ENID0990000089已調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
+  // 處理不調整按鈕點擊事件
+  function handleNoAdjustment (value: string): void {
+    console.log('不調整按鈕被點擊')
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要還原此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'noAdjustment'
+  }
+
+  // 送出不調整的確認邏輯
+  async function confirmNoAdjustment (): Promise<void> {
+    console.log('確認不調整操作的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行還原操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchDataList()
+    nextTick(() => {
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的申請書號碼：ENID0990000089不調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
   onMounted(() => {
     fetchDataList()
   })
@@ -365,6 +474,15 @@
 
   // 確認 message
   function messageConfirm (): void {
+    // 確認當日帳務調整
+    if (processStatus.value === 'ecData') {
+      confirmAdjustment()
+    }
+
+    // 確認不調整操作
+    if (processStatus.value === 'noAdjustment') {
+      confirmNoAdjustment()
+    }
     messageDialog.value = false
   }
 </script>

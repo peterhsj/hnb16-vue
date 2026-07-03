@@ -86,145 +86,20 @@
       <div v-if="isShowApp" class="mt-4 mx-4">
         <h1 class="hnb16__title">註銷申請/切結書-授信資料</h1>
 
-        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
-          <v-row class="my-4" justify="center">
-            <v-col cols="12" md="6" sm="12">
-              <div class="d-flex align-center ga-2 mb-2">
-                <div class="text-no-wrap text-end w-25">未退還保證金：</div>
-                <div>55000.0</div>
-              </div>
+        <v-card
+          v-if="userInfo.roleName === 'BH'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
+          <v-card-text class="bg-grey-lighten-4 pb-0">
+            <CancelAppCreditEditForm
+              v-model:form="form"
+            />
+          </v-card-text>
 
-              <div class="d-flex align-center ga-2 my-3">
-                <div class="text-no-wrap text-end w-25">退還保證金：</div>
-                <div>55000.0</div>
-              </div>
+          <v-card-actions>
+            <v-spacer />
 
-              <div class="d-flex align-start ga-2 mb-2">
-                <div class="text-no-wrap text-end w-25 mt-3">退還保證金方式：</div>
-
-                <div class="w-75">
-                  <v-radio-group
-                    v-model="form.pricingBenchmark"
-                    color="cyan-darken-3"
-                    density="compact"
-                    hide-details="auto"
-                  >
-                    <div class="d-flex align-center text-body-2">
-                      <v-radio
-                        color="cyan-darken-3"
-                        density="compact"
-                        hide-details
-                        style="flex: none;"
-                        value="01"
-                      />
-
-                      <div class="d-flex align-center my-1 w-100">
-                        <span class="text-no-wrap mx-1">入帳帳號：</span>
-
-                        <v-text-field
-                          v-model="form.accountNo"
-                          bg-color="white"
-                          color="teal-darken-2"
-                          density="compact"
-                          hide-details
-                          variant="outlined"
-                          @click.stop
-                        />
-
-                        <v-btn
-                          class="ms-2 hnb__btn--default"
-                          @click="checkAccountName"
-                        >
-                          查詢帳號戶名
-                        </v-btn>
-                      </div>
-                    </div>
-
-                    <div class="d-flex align-start text-body-2">
-                      <v-radio
-                        class="mt-3"
-                        color="cyan-darken-3"
-                        density="compact"
-                        hide-details
-                        style="flex: none;"
-                        value="02"
-                      />
-
-                      <div class="d-flex align-start my-1 w-100">
-                        <span class="text-no-wrap mx-1 mt-3">轉入科目：</span>
-
-                        <div class="d-flex flex-column w-100">
-                          <div class="d-flex align-center">
-                            <div class="text-no-wrap text-end me-2">轉入會計科目：</div>
-
-                            <v-select
-                              v-model="form.transferAccount"
-                              bg-color="white"
-                              color="teal-darken-2"
-                              density="compact"
-                              hide-details="auto"
-                              item-title="title"
-                              item-value="value"
-                              :items="[...TRANSFER_ACCOUNT_ITEMS]"
-                              variant="outlined"
-                            />
-                          </div>
-
-                          <div class="d-flex align-center">
-                            <div class="text-no-wrap text-end me-2">轉入銷帳序號：</div>
-
-                            <v-text-field
-                              v-model="form.transferSerialNumber"
-                              bg-color="white"
-                              class="my-1"
-                              color="teal-darken-2"
-                              density="compact"
-                              hide-details
-                              variant="outlined"
-                              @click.stop
-                            />
-                          </div>
-
-                          <div class="d-flex align-center">
-                            <div class="text-no-wrap text-end me-2">轉入科目金額：</div>
-
-                            <v-text-field
-                              v-model="form.transferAmount"
-                              bg-color="white"
-                              class="my-1"
-                              color="teal-darken-2"
-                              density="compact"
-                              hide-details
-                              variant="outlined"
-                              @click.stop
-                            />
-                          </div>
-
-                          <div class="d-flex align-center">
-                            <div class="text-no-wrap text-end me-2">轉入科目摘要：</div>
-
-                            <v-text-field
-                              v-model="form.transferSummary"
-                              bg-color="white"
-                              class="my-1"
-                              color="teal-darken-2"
-                              density="compact"
-                              hide-details
-                              variant="outlined"
-                              @click.stop
-                            />
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </v-radio-group>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-
-          <div class="mt-4 text-center">
             <v-btn
               class="hnb__btn--cancel my-2 mx-1"
               variant="flat"
@@ -248,7 +123,48 @@
             >
               確定
             </v-btn>
-          </div>
+
+            <v-spacer />
+          </v-card-actions>
+        </v-card>
+
+        <v-card
+          v-if="userInfo.roleName === 'BS'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
+          <v-card-text class="bg-grey-lighten-4 pb-0">
+            <div class="d-flex flex-column align-center">
+              <CancelAppCreditInfo />
+            </div>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              class="hnb__btn--cancel mx-1 my-2"
+              @click="onCloseApp"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1 my-2"
+              @click="handleAdjustment(cancelAppNo)"
+            >
+              當日帳務調整
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1 my-2"
+              @click="handleNoAdjustment(cancelAppNo)"
+            >
+              不調整
+            </v-btn>
+
+            <v-spacer />
+          </v-card-actions>
         </v-card>
       </div>
 
@@ -315,8 +231,12 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/cancelAdjustment'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
+
   const isLoading = ref(false)
   const isShowList = ref(true)
   const isShowApp = ref(false)
@@ -346,13 +266,6 @@
     transferAmount: '',
     transferSummary: '',
   })
-
-  const TRANSFER_ACCOUNT_ITEMS = [
-    { title: '13097-099：其他應收款-雜項', value: 'ta1' },
-    { title: '13097-100：其他應收款-雜項', value: 'ta2' },
-    { title: '13097-101：其他應收款-雜項', value: 'ta3' },
-    { title: '13097-102：其他應收款-雜項', value: 'ta4' },
-  ]
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -449,11 +362,6 @@
     }
   }
 
-  // 查詢帳號戶名
-  function checkAccountName (): void {
-    console.log('查詢帳號戶名', form.value.accountNo)
-  }
-
   function handlerCredit (value: string): void {
     console.log('Edit item:', value)
     cancelAppNo.value = value
@@ -535,7 +443,71 @@
     isShowDeposit.value = false
   }
 
-  onMounted(fetchTableList)
+  // 當日帳務調整
+  function handleAdjustment (value: string): void {
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要調整此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
+  }
+
+  // 送出當日帳務調整確認邏輯
+  async function confirmAdjustment (): Promise<void> {
+    console.log('確認當日帳務調整的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行調整操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的申請書號碼：ENID0990000089已調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
+  // 處理不調整按鈕點擊事件
+  function handleNoAdjustment (value: string): void {
+    console.log('不調整按鈕被點擊')
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要還原此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'noAdjustment'
+  }
+
+  // 送出不調整的確認邏輯
+  async function confirmNoAdjustment (): Promise<void> {
+    console.log('確認不調整操作的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行還原操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的申請書號碼：ENID0990000089不調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
@@ -544,6 +516,15 @@
 
   // 確認 message
   function messageConfirm (): void {
+    // 確認當日帳務調整
+    if (processStatus.value === 'ecData') {
+      confirmAdjustment()
+    }
+
+    // 確認不調整操作
+    if (processStatus.value === 'noAdjustment') {
+      confirmNoAdjustment()
+    }
     messageDialog.value = false
   }
 </script>

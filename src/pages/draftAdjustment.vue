@@ -39,7 +39,7 @@
             @update:items-per-page="pageOptions.itemsPerPage = $event"
           >
             <template #item.draftNo="{ item }">
-              <a v-if="item.draftNo" class="hnb__text--link" href="#" @click.prevent="handledraftView(item.draftNo)">
+              <a v-if="item.draftNo" class="hnb__text--link" href="#" @click.prevent="handleDraftView(item.draftNo)">
                 {{ item.draftNo }}
               </a>
 
@@ -67,7 +67,7 @@
                 class="hnb__btn--default mx-1 my-1"
                 size="small"
                 variant="flat"
-                @click="handlerCredit(item.draftNo)"
+                @click="handleCredit(item.draftNo)"
               >
                 授信資料
               </v-btn>
@@ -89,14 +89,61 @@
       <div v-if="isShowApp" class="mt-4 mx-4">
         <h1 class="hnb16__title">押匯申請-授信資料</h1>
 
-        <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
+        <v-card
+          v-if="userInfo.roleName === 'BH'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
           <DraftTypeEditForm :is-show-preview="true" @on-close="closeApp" />
+        </v-card>
+
+        <v-card
+          v-if="userInfo.roleName === 'BS'"
+          class="border-sm pa-4 bg-grey-lighten-4"
+          variant="outlined"
+        >
+          <v-card-text class="bg-grey-lighten-4">
+            <DraftInfo
+              :data="{
+                draftNo: draftNo,
+              }"
+              :is-show-deposit="true"
+            />
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn
+              class="hnb__btn--cancel mx-1 my-2"
+              @click="closeApp"
+            >
+              取消
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--orange mx-1 my-2"
+              @click="handleAdjustment(draftNo)"
+            >
+              當日帳務調整
+            </v-btn>
+
+            <v-btn
+              class="hnb__btn--default mx-1 my-2"
+              @click="handleNoAdjustment(draftNo)"
+            >
+              不調整
+            </v-btn>
+
+            <v-spacer />
+          </v-card-actions>
         </v-card>
       </div>
 
       <!-- Prompt Dialog -->
       <PromptDialog
         v-model:message-dialog="messageDialog"
+        :dialog-width="messageWidth"
         :is-confirm-btn="isConfirmBtn"
         :message="message"
         :message-status="messageStatus"
@@ -147,9 +194,13 @@
   import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDateList } from '@/api/draftAdjustment'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
+
   const isLoading = ref(false)
   const isShowList = ref(true)
   const isShowApp = ref(false)
@@ -165,7 +216,7 @@
   // Draft Review Dialog
   const isDraftReviewDialog = ref(false)
   const draftNo = ref<string>('')
-
+  // 顯示匯票正反面-撥款方式預覽
   const isShowPaymentType = ref<boolean>(true)
   provide('isShowPaymentType', isShowPaymentType)
 
@@ -195,6 +246,7 @@
   const messageTitle = ref<string>('')
   const message = ref<string>('')
   const messageStatus = ref<string>('')
+  const messageWidth = ref<string>('auto')
   const isConfirmBtn = ref<boolean>(false)
   const processStatus = ref<string>('')
 
@@ -268,7 +320,7 @@
   }
 
   // 查看匯票 Draft Review Dialog
-  function handledraftView (value: string): void {
+  function handleDraftView (value: string): void {
     console.log('View Draft:', value)
     draftNo.value = value
     isDraftReviewDialog.value = true
@@ -280,7 +332,7 @@
     draftNo.value = ''
   }
 
-  function handlerCredit (draftNo: string): void {
+  function handleCredit (draftNo: string): void {
     console.log('Edit item:', draftNo)
     isShowList.value = false
     isShowApp.value = true
@@ -327,6 +379,68 @@
     isShowList.value = true
   }
 
+  // 當日帳務調整
+  function handleAdjustment (value: string): void {
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要調整此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'ecData'
+  }
+
+  // 送出當日帳務調整確認邏輯
+  async function confirmAdjustment (): Promise<void> {
+    console.log('確認當日帳務調整的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行調整操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      // 模擬 API 呼叫和處理結果
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的匯票號碼：H970000002已調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
+  // 處理不調整按鈕點擊事件
+  function handleNoAdjustment (value: string): void {
+    console.log('不調整按鈕被點擊')
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要還原此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'noAdjustment'
+  }
+
+  // 送出不調整的確認邏輯
+  async function confirmNoAdjustment (): Promise<void> {
+    console.log('確認不調整操作的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行還原操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！<br>您的匯票號碼：H970000002不調整'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+      isShowApp.value = false
+    })
+  }
+
   onMounted(() => {
     fetchTableList()
   })
@@ -338,6 +452,15 @@
 
   // 確認 message
   function messageConfirm (): void {
+    // 確認當日帳務調整
+    if (processStatus.value === 'ecData') {
+      confirmAdjustment()
+    }
+
+    // 確認不調整操作
+    if (processStatus.value === 'noAdjustment') {
+      confirmNoAdjustment()
+    }
     messageDialog.value = false
   }
 </script>

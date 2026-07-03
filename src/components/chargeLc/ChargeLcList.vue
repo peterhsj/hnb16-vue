@@ -56,6 +56,7 @@
           </v-btn>
 
           <v-btn
+            v-if="userInfo.roleName === 'BH'"
             class="hnb__btn--red mx-1"
             size="small"
             variant="flat"
@@ -139,6 +140,7 @@
   import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDatacList } from '@/api/chargeLc'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const isShowPaymentType = ref(true)
@@ -147,6 +149,8 @@
   const emits = defineEmits(['on-edit'])
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
 
   const tableItems = ref<ListItem[]>([])
   const isLoading = ref(false)

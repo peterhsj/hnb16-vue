@@ -80,6 +80,16 @@
               >
                 當日更正
               </v-btn>
+
+              <v-btn
+                v-if="userInfo.roleName === 'BS'"
+                class="hnb__btn--red mx-1"
+                size="small"
+                variant="flat"
+                @click="handleNotEcData"
+              >
+                不更正
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -134,6 +144,12 @@
         @on-close="noticeDialogClose"
         @open-lc-detail="handleOpenLcDetail"
       />
+      <!-- Draft Dialog -->
+      <DraftReviewDialog
+        v-model:is-draft-review-dialog="isDraftReviewDialog"
+        :draft-no="draftNo"
+        @on-close="draftReviewDialogClose"
+      />
     </v-container>
   </div>
 </template>
@@ -142,12 +158,16 @@
   import type { ListItem } from '@/types/chargeAmendLc'
   import type { PageOptions } from '@/types/common'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
+  import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDateList } from '@/api/chargeAmendLc'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
+
   const isLoading = ref(false)
   const isShowList = ref(true)
 
@@ -160,6 +180,12 @@
   // Notice Dialog
   const noticeDialog = ref(false)
   const noticeNo = ref<string>('')
+  // Draft Review Dialog
+  const isDraftReviewDialog = ref(false)
+  const draftNo = ref<string>('')
+  // 顯示匯票正反面-撥款方式預覽
+  const isShowPaymentType = ref<boolean>(true)
+  provide('isShowPaymentType', isShowPaymentType)
 
   const breadcrumbs = [
     { title: '首頁', to: '/' },
@@ -258,8 +284,17 @@
     }
   }
 
-  function handleDraftView (draftNo: string): void {
-    console.log('View Draft:', draftNo)
+  // 查看匯票 Draft Review Dialog
+  function handleDraftView (value: string): void {
+    console.log('View Draft:', value)
+    draftNo.value = value
+    isDraftReviewDialog.value = true
+  }
+
+  // 離開 Draft Review Dialog
+  function draftReviewDialogClose (): void {
+    isDraftReviewDialog.value = false
+    draftNo.value = ''
   }
 
   // 查看信用狀 Lc Dialog
@@ -298,22 +333,23 @@
     noticeNo.value = ''
   }
 
-  // 處理當日沖正(EC)交易按鈕點擊事件
+  // 處理當日更正(EC)交易按鈕點擊事件
   function handleEcData (lcNo: string): void {
-    console.log('當日沖正(EC)交易按鈕被點擊')
-    // 這裡可以加入實際的處理邏輯，例如跳轉到當日沖正(EC)交易頁面或顯示相關資訊等
+    console.log('當日更正(EC)交易按鈕被點擊')
+    // 這裡可以加入實際的處理邏輯，例如跳轉到當日更正(EC)交易頁面或顯示相關資訊等
     messageDialog.value = true
+    messageWidth.value = '500px'
     messageTitle.value = '作業訊息'
-    message.value = '您確定要沖正此筆資料嗎？'
+    message.value = '您確定要更正此筆資料嗎？'
     messageStatus.value = 'alert'
     isConfirmBtn.value = true
     processStatus.value = 'ecData'
   }
 
-  // 送出當日沖正(EC)交易的確認邏輯
+  // 送出當日更正(EC)交易的確認邏輯
   async function confirmEcData (): Promise<void> {
-    console.log('確認沖正當日沖正(EC)交易的邏輯')
-    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行沖正操作，然後根據結果顯示成功或失敗的訊息等
+    console.log('確認更正當日更正(EC)交易的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行更正操作，然後根據結果顯示成功或失敗的訊息等
     // 刷新列表資料
     await fetchTableList()
     nextTick(() => {
@@ -323,6 +359,36 @@
       message.value = '作業已完成！'
       messageStatus.value = 'success'
       messageWidth.value = '400px'
+      isConfirmBtn.value = false
+      processStatus.value = ''
+      isShowList.value = true
+    })
+  }
+
+  // 處理不更正按鈕點擊事件
+  function handleNotEcData (): void {
+    console.log('不更正按鈕被點擊')
+    messageDialog.value = true
+    messageWidth.value = '500px'
+    messageTitle.value = '作業訊息'
+    message.value = '您確定要還原此筆資料嗎？'
+    messageStatus.value = 'alert'
+    isConfirmBtn.value = true
+    processStatus.value = 'notEcData'
+  }
+
+  // 送出不更正的確認邏輯
+  async function confirmNotEcData (): Promise<void> {
+    console.log('確認不更正操作的邏輯')
+    // 這裡可以加入實際的處理邏輯，例如呼叫 API 進行還原操作，然後根據結果顯示成功或失敗的訊息等
+    // 刷新列表資料
+    await fetchTableList()
+    nextTick(() => {
+      messageDialog.value = true
+      messageTitle.value = '作業訊息'
+      message.value = '作業已完成！'
+      messageStatus.value = 'success'
+      messageWidth.value = '500px'
       isConfirmBtn.value = false
       processStatus.value = ''
       isShowList.value = true
@@ -340,9 +406,15 @@
 
   // 確認 message
   function messageConfirm (): void {
-    messageDialog.value = false
+    // 確認沖正當日沖正(EC)交易
     if (processStatus.value === 'ecData') {
       confirmEcData()
     }
+
+    // 確認不沖正操作
+    if (processStatus.value === 'notEcData') {
+      confirmNotEcData()
+    }
+    messageDialog.value = false
   }
 </script>
