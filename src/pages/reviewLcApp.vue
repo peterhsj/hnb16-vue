@@ -90,7 +90,11 @@
           <!-- 審核表單 -->
           <v-row class="my-4" justify="center">
             <v-col cols="12" md="6" sm="12">
-              <v-card class="border-sm bg-white pa-4" elevated="2">
+              <v-card
+                v-if="userInfo.roleName === 'BH'"
+                class="border-sm bg-white pa-4"
+                elevated="2"
+              >
                 <v-row>
                   <v-col class="border-e-sm" cols="12" md="8">
                     <div class="d-flex align-center ga-2 mb-2">
@@ -150,6 +154,36 @@
                         <span class="text-body-2">重新引進</span>
                       </template>
                     </v-checkbox>
+                  </v-col>
+                </v-row>
+              </v-card>
+
+              <v-card
+                v-if="userInfo.roleName === 'BS'"
+                class="border-sm bg-white pa-4"
+                elevated="2"
+              >
+                <v-row>
+                  <v-col class="border-e-sm" cols="12" md="8">
+                    <div class="d-flex align-center ga-2 mb-2">
+                      <span class="text-nowrap text-end" style="width: 120px">放款戶號：</span>
+                      1750161000861
+                    </div>
+
+                    <div class="d-flex align-center ga-2 mb-2">
+                      <span class="text-nowrap text-end" style="width: 120px">開狀放款核號：</span>
+                      9900410000
+                    </div>
+                  </v-col>
+
+                  <v-col class="d-flex flex-column justify-center align-center ga-2" cols="12" md="4">
+                    <v-btn
+                      class="hnb__btn--orange mx-1"
+                      variant="flat"
+                      @click="handlePreviewCreditData(data.appNo)"
+                    >
+                      授信資料
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-card>
@@ -269,6 +303,23 @@
       :lc-app-no="lcAppNo"
       @on-close="closeReviewLcApproveDialog"
     />
+
+    <!-- 開狀申請書-授信資料 Dialog -->
+    <LcAppCreditDialog
+      v-model:is-lc-app-credit-dialog-open="isLcAppCreditDialogOpen"
+      :amend-notice-no="amendNoticeNoValue"
+      :is-show-history="isShowHistory"
+      @on-close="lcAppCreditDialogClose"
+      @on-show-history-view="handleHistoryView"
+    />
+
+    <!-- 查看授信歷程資料 Dialog -->
+    <LcAppHistoryViewDialog
+      v-model:is-history-dialog-open="isHistoryDialogOpen"
+      :credit-no="creditNo"
+      :is-show-history="isShowHistory"
+      @on-close="historyDialogClose"
+    />
   </div>
 </template>
 
@@ -278,10 +329,15 @@
   import type { DataTableHeader } from 'vuetify'
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/reviewLcApp'
+  // import { LcAppInfo } from '@/components/lcApp/LcAppInfo'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
+
   const isLoading = ref(false)
   const isShowList = ref(true)
   // Lc Dialog
@@ -300,6 +356,15 @@
   // 審核核准 Dialog
   const isReviewLcApprove = ref(false)
   const lcAppNo = ref<string>('')
+
+  // 授信資料 Dialog
+  const isLcAppCreditDialogOpen = ref(false)
+  const amendNoticeNoValue = ref<string>('')
+
+  // 查看授信歷程資料 Dialog
+  const isShowHistory = ref(true)
+  const isHistoryDialogOpen = ref(false)
+  const creditNo = ref<string>('') // 這裡可以根據實際情況設定 creditNo 的值
 
   const isShowApp = ref(false)
   const beneType = ref<string>('cds')
@@ -519,6 +584,32 @@
     isConfirmBtn.value = false
     messageWidth.value = '400px'
     messageDialog.value = true
+  }
+
+  // 處理授信資料按鈕點擊事件
+  function handlePreviewCreditData (amendNoticeNo: string): void {
+    console.log('授信資料按鈕被點擊')
+    amendNoticeNoValue.value = amendNoticeNo
+    isLcAppCreditDialogOpen.value = true
+    // 這裡可以加入實際的處理邏輯，例如跳轉到授信資料頁面或顯示相關資訊等
+  }
+
+  function lcAppCreditDialogClose (): void {
+    isLcAppCreditDialogOpen.value = false
+  }
+
+  // 處理查看歷程資料事件
+  function handleHistoryView (value: string): void {
+    console.log('查看歷程資料', value)
+    // 這裡可以加入實際的處理邏輯，例如根據傳入的值顯示歷程資料等
+    isHistoryDialogOpen.value = true
+    creditNo.value = value
+  }
+
+  // 查看歷程資料 Dialog 關閉事件
+  function historyDialogClose (): void {
+    isHistoryDialogOpen.value = false
+    creditNo.value = ''
   }
 
   function downloadFile () {
