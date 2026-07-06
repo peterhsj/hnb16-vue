@@ -2,7 +2,7 @@
   <v-dialog
     v-model="show"
     persistent
-    width="800"
+    width="900"
   >
     <v-card
       class="hnb__dialog"
@@ -29,33 +29,78 @@
             <tbody>
               <tr>
                 <td>
-                  <div class="hnb__line--indent">
-                    1. 國內信用狀利率約定書，其中依本信用狀所墊付之本次押匯金額 1,000,000 元， 本公司申請借款 新台幣 壹仟萬元整，並同意按下列定價之指標其中之一，按月計付利息。
+                  <div class="hnb__line--indent ms-1">
+                    1. 國內信用狀利率約定書，其中依本信用狀所墊付之本次押匯金額 <span class="text-red-darken-3">1,000,000</span> 元， 本公司申請借款 新台幣 壹仟萬元整，並同意按下列定價之指標其中之一，按月計付利息。
                   </div>
                 </td>
               </tr>
 
               <tr>
                 <td>
-                  2.改貸之利率約定：
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    按貴行之基準利率加碼年率 - % 計息，嗣後貴行基準利率每 3 個月 調整時隨同調整，加碼幅度不變。
+                  <div class="mb-1">2. 改貸之利率約定：</div>
+
+                  <div class="d-flex align-center text-body-2 my-2 ms-2">
+                    <span class="mx-1">
+                      <v-icon :icon="rateType === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                    </span>
+
+                    <div>
+                      <span class="text-no-wrap mx-1">按貴行之基準利率加碼年率</span>
+                      0.0100000
+                      <span class="text-no-wrap mx-1">% 計息，</span>
+                      <span class="text-no-wrap mx-1">嗣後貴行基準利率每</span>
+                      1
+                      <span class="text-no-wrap mx-1">個月調整時隨同調整，加碼幅度不變。</span>
+                    </div>
                   </div>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    固定利率，按年率 - % 計息。
+                  <div class="d-flex align-center text-body-2 my-2 ms-2">
+                    <span class="mx-1">
+                      <v-icon :icon="rateType === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                    </span>
+
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-center">
+                        <span class="text-no-wrap mx-1">固定利率，按年率</span>
+                        --
+                        <span class="text-no-wrap mx-1">% 計息。</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    按貴行之 初級市場利率 100 天期 均價利率 加碼 - % 計息，嗣後以貸放日後每滿 3 個月 之相對日為利率變動調整日，自調整日起隨同調整，加減碼幅度不變。
+                  <div class="d-flex align-center text-body-2 my-2 ms-2">
+                    <span class="mx-1">
+                      <v-icon :icon="rateType === '03' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                    </span>
+
+                    <div>
+                      <span class="text-no-wrap mx-1">按貴行之貨幣市場</span>
+                      --
+                      --
+                      <span class="text-no-wrap mx-1">天期均價利率</span>
+                      --
+                      <span class="text-no-wrap mx-1">碼</span>
+                      --
+                      <span class="text-no-wrap mx-1">% 計息，</span>
+
+                      <span class="text-no-wrap mx-1">嗣後以貸放日後每滿</span>
+                      --
+                      <span class="text-no-wrap mx-1">個月之相對日為利率變動調整日，自調整日起隨同調整，加減碼幅度不變。</span>
+                    </div>
                   </div>
 
-                  <div class="hnb__line--indent my-2">
-                    <v-icon :icon="rateType === '04' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
-                    其他：無
+                  <div class="d-flex align-center text-body-2 my-2 ms-2">
+                    <span class="mx-1">
+                      <v-icon :icon="rateType === '04' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" />
+                    </span>
+
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-center">
+                        <span class="text-no-wrap mx-1">其他：</span>
+
+                        --
+                      </div>
+                    </div>
                   </div>
                 </td>
               </tr>

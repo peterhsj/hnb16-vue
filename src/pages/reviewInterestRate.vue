@@ -185,6 +185,14 @@
       <!-- 填寫利率約定(改貸)申請書 -->
       <div v-if="isEdit">
         <ReviewInterestRateEdit
+          v-if="userInfo.roleName === 'BH'"
+          :form-data="draftLcData"
+          @on-cancel="closeEditForm"
+          @on-submit="submitEditForm"
+        />
+
+        <ReviewInterestRateCheck
+          v-if="userInfo.roleName === 'BS'"
           :form-data="draftLcData"
           @on-cancel="closeEditForm"
           @on-submit="submitEditForm"
@@ -199,6 +207,7 @@
   import { isAfter, isBefore } from 'date-fns'
   import { computed, reactive, ref, watch } from 'vue'
   import { VForm } from 'vuetify/components'
+  import { useUserStore } from '@/stores/user'
   import {
     createInitialQueryForm,
     LC_STATUS_ITEMS,
@@ -209,6 +218,9 @@
     { title: '編審作業' },
     { title: '利率約定(改貸)', to: '/reviewInterestRate' },
   ]
+
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
 
   const currentView = ref('search')
   const isEdit = ref(false)

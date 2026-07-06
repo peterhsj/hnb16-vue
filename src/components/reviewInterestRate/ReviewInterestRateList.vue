@@ -53,7 +53,7 @@
             variant="flat"
             @click="editItem(item.lcNo)"
           >
-            填寫利率約定(改貸)表單
+            {{ userInfo.roleName === 'BH' ? '填寫利率約定(改貸)表單' : '審核利率約定(改貸)' }}
           </v-btn>
         </template>
       </v-data-table>
@@ -121,11 +121,14 @@
   import { computed, onMounted, provide, ref, watch } from 'vue'
   import { getDatacList } from '@/api/reviewInterestRate'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const emits = defineEmits(['on-edit'])
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
 
   const tableItems = ref<LcListItem[]>([])
   const isLoading = ref(false)

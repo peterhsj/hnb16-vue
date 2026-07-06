@@ -9,6 +9,8 @@
     <v-card class="border-sm mx-4 pa-4 bg-grey-lighten-4" variant="outlined">
       <v-form ref="formRef" @submit.prevent="onSubmit">
         <v-card-text class="bg-grey-lighten-4">
+          <div class="text-body-2 mb-1">申請日期：2026/05/10</div>
+
           <v-table
             class="hnb__table hnb__table--vertical w-100"
             density="compact"
