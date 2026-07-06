@@ -236,7 +236,7 @@
 
   // 押匯審核
   function handleDraftReview (draftNo: string): void {
-    emits('on-draft-review', { draftNo })
+    emits('on-draft-review', draftNo)
   }
 
   // 查看信用狀 Lc Dialog
@@ -275,7 +275,9 @@
     noticeNo.value = ''
   }
 
-  onMounted(fetchTableList)
+  onMounted(() => {
+    fetchTableList()
+  })
 
   // 離開 message
   function messageClose (): void {
