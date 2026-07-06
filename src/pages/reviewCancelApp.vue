@@ -95,7 +95,11 @@
           <!-- 審核表單 -->
           <v-row class="my-4" justify="center">
             <v-col cols="12" md="6" sm="12">
-              <v-card class="border-sm bg-white pa-4" elevated="2">
+              <v-card
+                v-if="userInfo.roleName === 'BH'"
+                class="border-sm bg-white pa-4"
+                elevated="2"
+              >
                 <div class="d-flex align-center ga-2 mb-2">
                   <div class="text-no-wrap text-end w-25">未退還保證金：</div>
                   <div>55000.0</div>
@@ -232,6 +236,73 @@
                   </div>
                 </div>
               </v-card>
+
+              <v-card
+                v-if="userInfo.roleName === 'BS'"
+                class="border-sm bg-white pa-4"
+                elevated="2"
+              >
+                <div class="d-flex align-center ga-2 mb-2">
+                  <div class="text-no-wrap text-end w-25">未退還保證金：</div>
+                  <div>55000.0</div>
+                </div>
+
+                <div class="d-flex align-center ga-2 my-3">
+                  <div class="text-no-wrap text-end w-25">退還保證金：</div>
+                  <div>55000.0</div>
+                </div>
+
+                <div class="d-flex align-start ga-2 mb-2">
+                  <div class="text-no-wrap text-end w-25">退還保證金方式：</div>
+
+                  <div class="w-75">
+                    <div class="d-flex align-center text-body-2">
+                      <span class="mx-1"><v-icon :icon="reviewForm.pricingBenchmark === '01' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /></span>
+
+                      <div class="d-flex align-center my-1 w-100">
+                        <span class="text-no-wrap mx-1">入帳帳號：</span>
+
+                        <span>---</span>
+                      </div>
+                    </div>
+
+                    <div class="d-flex align-start text-body-2">
+                      <span class="mx-1"><v-icon :icon="reviewForm.pricingBenchmark === '02' ? 'mdi mdi-circle' : 'mdi mdi-circle-outline'" size="small" /></span>
+
+                      <div class="d-flex align-start my-1 w-100">
+                        <span class="text-no-wrap mx-1">轉入科目：</span>
+
+                        <div class="d-flex flex-column w-100">
+                          <div class="d-flex align-center">
+                            <div class="text-no-wrap text-end me-2">轉入會計科目：</div>
+
+                            <span>13097-099：其他應收款-雜項</span>
+                          </div>
+
+                          <div class="d-flex align-center">
+                            <div class="text-no-wrap text-end me-2">轉入銷帳序號：</div>
+
+                            <span>---</span>
+                          </div>
+
+                          <div class="d-flex align-center">
+                            <div class="text-no-wrap text-end me-2">轉入科目金額：</div>
+
+                            <span>55000.0</span>
+                          </div>
+
+                          <div class="d-flex align-center">
+                            <div class="text-no-wrap text-end me-2">轉入科目摘要：</div>
+
+                            <span>信用狀保證金梅石股份有限公司</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </v-card>
             </v-col>
           </v-row>
 
@@ -350,9 +421,12 @@
   import { computed, onMounted, ref, watch } from 'vue'
   import { getDateList } from '@/api/reviewCancelApp'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { useUserStore } from '@/stores/user'
   import { thousandsFormatting } from '@/utils/format'
 
   const { handleApiError } = useApiErrorHandler()
+  const userStore = useUserStore()
+  const userInfo = computed(() => userStore.userInfo)
   const isLoading = ref(false)
   const isShowList = ref(true)
   // 審核核准 Dialog
@@ -599,6 +673,9 @@
   }
 
   onMounted(() => {
+    if (userInfo.value.roleName === 'BS') {
+      reviewForm.value.pricingBenchmark = '02'
+    }
     fetchTableList()
   })
 

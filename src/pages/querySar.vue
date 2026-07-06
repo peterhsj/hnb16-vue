@@ -153,7 +153,7 @@
   const searchForm = reactive<QueryFormPayload>(createInitialQueryForm())
   const propsFormData = ref<QueryFormPayload>({ ...searchForm })
 
-  const searchEnabled = computed(() => searchForm.issueDateStart !== '' || searchForm.issueDateEnd !== '' || searchForm.issuingBank !== '')
+  const searchEnabled = computed(() => searchForm.issueDateStart !== '' || searchForm.issueDateEnd !== '' || searchForm.operationType !== '' || searchForm.transactionSeqNo !== '')
 
   interface Rules {
     issueDateStartRule: ((v: string) => boolean | string)[]
