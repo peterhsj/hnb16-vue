@@ -15,6 +15,7 @@ const router = createRouter({
   routes: setupLayouts(routes),
 })
 
+// 路由守衛：未登入導向登入頁
 router.beforeEach(to => {
   const userStore = useUserStore()
   if (to.path !== '/login' && !userStore.isAuthenticated) {

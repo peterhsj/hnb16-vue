@@ -12,7 +12,7 @@
       <v-img
         alt="HNB Logo"
         class="d-inline-flex ml-3"
-        src="/images/logo-hncb.png"
+        :src="logoPng"
         width="175"
       />
     </div>
@@ -86,13 +86,11 @@
               :value="item.value"
             >
               <div class="d-flex align-center">
-                <!-- <v-icon class="mr-2" :icon="'mdi-atom-variant'" size="16" /> -->
                 <span class="font-weight-medium">{{ item.text }}</span>
               </div>
             </v-list-item>
           </template>
           <!-- 第二層選單 -->
-          <!-- <v-divider /> -->
 
           <template v-for="subItem in item.subMenu" :key="subItem.value">
             <!-- 有第三層選單的項目 -->
@@ -109,7 +107,6 @@
                   class="border-t-sm"
                 >
                   <div class="d-flex align-start">
-                    <!-- <v-icon class="mr-2" :icon="'mdi-pause-box-outline'" size="16" /> -->
                     <span class="text-body-2">{{ subItem.text }}</span>
                   </div>
                 </v-list-item>
@@ -128,7 +125,6 @@
                 @click="selectedHandler(secItem.value)"
               >
                 <div class="d-flex align-start">
-                  <!-- <v-icon class="mr-2 mt-1" :icon="'mdi-checkbox-blank'" size="12" /> -->
                   <span class="text-body-2">{{ secItem.text }}</span>
                 </div>
               </v-list-item>
@@ -190,14 +186,16 @@
 </template>
 
 <script setup lang="ts">
-  import type { MenuItem, MenuPathResult } from '@/plugins/menu'
+  import type { AuthType, MenuItem, MenuPathResult } from '@/plugins/menu'
   import { storeToRefs } from 'pinia'
   import { computed, nextTick, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useDisplay } from 'vuetify'
   import { logout } from '@/api/auth'
+  import logoPng from '@/assets/images/logo-hncb.png'
   import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
-  import { menuByRole } from '@/plugins/menu'
+  import { useMenu } from '@/composables/useMenu'
+  import { authTypeLabels } from '@/plugins/menu'
   import { useUserStore } from '@/stores/user'
 
   const userStore = useUserStore()
@@ -206,38 +204,20 @@
   const drawer = ref(mdAndUp.value)
   const { userInfo } = storeToRefs(userStore)
   const { handleApiError } = useApiErrorHandler()
+  const { currentMenu, showTodoList, showInfo } = useMenu()
   const loading = ref<boolean>(false)
 
   // 依照角色動態取得選單
-  const menu = computed(() => {
-    console.log('使用者資訊:', userInfo.value.roleName)
-    const role = userInfo.value.roleName || 'BH'
-    return menuByRole[role] ?? menuByRole.BH
-  })
+  // const menu = computed(() => {
+  //   console.log('使用者資訊:', userInfo.value.roleName)
+  //   const role = userInfo.value.roleName || 'BH'
+  //   return menuByRole[role] ?? menuByRole.BH
+  // })
 
-  // 取得職稱
+  // 取得職稱 - BH=經辦, BS=主管, SM=系統管理員, MB=總行, BM=分行管理員
   const roleName = computed((): string => {
     const role = userInfo.value.roleName || ''
-    switch (role) {
-      case 'BH': {
-        return '經辦'
-      }
-      case 'BS': {
-        return '主管'
-      }
-      case 'SM': {
-        return '系統管理員'
-      }
-      case 'MB': {
-        return '總行'
-      }
-      case 'BM': {
-        return '分行管理員'
-      }
-      default: {
-        return ''
-      }
-    }
+    return authTypeLabels[role as AuthType] || ''
   })
 
   // Prompt Message Dialog
