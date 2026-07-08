@@ -1,4 +1,5 @@
 export interface FormData {
-  account: string
+  auth?: string
+  userId: string
   password: string
 }

@@ -35,6 +35,8 @@ export const useAuthStore = defineStore('auth', () => {
       saveToken(res.data!.token, res.data!.expiresAt)
       localStorage.setItem('user_name', res.data!.userName)
       localStorage.setItem('user_branches', JSON.stringify(res.data!.branches))
+    } else {
+      throw new Error(res.message) // 讓 handleLogin 的 catch 接到
     }
     return res
   }

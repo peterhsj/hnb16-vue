@@ -1,6 +1,6 @@
 <template>
   <v-app-bar
-    v-if="userStore.isAuthenticated"
+    v-if="isAuthenticated"
     color="white"
     elevation="3"
     height="70"
@@ -22,7 +22,7 @@
 
     <div class="d-none d-md-flex d-lg-flex align-center">
       <span class="text-body-2 text-blue-grey-darken-1">
-        {{ roleName }} {{ userInfo.name }} 您好，歡迎使用本系統
+        {{ authLabel }} {{ authStore.userName }} 您好，歡迎使用本系統
       </span>
 
       <v-divider
@@ -33,11 +33,21 @@
         vertical
       />
 
-      <a class="mx-2 hnb__text--link" href="#" @click.prevent="todoListHandler">
+      <a
+        v-if="showTodoList"
+        class="mx-2 hnb__text--link"
+        href="#"
+        @click.prevent="todoListHandler"
+      >
         待辦事項
       </a>
 
-      <a class="mx-2 hnb__text--link" href="#" @click.prevent="infoHandler">
+      <a
+        v-if="showInfo"
+        class="mx-2 hnb__text--link"
+        href="#"
+        @click.prevent="infoHandler"
+      >
         訊息匣
       </a>
 
@@ -53,7 +63,7 @@
   </v-app-bar>
 
   <v-navigation-drawer
-    v-if="userStore.isAuthenticated"
+    v-if="isAuthenticated"
     v-model="drawer"
     class="hnb__drawer"
     color="grey-lighten-2"
@@ -65,7 +75,7 @@
     <v-list v-model:opened="open" class="pa-0">
       <!-- 第一層選單 -->
       <template
-        v-for="item in menu"
+        v-for="item in currentMenu"
         :key="item.value"
       >
         <!-- 有第二層選單的項目 -->
@@ -191,33 +201,22 @@
   import { computed, nextTick, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useDisplay } from 'vuetify'
-  import { logout } from '@/api/auth'
   import logoPng from '@/assets/images/logo-hncb.png'
-  import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
   import { useMenu } from '@/composables/useMenu'
   import { authTypeLabels } from '@/plugins/menu'
-  import { useUserStore } from '@/stores/user'
+  import { useAuthStore } from '@/stores/authStore'
 
-  const userStore = useUserStore()
+  const authStore = useAuthStore()
   const router = useRouter()
   const { mdAndUp } = useDisplay()
   const drawer = ref(mdAndUp.value)
-  const { userInfo } = storeToRefs(userStore)
-  const { handleApiError } = useApiErrorHandler()
-  const { currentMenu, showTodoList, showInfo } = useMenu()
+  const { isAuthenticated } = storeToRefs(authStore)
+  const { currentMenu, showTodoList, showInfo } = useMenu(authStore.authType)
   const loading = ref<boolean>(false)
 
-  // 依照角色動態取得選單
-  // const menu = computed(() => {
-  //   console.log('使用者資訊:', userInfo.value.roleName)
-  //   const role = userInfo.value.roleName || 'BH'
-  //   return menuByRole[role] ?? menuByRole.BH
-  // })
-
   // 取得職稱 - BH=經辦, BS=主管, SM=系統管理員, MB=總行, BM=分行管理員
-  const roleName = computed((): string => {
-    const role = userInfo.value.roleName || ''
-    return authTypeLabels[role as AuthType] || ''
+  const authLabel = computed((): string => {
+    return authTypeLabels[authStore.authType as AuthType] || ''
   })
 
   // Prompt Message Dialog
@@ -263,7 +262,7 @@
   }
 
   // 根據選單項目值尋找對應的主選單和子選單
-  function findMenuPath (targetValue: string, menuItems: MenuItem[] = menu.value || [], parentMain: string | null = null, parentSub: string | null = null): MenuPathResult | null {
+  function findMenuPath (targetValue: string, menuItems: MenuItem[] = currentMenu.value || [], parentMain: string | null = null, parentSub: string | null = null): MenuPathResult | null {
     for (const item of menuItems) {
       // 如果當前項目匹配
       if (item.value === targetValue) {
@@ -302,43 +301,18 @@
 
   // 登出
   async function handleLogout (): Promise<void> {
-    interface Payload {
-      account: string
-    }
-    const payload: Payload = { account: userInfo.value.account }
-
-    loading.value = true
-    try {
-      if (userInfo.value.token) {
-        const res = await logout(payload)
-        const { status } = res
-        if (status === 200) {
-          // 清除 localStorage 中的登入資訊
-          userStore.signOut()
-          // 導向到 login 頁面
-          router.push('/login')
-        }
-      } else {
-        router.push('/login')
-        return
-      }
-    } catch (error: any) {
-      await handleApiError(error, handleLogout, {
-        messageTitle,
-        message,
-        messageStatus,
-        isConfirmBtn,
-        messageDialog,
-      })
-    } finally {
-      loading.value = false
-    }
+    await authStore.logout()
+    router.push('/login')
   }
 
-  // 初始化選單狀態
+  /**
+   * 初始化選單狀態
+   * 主選單: foundPath.mainMenu,
+   * 子選單: foundPath.subMenu,
+   * 前頁面: pathValue,
+   */
   function initMenuState (): void {
     const currentPath = router.currentRoute.value.path
-    // console.log('當前路由:', currentPath)
     if (currentPath === '/') {
       currentItem.value = 'home'
       mainMenu.value = 'home'
@@ -354,11 +328,6 @@
         if (foundPath.mainMenu) {
           open.value = foundPath.subMenu ? [foundPath.subMenu, foundPath.mainMenu] : [foundPath.mainMenu]
         }
-        // console.log('自動展開選單:', {
-        //   主選單: foundPath.mainMenu,
-        //   子選單: foundPath.subMenu,
-        //   當前頁面: pathValue,
-        // })
       } else {
         mainMenu.value = pathValue
         currentSecMenu.value = ''

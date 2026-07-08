@@ -5,20 +5,21 @@
  */
 
 // Composables
+import type { RouteLocationNormalized } from 'vue-router'
 import { setupLayouts } from 'virtual:generated-layouts'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
-import { useUserStore } from '@/stores/user'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: setupLayouts(routes),
 })
 
 // 路由守衛：未登入導向登入頁
-router.beforeEach(to => {
-  const userStore = useUserStore()
-  if (to.path !== '/login' && !userStore.isAuthenticated) {
+router.beforeEach((to: RouteLocationNormalized) => {
+  const authStore = useAuthStore()
+  if (!authStore.isAuthenticated && to.path !== '/login') {
     return '/login'
   }
 })

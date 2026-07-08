@@ -38,6 +38,11 @@ export const $api = axios.create({
 // ── Request interceptor：token 生命週期管理 ────────────────────────────────────
 
 $api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  // 登入等公開路由不需要 token 驗證
+  if (config.url?.includes('/auth/login')) {
+    return config // 沒 token → 直接跳過
+  }
+
   const token = getAccessToken()
   if (!token) {
     return config
@@ -76,6 +81,11 @@ $api.interceptors.response.use(
   },
   async error => {
     const originalRequest = error.config as InternalAxiosRequestConfig
+
+    // 公開路由（如登入）的 401 代表帳密錯誤，不走 token 刷新
+    if (originalRequest.url?.includes('/auth/login')) {
+      throw error // 讓 apiRequest 的 catch 處理成 success: false
+    }
 
     if (error.response?.status === 401 && !originalRequest._retried) {
       originalRequest._retried = true
