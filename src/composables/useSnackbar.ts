@@ -7,7 +7,7 @@ const message = ref('')
 const color = ref<SnackbarColor>('success')
 const timeout = ref(3000)
 
-export function useSnackbar() {
+export function useSnackbar () {
   function show (msg: string, type: SnackbarColor = 'success', ms = 3000) {
     message.value = msg
     color.value = type

@@ -2,21 +2,20 @@
   <div>
     <v-card class="border-sm pa-4 bg-grey-lighten-4" variant="outlined">
       <v-data-table
-        v-model:items-per-page="pageOptions.itemsPerPage"
         class="table-sm hnb__table bg-white"
         color="blue-darken-2"
         density="compact"
         :headers="tableHeaders"
         hide-default-footer
-        item-value="seqNo"
-        :items="tableItems"
-        :loading="isLoading"
-        :page="pageOptions.page"
+        item-value="no"
+        :items="props.tableItems"
+        :items-per-page="props.pageOptions.itemsPerPage"
+        :loading="props.loading"
+        :page="props.pageOptions.page"
         sort-asc-icon="mdi-sort-ascending"
         sort-desc-icon="mdi-sort-descending"
         sort-icon="mdi-swap-vertical"
         striped="odd"
-        @update:items-per-page="pageOptions.itemsPerPage = $event"
       >
         <template #item.appNo="{ item }">
           <a v-if="item.appNo" class="hnb__text--link" href="#" @click.prevent="handleLcAppView(item.appNo)">
@@ -42,8 +41,8 @@
           {{ item.pendingApprover || 'N/A' }}
         </template>
 
-        <template #item.totalAmount="{ item }">
-          ${{ thousandsFormatting(item.totalAmount.toLocaleString()) }}
+        <template #item.amount="{ item }">
+          ${{ thousandsFormatting(item.amount.toLocaleString()) }}
         </template>
 
         <!-- 查看開狀手續費收據 -->
@@ -128,14 +127,15 @@
     </v-card>
 
     <TablePagination
-      v-model:items-per-page="pageOptions.itemsPerPage"
-      v-model:page="pageOptions.page"
       :is-show-total-amount="isShowTotalAmount"
       :is-show-total-pages="isShowTotalPages"
+      :items-per-page="props.pageOptions.itemsPerPage"
+      :page="props.pageOptions.page"
       :total-amount="totalAmount"
-      :total-items="tableItems.length"
+      :total-items="totalCount"
       :total-pages="totalPages"
-      @update:items-per-page="pageOptions.page = 1"
+      @update:items-per-page="emits('update:items-per-page', $event)"
+      @update:page="emits('update:page', $event)"
     />
     <!-- Prompt Dialog -->
     <PromptDialog
@@ -213,21 +213,39 @@
 </template>
 
 <script setup lang="ts">
-  import type { ListItem, QueryFormPayload } from '@/types/queryLcApp'
+  import type { ListItem } from '@/composables/useQueryLcApp'
+  import type { PageOptions } from '@/types/common'
   import type { DataTableHeader } from 'vuetify'
-  import { computed, onMounted, ref, watch } from 'vue'
-  import { getDatacList } from '@/api/queryLcApp'
-  import { useApiErrorHandler } from '@/composables/useApiErrorHandler'
+  import { ref } from 'vue'
   import { thousandsFormatting } from '@/utils/format'
 
-  const emits = defineEmits(['on-edit'])
+  const emits = defineEmits<{
+    'update:page': [page: number]
+    'update:items-per-page': [size: number]
+  }>()
 
-  const { handleApiError } = useApiErrorHandler()
+  const tableHeaders: DataTableHeader[] = [
+    { title: '編號', key: 'no', align: 'center', sortable: false, nowrap: true },
+    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
+    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
+    { title: '申請人', key: 'applicantName', align: 'start', sortable: false, nowrap: true },
+    { title: '通知銀行', key: 'notifyBank', align: 'start', sortable: false, nowrap: true },
+    { title: '申請日期', key: 'applyDate', align: 'center', sortable: false, nowrap: true },
+    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
+    { title: '金額', key: 'amount', align: 'end', sortable: false, nowrap: true },
+    { title: '受益人', key: 'beneficiaryName', align: 'start', sortable: false, nowrap: true },
+    { title: '狀態', key: 'hasAmendNotice', align: 'center', sortable: false, nowrap: true },
+    { title: '尚待審核人員', key: 'pendingApprover', align: 'center', sortable: false, nowrap: false, minWidth: 80 },
+    { title: '開狀手續費收據', key: 'lcFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
+    { title: '保證金收款證明', key: 'depositReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
+    { title: '現金繳費單', key: 'cashPaySlip', align: 'center', sortable: false, nowrap: false, minWidth: 70 },
+    { title: '承兌手續費收據', key: 'acceptanceFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
+    { title: '轉帳支出傳票', key: 'transferVoucher', align: 'center', sortable: false, nowrap: false, minWidth: 90 },
+    { title: '電子帳簿開狀手續費收據', key: 'eBankFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 120 },
+  ]
 
-  const tableItems = ref<ListItem[]>([])
-  const isLoading = ref(false)
   // App Dialog
-  const appDialog = ref(false)
   const appNo = ref<string>('')
   // Lc Dialog
   const lcDialog = ref(false)
@@ -259,143 +277,16 @@
   const isConfirmBtn = ref<boolean>(false)
   const isShowTotalPages = ref<boolean>(false)
   const isShowTotalAmount = ref<boolean>(true)
-  // const processStatus = ref<{ action: string, status: number }>({
-  //   action: '',
-  //   status: 0,
-  // })
-
-  const tableHeaders: DataTableHeader[] = [
-    { title: '編號', key: 'seqNo', align: 'center', sortable: false, nowrap: true },
-    { title: '開狀申請書號碼', key: 'appNo', align: 'center', sortable: false, nowrap: true },
-    { title: '信用狀號碼', key: 'lcNo', align: 'center', sortable: false, nowrap: true },
-    { title: '信用狀別', key: 'lcType', align: 'center', sortable: false, nowrap: true },
-    { title: '申請人', key: 'applicant', align: 'start', sortable: false, nowrap: true },
-    { title: '通知銀行', key: 'issuingBank', align: 'start', sortable: false, nowrap: true },
-    { title: '申請日期', key: 'applicationDate', align: 'center', sortable: false, nowrap: true },
-    { title: '開狀日期', key: 'issueDate', align: 'center', sortable: false, nowrap: true },
-    { title: '金額', key: 'totalAmount', align: 'end', sortable: false, nowrap: true },
-    { title: '受益人', key: 'beneficiary', align: 'start', sortable: false, nowrap: true },
-    { title: '狀態', key: 'status', align: 'center', sortable: false, nowrap: true },
-    { title: '尚待審核人員', key: 'pendingApprover', align: 'center', sortable: false, nowrap: false, minWidth: 80 },
-    { title: '開狀手續費收據', key: 'lcFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
-    { title: '保證金收款證明', key: 'depositReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
-    { title: '現金繳費單', key: 'cashPaySlip', align: 'center', sortable: false, nowrap: false, minWidth: 70 },
-    { title: '承兌手續費收據', key: 'acceptanceFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 100 },
-    { title: '轉帳支出傳票', key: 'transferVoucher', align: 'center', sortable: false, nowrap: false, minWidth: 90 },
-    { title: '電子帳簿開狀手續費收據', key: 'eBankFeeReceipt', align: 'center', sortable: false, nowrap: false, minWidth: 120 },
-  ]
 
   interface Props {
-    formData?: QueryFormPayload
+    loading: boolean
+    pageOptions: PageOptions
+    tableItems: ListItem[]
+    totalAmount: number
+    totalCount: number
+    totalPages: number
   }
   const props = defineProps<Props>()
-  const searchForm = ref<QueryFormPayload>(props.formData ?? {
-    queryMode: '',
-    lcNo: '',
-    lcAppNo: '',
-    applicantTaxId: '',
-    beneficiaryTaxId: '',
-    issuingBank: '',
-    lcStatus: [],
-    lcType: [],
-    issueDateStart: '',
-    issueDateEnd: '',
-  })
-
-  interface PageOptions {
-    page: number
-    itemsPerPage: number
-    sortBy: {
-      key: string
-      order?: 'asc' | 'desc'
-    }[]
-  }
-  const pageOptionsInit = ref<PageOptions>({
-    page: 1,
-    itemsPerPage: 10,
-    sortBy: [{ key: 'companyId', order: 'asc' }],
-  })
-  const pageOptions = ref<PageOptions>({ ...pageOptionsInit.value })
-  const totalCount = ref<number>(0) // 總筆數
-  const totalAmount = ref<number>(0) // 總金額
-
-  const totalPages = computed(() =>
-    Math.ceil(totalCount.value / pageOptions.value.itemsPerPage),
-  )
-
-  watch(
-    () => props.formData,
-    newVal => {
-      searchForm.value = newVal
-        ? { ...newVal }
-        : {
-          queryMode: '',
-          lcNo: '',
-          lcAppNo: '',
-          applicantTaxId: '',
-          beneficiaryTaxId: '',
-          issuingBank: '',
-          lcStatus: [],
-          lcType: [],
-          issueDateStart: '',
-          issueDateEnd: '',
-        }
-      pageOptions.value.page = 1
-      console.log('Search form data changed:', searchForm.value)
-      fetchLcAppList()
-    },
-    { deep: true },
-  )
-
-  watch(
-    () => pageOptions.value,
-    newVal => {
-      console.log('Page options changed:', newVal)
-      fetchLcAppList()
-    },
-    { deep: true },
-  )
-
-  // 取得列表資料
-  async function fetchLcAppList () {
-    const { lcNo, lcAppNo, applicantTaxId, beneficiaryTaxId, issuingBank, lcStatus, lcType, issueDateStart, issueDateEnd } = searchForm.value
-    const { page, itemsPerPage } = pageOptions.value
-    const payload = {
-      lcNo,
-      lcAppNo,
-      applicantTaxId,
-      beneficiaryTaxId,
-      issuingBank,
-      lcStatus,
-      lcType,
-      issueDateStart,
-      issueDateEnd,
-      page,
-      itemsPerPage,
-    }
-    console.log('Fetching list with payload:', payload, 'Page:', page, 'Items per page:', itemsPerPage)
-    isLoading.value = true
-    try {
-      const res = await getDatacList(payload)
-      console.log('API response:', res)
-      const { status, data: { items: sourceData, summary: { total, amount } } } = res
-      if (status === 200) {
-        tableItems.value = sourceData || []
-        totalCount.value = total || 0
-        totalAmount.value = amount || 0
-      }
-    } catch (error: any) {
-      await handleApiError(error, fetchLcAppList, {
-        messageTitle,
-        message,
-        messageStatus,
-        isConfirmBtn,
-        messageDialog,
-      })
-    } finally {
-      isLoading.value = false
-    }
-  }
 
   // 查看開狀申請書 LC app Dialog
   function handleLcAppView (value: string): void {
@@ -441,6 +332,8 @@
   // 查看電子帳簿開狀手續費收據
   function handleEBankFeeReceiptView (value: string): void {
     console.log('查看電子帳簿開狀手續費收據:', value)
+    lcNo.value = value
+    // isEBankFeeReceiptDialog.value = true
   }
 
   // 查看信用狀 Lc Dialog
@@ -478,8 +371,6 @@
     noticeDialog.value = false
     noticeNo.value = ''
   }
-
-  onMounted(fetchLcAppList)
 
   // 離開 message
   function messageClose (): void {

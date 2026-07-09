@@ -91,7 +91,7 @@
   })
 
   defineEmits<{
-    'update:page': [value: number]
-    'update:itemsPerPage': [value: number]
+    'update:page': [page: number]
+    'update:itemsPerPage': [size: number]
   }>()
 </script>

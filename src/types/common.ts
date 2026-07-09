@@ -22,5 +22,9 @@ export interface PageOptions {
     order?: 'asc' | 'desc'
   }[]
 }
+export interface SelectItem {
+  readonly title: string
+  readonly value: string
+}
 
 export type LcTypeOption = 'sight' | 'usance' // 即期 / 遠期
