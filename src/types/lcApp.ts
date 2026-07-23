@@ -1,6 +1,22 @@
 import type { BranchOption } from '@/api/branchApi'
 import type { SelectItem } from '@/types/common'
 
+// 狀態
+export const LC_STATUS_ITEMS: readonly SelectItem[] = [
+  { title: '待審核', value: 'pending' },
+  { title: '已核准', value: 'approved' },
+  { title: '已完成', value: 'completed' },
+  { title: '已拒絕', value: 'rejected' },
+]
+
+// 信用狀類別
+export const LC_TYPE_ITEMS: readonly SelectItem[] = [
+  { title: '國內信用狀', value: 'domestic' },
+  { title: '擔保信用狀', value: 'standby' },
+]
+
+// ============== 以下實際尚未確認  ==============
+
 // 受益人團體類別（對應後端 HNB.Api.Models.Enums.BeneficiaryGroupCategory）
 export enum BeneficiaryGroupCategory {
   CDS = 1, // CDS
@@ -16,18 +32,6 @@ export const beneficiaryCategoryOptions: { title: string, value: BeneficiaryGrou
   { title: '台塑 e 化平台客戶 (台塑集團)', value: BeneficiaryGroupCategory.FPG },
   { title: '奇美 e 化平台客戶', value: BeneficiaryGroupCategory.CHI },
   { title: '其他客戶', value: BeneficiaryGroupCategory.Others },
-]
-
-export const LC_STATUS_ITEMS: readonly SelectItem[] = [
-  { title: '待審核', value: 'pending' },
-  { title: '已核准', value: 'approved' },
-  { title: '已完成', value: 'completed' },
-  { title: '已拒絕', value: 'rejected' },
-]
-
-export const LC_TYPE_ITEMS: readonly SelectItem[] = [
-  { title: '國內信用狀', value: 'domestic' },
-  { title: '擔保信用狀', value: 'standby' },
 ]
 
 export interface LcCdsFormData {

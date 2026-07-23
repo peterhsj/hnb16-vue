@@ -296,9 +296,5 @@
     resetHandler,
     handleItemsPerPageChange,
     handlePageChange,
-    showDetail,
-    detailLoading,
-    selectedDetail,
-    openDetail,
   } = useQueryLcApp()
 </script>

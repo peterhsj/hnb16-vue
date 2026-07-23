@@ -2,9 +2,10 @@ import type { PageOptions } from '@/types/common'
 import type { LcAppDetailDto } from '@/types/lcApp'
 import type { VForm } from 'vuetify/components'
 import { isAfter, isBefore } from 'date-fns'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { apiRequest } from '@/services/api-service'
 
+// 搜尋模式: lcNo: 信用狀號碼, appNo: 申請書號碼, advanced: 進階搜尋
 type SearchMode = 'lcNo' | 'appNo' | 'advanced'
 
 interface Rules {
@@ -12,38 +13,18 @@ interface Rules {
   dateEndRule: ((v: string) => boolean | string)[]
 }
 
-// interface LcAppItem {
-//   no: number // 編號
-//   appNo: string // 開狀申請書號碼
-//   lcNo: string // 信用狀號碼
-//   applyDate: string // 申請日期
-//   applicantName: string // 申請人
-//   applicantTaxId: string // 統編
-//   amount: number // 金額
-//   currency: string // 幣別
-//   notifyBank: string // 通知銀行
-//   beneficiaryName: string // 受益人
-//   expiry: string // 有效期限
-//   status: string // 修改申請
-//   hasAmendApp: boolean // 押匯申請
-//   hasDraftList: boolean // 利率約定
-//   hasInterestRate: boolean // 註銷申請
-//   hasCancelApp: boolean // 修改通知書
-//   hasAmendNotice: boolean // 狀態
-// }
-
 export interface ListItem {
-  no: number // 編號
-  appNo: string // 開狀申請書號碼
-  lcNo: string // 信用狀號碼
+  no: number // 編號 v
+  appNo: string // 開狀申請書號碼 v
+  lcNo: string // 信用狀號碼 v
   lcType: string // 信用狀別
-  applicantName: string // 申請人
-  notifyBank: string // 通知銀行
-  applyDate: string // 申請日期
+  applicantName: string // 申請人 v
+  notifyBank: string // 通知銀行 v
+  applyDate: string // 申請日期 v
   issueDate: string // 開狀日期
-  amount: number // 金額
-  beneficiaryName: string // 受益人
-  hasAmendNotice: boolean // 狀態
+  amount: number // 金額 v
+  beneficiaryName: string // 受益人 v
+  hasAmendNotice: boolean // 狀態 v
   pendingApprover: string // 待審核人員
   lcFeeReceipt: boolean // 開狀手續費收據
   depositReceipt: boolean // 保證金收款證明
@@ -115,6 +96,7 @@ export function useQueryLcApp () {
     },
   )
 
+  // 搜尋處理
   async function searchHandler () {
     loading.value = true
     try {
@@ -144,10 +126,12 @@ export function useQueryLcApp () {
         }
       }
       const res = await apiRequest<ListItem[]>('/query/lc-app', { method: 'POST', data: body })
-      if (res.success) {
-        tableItems.value = res.data ?? []
-        totalCount.value = res.total ?? 0
-        totalAmount.value = res.totalAmount ?? 0
+      // console.log('[useQueryLcApp/searchHandler] res', res)
+      const { success, data, total, totalAmount: amount } = res
+      if (success) {
+        tableItems.value = data ?? []
+        totalCount.value = total ?? 0
+        totalAmount.value = amount ?? 0
         showResult.value = true
       } else {
         console.error('[useQueryLcApp/searchHandler]', res.message, res.errors)
@@ -169,7 +153,6 @@ export function useQueryLcApp () {
 
   async function handlePageChange (page: number) {
     pageOptions.value.page = page
-    console.log('handlePageChange', pageOptions.value)
     await searchHandler()
   }
 
@@ -189,24 +172,26 @@ export function useQueryLcApp () {
     await searchHandler()
   }
 
-  // 開狀申請書 明細對話框
-  const showDetail = ref(false)
-  const detailLoading = ref(false)
-  const selectedDetail = ref<LcAppDetailDto | null>(null)
+  // 開狀申請書預覽 Dialog
+  const isLcAppReviewDialog = ref(false)
+  // const detailLoading = ref(false)
+  const lcAppReviewDetail = ref<LcAppDetailDto | null>(null)
 
-  async function openDetail (appNo: string) {
-    showDetail.value = true
-    detailLoading.value = true
-    selectedDetail.value = null
+  async function handleLcAppView (appNo: string) {
+    isLcAppReviewDialog.value = true
+    loading.value = true
+    lcAppReviewDetail.value = null
     try {
       const res = await apiRequest<LcAppDetailDto>(`/query/lc-app/${encodeURIComponent(appNo)}`)
-      if (res.success) {
-        selectedDetail.value = res.data ?? null
+      console.log('[useQueryLcApp/searchHandler] res', res)
+      const { success, data, message } = res
+      if (success) {
+        lcAppReviewDetail.value = data ?? null
       } else {
-        console.error('[useQueryLcApp/openDetail]', res.message, res.errors)
+        console.error('[useQueryLcApp/handleLcAppView]', res.message, res.errors)
       }
     } finally {
-      detailLoading.value = false
+      loading.value = false
     }
   }
 
@@ -215,6 +200,7 @@ export function useQueryLcApp () {
     searchFormRef,
     loading,
     showResult,
+    // 查詢欄位
     lcNo,
     appNo,
     appTaxId,
@@ -225,6 +211,7 @@ export function useQueryLcApp () {
     dateStart,
     dateEnd,
     rules,
+    // 列表相關
     tableItems,
     totalCount,
     totalAmount,
@@ -236,9 +223,9 @@ export function useQueryLcApp () {
     handleItemsPerPageChange,
     handlePageChange,
     goToPage,
-    showDetail,
-    detailLoading,
-    selectedDetail,
-    openDetail,
+    // 開狀申請書預覽相關
+    isLcAppReviewDialog,
+    lcAppReviewDetail,
+    handleLcAppView,
   }
 }

@@ -1,7 +1,20 @@
+export interface PageOptions {
+  page: number
+  itemsPerPage: number
+  sortBy: {
+    key: string
+    order?: 'asc' | 'desc'
+  }[]
+}
+
+// ========== 以下未測試 ==========
+
 export interface ApiResponse<T = any> {
-  code: number
-  message?: string
   data?: T
+  message?: string
+  total?: number
+  amount?: number
+  success?: boolean
 }
 
 // ── 分頁選項 ──────────────────────────────────────────────────────────────────

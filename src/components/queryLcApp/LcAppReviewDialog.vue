@@ -19,55 +19,57 @@
         />
       </v-card-title>
 
-      <v-form ref="formRef">
-        <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;">
-          <LcAppInfo :bene-type="beneType" :data="LcAppInfoData" />
-          <!-- 下載 / 列印 -->
-          <v-container class="" fluid>
-            <v-row>
-              <v-col class="text-center" cols="12">
-                <v-btn
-                  class="ma-1 hnb__btn--orange"
-                  @click="handleCreditData('')"
-                >
-                  授信資料
-                </v-btn>
+      <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;">
+        <LcAppInfo
+          v-if="props.detail"
+          :bene-type="beneType"
+          :data="props.detail"
+        />
+        <!-- 下載 / 列印 -->
+        <v-container class="" fluid>
+          <v-row>
+            <v-col class="text-center" cols="12">
+              <v-btn
+                class="ma-1 hnb__btn--orange"
+                @click="handleCreditData('')"
+              >
+                授信資料
+              </v-btn>
 
-                <span> | </span>
+              <span> | </span>
 
-                <v-btn
-                  class="ma-1 hnb__btn--default"
-                  prepend-icon="mdi-cloud-download"
-                  @click="downloadFile"
-                >
-                  下載電子檔
-                </v-btn>
+              <v-btn
+                class="ma-1 hnb__btn--default"
+                prepend-icon="mdi-cloud-download"
+                @click="downloadFile"
+              >
+                下載電子檔
+              </v-btn>
 
-                <v-btn
-                  class="ma-1 hnb__btn--orange"
-                  prepend-icon="mdi-printer"
-                  @click="printDoc"
-                >
-                  列印
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
+              <v-btn
+                class="ma-1 hnb__btn--orange"
+                prepend-icon="mdi-printer"
+                @click="printDoc"
+              >
+                列印
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
 
-        <v-card-actions>
-          <v-spacer />
+      <v-card-actions>
+        <v-spacer />
 
-          <v-btn
-            class="hnb__btn--cancel mx-1 my-2"
-            @click="onClose"
-          >
-            關閉
-          </v-btn>
+        <v-btn
+          class="hnb__btn--cancel mx-1 my-2"
+          @click="onClose"
+        >
+          關閉
+        </v-btn>
 
-          <v-spacer />
-        </v-card-actions>
-      </v-form>
+        <v-spacer />
+      </v-card-actions>
     </v-card>
 
     <!-- 開狀申請書-授信資料 Dialog -->
@@ -89,18 +91,10 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
+  import type { LcAppDetailDto } from '@/types/lcApp'
   import { computed, ref } from 'vue'
-  import { VForm } from 'vuetify/components'
 
-  const formRef = ref<InstanceType<typeof VForm>>()
   const beneType = ref<string>('cds')
-  const LcAppInfoData = ref<any>({
-    appNo: 'LC20240225001',
-    lcAmount: 1_000_000,
-    fee: 500,
-  })
-
-  const isLoading = ref<boolean>(false)
 
   // 授信資料 Dialog
   const isLcAppCreditDialogOpen = ref(false)
@@ -113,11 +107,11 @@
 
   interface Props {
     isLcAppReviewDialog?: boolean
-    appNo?: string
+    detail?: LcAppDetailDto | null
   }
   const props = withDefaults(defineProps<Props>(), {
     isLcAppReviewDialog: false,
-    appNo: '',
+    detail: null,
   })
 
   const emits = defineEmits<{

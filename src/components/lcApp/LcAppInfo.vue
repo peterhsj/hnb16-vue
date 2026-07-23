@@ -9,14 +9,14 @@
 
         <v-col class="py-1" cols="6">
           <span class="my-1 text-h6 hnb__bankName">
-            <span class="pe-1">華南商業銀行</span>
-            <span class="pe-1">建成分行</span>
+            <span class="pe-1">{{ detail.bankName }}</span>
+            <span class="pe-1">{{ detail.branchName }}</span>
             <span>台鑑</span>
           </span>
         </v-col>
 
         <v-col class="py-1 text-end" cols="6">
-          日期：中華民國 114 年 5 月 10 日
+          日期：{{ toRocDate(detail.date) }}
         </v-col>
       </v-row>
     </v-container>
@@ -39,33 +39,37 @@
           <td>
             <p>
               <span class="font-weight-bold">信用狀號碼：</span>
-              <span>099700049161000861</span>
+              <span>{{ detail.lcNo }}</span>
             </p>
 
             <p class="mb-0">
               <span class="font-weight-bold">開證日期：</span>
+              <span>{{ detail.issueDate }}</span>
             </p>
           </td>
 
           <td>
             <span class="font-weight-bold">通知銀行編號：</span>
-            <span>01</span>
+            <span>{{ detail.notifyBankNo }}</span>
           </td>
         </tr>
 
         <tr>
           <td class="hnb__table--left-border" colspan="2">
             <p>
-              <span class="font-weight-bold">申請人：</span>優勢股份有限公司
+              <span class="font-weight-bold">申請人：</span>
+              {{ detail.applicantName }}
             </p>
 
             <p>
               <span class="pe-5">
-                <span class="font-weight-bold">聯絡人姓名：</span>林小明
+                <span class="font-weight-bold">聯絡人姓名：</span>
+                {{ detail.contactName }}
               </span>
 
               <span>
-                <span class="font-weight-bold">聯絡人電話：</span>202-12346789
+                <span class="font-weight-bold">聯絡人電話：</span>
+                {{ detail.contactPhone }}
               </span>
             </p>
           </td>
@@ -74,13 +78,15 @@
         <tr>
           <td class="w-50">
             <span class="font-weight-bold">通知銀行：</span>
-            華南商業銀行 建成分行
+            {{ detail.notifyBank }}
           </td>
 
           <td colspan="2">
             <span class="font-weight-bold">金額：</span>
-            新台幣
-            <span class="text-red-darken-3 font-weight-bold">伍仟萬元整</span>
+            {{ detail.currency }}
+            <span class="text-red-darken-3 font-weight-bold">
+              {{ detail.amountText }}
+            </span>
           </td>
         </tr>
 
@@ -88,39 +94,39 @@
           <td class="w-50">
             <!-- 共用 -->
             <span class="font-weight-bold">受益人：</span>
-            中鴻鋼鐵股份有限公司
+            {{ detail.beneficiaryName }}
             <br>
             <span class="font-weight-bold">統一編號：</span>
-            12345678
+            {{ detail.beneficiaryTaxId }}
             <br>
             <span class="font-weight-bold">受益人負責人：</span>
-            林大華
+            {{ detail.beneficiaryRepresentative }}
             <br>
             <span class="font-weight-bold">負責人職稱：</span>
-            總經理
+            {{ detail.beneficiaryTitle }}
             <br>
             <span class="font-weight-bold">地址：</span>
-            高雄縣橋頭鄉芋寮村芋寮路317號
+            {{ detail.beneficiaryAddress }}
             <br>
             <span class="font-weight-bold">電話：</span>
-            07-611-7171
+            {{ detail.beneficiaryPhone }}
             <br>
             <span class="font-weight-bold">Email：</span>
-            a1b2c3d4e5@example.com
+            {{ detail.beneficiaryEmail }}
 
             <!-- FPC -->
             <template v-if="props.beneType === 'fpc'">
               <span class="font-weight-bold">受益人事業部：</span>
-              HSTKS
+              {{ detail.beneficiaryDept }}
               <br>
               <span class="font-weight-bold">客戶編號：</span>
-              HSTKS
+              {{ detail.beneficiaryCustomerNo }}
             </template>
           </td>
 
           <td colspan="2">
             <span class="font-weight-bold">有效期限至：</span>
-            民國 114 年 6 月 10 日
+            {{ toRocDate(detail.expiry) }}
           </td>
         </tr>
 
@@ -133,8 +139,8 @@
             <p class="font-weight-bold my-1">一、匯票之條件：</p>
 
             <ol class="hnb__list--ol ms-10">
-              <li class="mb-2">甲、付款人：華南商業銀行 建成分行</li>
-              <li v-if="props.beneType === 'cds' || props.beneType === 'fpc'" class="mb-2">乙、付款期限：見票即付。</li>
+              <li class="mb-2">甲、付款人：{{ detail.payerBank }}</li>
+              <li v-if="props.beneType === 'cds' || props.beneType === 'fpc'" class="mb-2">乙、付款期限：{{ detail.paymentTerm }}。</li>
 
               <li v-if="props.beneType === 'other'" class="mb-2 d-flex">
                 <div>乙、付款期限：</div>
@@ -172,25 +178,38 @@
             <p class="font-weight-bold my-1">二、應檢附之單據如下：</p>
 
             <ol class="hnb__list--ol ms-10">
-              <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
+              <li v-for="(doc, idx) in detail.documents" :key="idx" class="mb-1">
+                <v-icon size="small">{{ doc.checked ? 'mdi mdi-square' : 'mdi mdi-square-outline' }}</v-icon>
+                {{ doc.text }}
+              </li>
+              <!-- <li class="mb-2">1. <v-icon icon="mdi mdi-square" size="small" /> 匯票付款申請書乙份。</li>
               <li class="mb-2">2. <v-icon icon="mdi mdi-square-outline" size="small" /> 匯票承兌申請書乙份。</li>
               <li v-if="props.beneType === 'cds'" class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> 統一發票。</li>
               <li v-if="props.beneType === 'fpc' || props.beneType === 'other'" class="mb-2">3. <v-icon icon="mdi mdi-square" size="small" /> {{ data.invoiceKind === 'invoice' ? '發票' : data.invoiceKind === 'unified' ? '統一發票' : '' }}。</li>
-              <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： </li>
+              <li class="mb-2">4. <v-icon icon="mdi mdi-square-outline" size="small" /> 其他： </li> -->
             </ol>
 
-            <p class="ms-3 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
-            <p class="ms-3">鋼品一批</p>
+            <p class="ms-4 font-weight-bold">上項單據應載明申請人向受益人購買下列貨物：</p>
+            <p class="ms-4">{{ detail.goodsDescription }}</p>
           </td>
         </tr>
 
         <tr>
           <td colspan="3">
             <p class="font-weight-bold mb-2">三、特別指示：</p>
-            <p class="font-weight-bold mb-2">1.電子押匯特別指示條款</p>
+
+            <p class="ms-3">{{ detail.specialInstructionTitle }}</p>
+
+            <ol class="hnb__list--ol mb-2">
+              <li v-for="(inst, idx) in detail.specialInstructions" :key="idx" class="mb-1">
+                {{ inst }}
+              </li>
+            </ol>
+
+            <!-- <p class="font-weight-bold mb-2">1.電子押匯特別指示條款</p> -->
 
             <!-- CDS 特別指示 -->
-            <template v-if="props.beneType === 'cds'">
+            <!-- <template v-if="props.beneType === 'cds'">
               <ol class="hnb__list--ol mb-2">
                 <li class="mb-2">(1) 賣方所提供鋼品之一部或全部，可能產自中國鋼鐵股份有限公司或中龍鋼鐵股份有限公司(下稱中龍公司)，視實際出貨狀況而定，如產自中龍公司，賣方就其鋼品品質，負賣方責任，至如約定價格、各交易條件及優惠措施均不受影響。</li>
                 <li class="mb-2">(2) 匯票及匯票付款申請書使用中鋼格式，由受益人單獨簽章或使用數位憑證有效。</li>
@@ -213,10 +232,10 @@
                 <v-icon icon="mdi mdi-square-outline" size="small" /> 賣方負擔
                 （未填者視為由買方負擔）
               </p>
-            </template>
+            </template> -->
 
             <!-- FPC 特別指示 -->
-            <template v-if="props.beneType === 'fpc'">
+            <!-- <template v-if="props.beneType === 'fpc'">
               <p class="mb-1">1. 匯票及匯票付款申請書使用受益人所訂格式，由受益人單獨簽章或使用數位憑證有效。</p>
               <p class="mb-1">2. 貨物可以分批交貨。</p>
 
@@ -263,10 +282,10 @@
 
                 <span class="text-caption">( 以統一發票日起算匯票到其日期者，請填寫此項，未填寫者視為未限制發票開立日期 )。</span>
               </div>
-            </template>
+            </template> -->
 
             <!-- 其他受益人特別指示 -->
-            <template v-if="props.beneType === 'other'">
+            <!-- <template v-if="props.beneType === 'other'">
               <ol class="hnb__line--ol ms-4">
                 <li class="mb-2">
                   <span>匯票承兌/付款申請書使用 </span>
@@ -337,15 +356,16 @@
                   <span class="font-weight-bold" v-html="data.otherSpecialTerms" />
                 </li>
               </ol>
-            </template>
+            </template> -->
           </td>
         </tr>
 
+        <!-- 利率條款 / 計期方式 / 手續費 / 申請人印鑑 -->
         <tr>
           <td colspan="3">
             <p class="mb-2">
               <span class="font-weight-bold">利率約款：</span>
-              貴行依本申請書開發信用狀所墊付之款項，申請人同意依貴我雙方所訂之利率訂價方式，按月計付利息。
+              {{ detail.rateTerm }}
             </p>
 
             <!-- rateRule 在 CDS 狀態下不顯示 -->
@@ -365,12 +385,13 @@
 
             <p class="mb-2">
               <span class="font-weight-bold">新臺幣短期放款計期方式：</span>
-              按日計息，以每年365天為利息計算基礎，逢閏年時亦同。利率=本金餘額×年利率×1/365×計息天數。
+              {{ detail.calculationMethod }}
             </p>
 
             <div class="mb-2">
               <span class="font-weight-bold">手續費約款：</span>
-              <p class="mb-2">申請人同意貴行目前所訂相關費用之收費標準，且同意貴行得隨時調整，但應於調整前以顯著方式於營業場所或網站上公開揭示，另</p>
+              {{ detail.feeTerm }}
+              <!-- <p class="mb-2">申請人同意貴行目前所訂相關費用之收費標準，且同意貴行得隨時調整，但應於調整前以顯著方式於營業場所或網站上公開揭示，另</p>
 
               <ol class="hnb__list--ol">
                 <li class="mb-2">
@@ -384,26 +405,26 @@
                   <br />
                   2.申請人提前清償借款，其原開狀手續費加計利息(分批押匯改賃，以第一筆押匯金額計算)合計低於新臺幣1，000元者。
                 </li>
-              </ol>
+              </ol> -->
             </div>
 
             <div class="d-flex align-center justify-space-between">
               <span>
                 <span class="font-weight-bold">申請人：</span>
-                優勢股份有限公司　(請蓋原留印鑑)
+                {{ detail.applicantStampLabel }}　(請蓋原留印鑑)
               </span>
 
               <template v-if="props.beneType === 'cds'">
                 <span class="px-3 text-center">
-                  <v-img src="../../assets/images/cds_01.gif" />
-                  <div class="py-1">MIAGCSqGSI</div>
+                  <v-img :src="detail.qrImageUrl" />
+                  <div class="py-1">{{ detail.qrText }}</div>
                 </span>
               </template>
 
               <template v-if="props.beneType === 'other'">
                 <span class="px-3 text-center">
-                  <v-img src="../../assets/images/cds_03.gif" />
-                  <div class="py-1">MIAGCSqGSI</div>
+                  <v-img :src="detail.qrImageUrl" />
+                  <div class="py-1">{{ detail.qrText }}</div>
                 </span>
               </template>
             </div>
@@ -420,7 +441,7 @@
           </th>
 
           <td class="w-25">
-            36,000,000
+            {{ detail.creditSummary.creditLine }}
           </td>
 
           <th class="hnb__tbhd2 w-25 text-end">
@@ -428,7 +449,7 @@
           </th>
 
           <td class="w-25">
-            37,100,000
+            {{ detail.creditSummary.creditBalance }}
           </td>
         </tr>
 
@@ -437,13 +458,17 @@
             國內交易外幣信用狀額(限)度
           </th>
 
-          <td />
+          <td>
+            {{ detail.creditSummary.fxCreditLine }}
+          </td>
 
           <th class="hnb__tbhd2 text-end">
             國內交易外幣信用狀餘額(含本件)
           </th>
 
-          <td />
+          <td>
+            {{ detail.creditSummary.fxCreditBalance }}
+          </td>
         </tr>
 
         <tr>
@@ -452,7 +477,7 @@
           </th>
 
           <td>
-            信保10%
+            {{ detail.creditSummary.collateralCondition }}
           </td>
 
           <th class="hnb__tbhd2 text-end">
@@ -460,7 +485,7 @@
           </th>
 
           <td>
-            民國115年12月31日
+            {{ toRocDate(detail.creditSummary.creditLineExpiryDate) }}
           </td>
         </tr>
 
@@ -470,14 +495,16 @@
           </th>
 
           <td>
-            10.00
+            {{ detail.creditSummary.depositRatio }}
           </td>
 
           <th class="hnb__tbhd2 text-end">
             承兌手續費
           </th>
 
-          <td />
+          <td>
+            {{ detail.creditSummary.acceptanceFee }}
+          </td>
         </tr>
 
         <tr>
@@ -486,14 +513,16 @@
           </th>
 
           <td>
-            500
+            {{ detail.creditSummary.openingFee }}
           </td>
 
           <th class="hnb__tbhd2 text-end">
             放款帳號
           </th>
 
-          <td />
+          <td>
+            {{ detail.creditSummary.loanAccountNo }}
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -501,6 +530,7 @@
 </template>
 <script setup lang="ts">
   import { ref } from 'vue'
+  import { toRocDate } from '@/utils/format'
   interface Props {
     beneType?: string
     data?: any
@@ -510,5 +540,5 @@
     data: {},
   })
 
-  const data = ref(props.data)
+  const detail = ref(props.data)
 </script>

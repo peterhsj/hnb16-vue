@@ -131,9 +131,9 @@
       :is-show-total-pages="isShowTotalPages"
       :items-per-page="props.pageOptions.itemsPerPage"
       :page="props.pageOptions.page"
-      :total-amount="totalAmount"
-      :total-items="totalCount"
-      :total-pages="totalPages"
+      :total-amount="props.totalAmount"
+      :total-items="props.totalCount"
+      :total-pages="props.totalPages"
       @update:items-per-page="emits('update:items-per-page', $event)"
       @update:page="emits('update:page', $event)"
     />
@@ -207,17 +207,25 @@
   <!-- 開狀申請書預覽 -->
   <LcAppReviewDialog
     v-model:is-lc-app-review-dialog="isLcAppReviewDialog"
-    :app-no="appNo"
+    :detail="lcAppReviewDetail"
     @on-close="isLcAppReviewDialog = false"
   />
 </template>
 
 <script setup lang="ts">
+
   import type { ListItem } from '@/composables/useQueryLcApp'
   import type { PageOptions } from '@/types/common'
   import type { DataTableHeader } from 'vuetify'
   import { ref } from 'vue'
+  import { useQueryLcApp } from '@/composables/useQueryLcApp'
   import { thousandsFormatting } from '@/utils/format'
+
+  const {
+    isLcAppReviewDialog,
+    lcAppReviewDetail,
+    handleLcAppView,
+  } = useQueryLcApp()
 
   const emits = defineEmits<{
     'update:page': [page: number]
@@ -267,7 +275,7 @@
   // 轉帳支出傳票 Dialog
   const isTransferVoucherDialog = ref(false)
   // 開狀申請書預覽 Dialog
-  const isLcAppReviewDialog = ref(false)
+  // const isLcAppReviewDialog = ref(false)
 
   // Prompt Message Dialog
   const messageDialog = ref<boolean>(false)
@@ -289,10 +297,10 @@
   const props = defineProps<Props>()
 
   // 查看開狀申請書 LC app Dialog
-  function handleLcAppView (value: string): void {
-    isLcAppReviewDialog.value = true
-    appNo.value = value
-  }
+  // function handleLcAppView (value: string): void {
+  //   isLcAppReviewDialog.value = true
+  //   appNo.value = value
+  // }
 
   // 查看開狀手續費收據
   function handleLcFeeReceiptView (value: string): void {
