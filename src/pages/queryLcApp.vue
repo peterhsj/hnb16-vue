@@ -244,7 +244,7 @@
         </h2>
 
         <QueryLcAppList
-          :loading="loading"
+          :list-loading="loading"
           :page-options="pageOptions"
           :table-items="tableItems"
           :total-amount="totalAmount"

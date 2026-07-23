@@ -198,7 +198,7 @@
           <td colspan="3">
             <p class="font-weight-bold mb-2">三、特別指示：</p>
 
-            <p class="ms-3">{{ detail.specialInstructionTitle }}</p>
+            <p class="ms-4">{{ detail.specialInstructionTitle }}</p>
 
             <ol class="hnb__list--ol mb-2">
               <li v-for="(inst, idx) in detail.specialInstructions" :key="idx" class="mb-1">
@@ -444,11 +444,11 @@
             {{ detail.creditSummary.creditLine }}
           </td>
 
-          <th class="hnb__tbhd2 w-25 text-end">
+          <th class="hnb__tbhd2 w-30 text-end">
             國內信用狀餘額(含本件)
           </th>
 
-          <td class="w-25">
+          <td class="w-20">
             {{ detail.creditSummary.creditBalance }}
           </td>
         </tr>

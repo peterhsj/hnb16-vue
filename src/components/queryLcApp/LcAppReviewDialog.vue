@@ -19,9 +19,11 @@
         />
       </v-card-title>
 
-      <v-card-text class="bg-grey-lighten-4" style="max-height: 70vh; overflow-y: auto;">
+      <v-card-text
+        class="bg-grey-lighten-4"
+        style="max-height: 70vh; overflow-y: auto;"
+      >
         <LcAppInfo
-          v-if="props.detail"
           :bene-type="beneType"
           :data="props.detail"
         />

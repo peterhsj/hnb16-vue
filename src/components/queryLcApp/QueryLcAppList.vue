@@ -10,7 +10,7 @@
         item-value="no"
         :items="props.tableItems"
         :items-per-page="props.pageOptions.itemsPerPage"
-        :loading="props.loading"
+        :loading="props.listLoading"
         :page="props.pageOptions.page"
         sort-asc-icon="mdi-sort-ascending"
         sort-desc-icon="mdi-sort-descending"
@@ -137,6 +137,9 @@
       @update:items-per-page="emits('update:items-per-page', $event)"
       @update:page="emits('update:page', $event)"
     />
+
+    <CommonOverlay :overlay="loading" />
+
     <!-- Prompt Dialog -->
     <PromptDialog
       v-model:message-dialog="messageDialog"
@@ -206,6 +209,7 @@
   </div>
   <!-- 開狀申請書預覽 -->
   <LcAppReviewDialog
+    v-if="lcAppReviewDetail"
     v-model:is-lc-app-review-dialog="isLcAppReviewDialog"
     :detail="lcAppReviewDetail"
     @on-close="isLcAppReviewDialog = false"
@@ -224,6 +228,7 @@
   const {
     isLcAppReviewDialog,
     lcAppReviewDetail,
+    loading,
     handleLcAppView,
   } = useQueryLcApp()
 
@@ -287,7 +292,7 @@
   const isShowTotalAmount = ref<boolean>(true)
 
   interface Props {
-    loading: boolean
+    listLoading: boolean
     pageOptions: PageOptions
     tableItems: ListItem[]
     totalAmount: number
